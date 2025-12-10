@@ -45,6 +45,11 @@ app.use((req, res, next) => {
     next();
 });
 
+// Riot Verification Route: Handle request to product.html/riot.txt
+app.get('/product.html/riot.txt', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/riot.txt'));
+});
+
 app.use(express.static(path.join(__dirname, '../public')));
 
 app.use('/rank', rankRoutes);
