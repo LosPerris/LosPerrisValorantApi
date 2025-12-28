@@ -1,7 +1,7 @@
 const getBaseUrl = () => {
     const path = window.location.pathname;
-    if (path.startsWith('/valorantapi')) {
-        return '/valorantapi';
+    if (path.startsWith('/api/valorant')) {
+        return '/api/valorant';
     }
     return '';
 };

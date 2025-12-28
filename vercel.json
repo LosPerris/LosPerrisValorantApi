@@ -2,11 +2,11 @@
     "version": 2,
     "rewrites": [
         {
-            "source": "/valorantapi",
+            "source": "/api/valorant",
             "destination": "/api/index.js"
         },
         {
-            "source": "/valorantapi/(.*)",
+            "source": "/api/valorant/(.*)",
             "destination": "/api/index.js"
         },
         {

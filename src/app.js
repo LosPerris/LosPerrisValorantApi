@@ -39,8 +39,8 @@ app.use(limiter);
 app.use(express.json());
 
 app.use((req, res, next) => {
-    if (req.url.startsWith('/valorantapi')) {
-        req.url = req.url.replace('/valorantapi', '') || '/';
+    if (req.url.startsWith('/api/valorant')) {
+        req.url = req.url.replace('/api/valorant', '') || '/';
     }
     next();
 });
