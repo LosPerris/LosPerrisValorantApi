@@ -12,6 +12,28 @@
     --input-bg: rgba(0, 0, 0, 0.3);
 }
 
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #d93a46;
+}
+
+::selection {
+    background: var(--accent-color);
+    color: white;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -83,6 +105,14 @@ body::before {
     padding: 25px;
     border-radius: 4px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    /* Glassmorphism */
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 70, 85, 0.3);
 }
 
 .hidden {
@@ -91,9 +121,13 @@ body::before {
 
 h1 {
     font-family: var(--font-header);
-    font-size: 3rem;
-    letter-spacing: 2px;
+    font-size: 3.5rem;
+    /* Slightly larger */
+    letter-spacing: 4px;
+    /* Wide spacing */
     text-transform: uppercase;
+    text-shadow: 0 4px 10px rgba(255, 70, 85, 0.2);
+    /* Subtle glow */
 }
 
 h3 {
@@ -103,6 +137,8 @@ h3 {
     border-bottom: 1px solid var(--card-border);
     padding-bottom: 10px;
     color: var(--text-color);
+    letter-spacing: 2px;
+    /* Wide spacing */
 }
 
 .accent {
@@ -201,7 +237,8 @@ option {
     font-size: 1.2rem;
     cursor: pointer;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    /* Wide spacing */
     transition: all 0.2s ease;
     margin-top: 10px;
     border-radius: 2px;
