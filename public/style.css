@@ -1,14 +1,15 @@
 :root {
     --bg-color: #0f1923;
-    --card-bg: #1f2b35;
+    --card-bg: rgba(31, 43, 53, 0.9);
     --accent-color: #ff4655;
     --text-color: #ece8e1;
     --text-muted: #8b9bb4;
-    --card-border: #36495d;
+    --card-border: rgba(255, 255, 255, 0.1);
     --success: #4ade80;
     --danger: #ff4655;
     --font-main: 'Roboto', sans-serif;
     --font-header: 'Oswald', sans-serif;
+    --input-bg: rgba(0, 0, 0, 0.3);
 }
 
 * {
@@ -169,33 +170,27 @@ label {
 input,
 select {
     border: 1px solid var(--card-border);
+    background: var(--input-bg);
     padding: 12px;
     color: white;
     font-family: var(--font-main);
     font-size: 1rem;
     outline: none;
-    transition: border-color 0.3s;
-}
-
-input {
-    background: rgba(0, 0, 0, 0.2);
-}
-
-select {
-    background: var(--accent-color);
+    transition: all 0.3s ease;
+    border-radius: 2px;
 }
 
 input:focus,
 select:focus {
-    border-color: white;
+    border-color: var(--accent-color);
+    background: rgba(0, 0, 0, 0.5);
 }
 
 option {
-    background-color: var(--card-bg);
+    background-color: #1f2b35;
     color: white;
 }
 
-/* Buttons */
 .btn-primary {
     width: 100%;
     background-color: var(--accent-color);
@@ -207,12 +202,22 @@ option {
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: 1px;
-    transition: background 0.3s;
+    transition: all 0.2s ease;
     margin-top: 10px;
+    border-radius: 2px;
+    font-weight: bold;
+    box-shadow: 0 4px 0px #bd2f3b;
 }
 
 .btn-primary:hover {
-    background-color: #d93a46;
+    background-color: #ff5866;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0px #bd2f3b;
+}
+
+.btn-primary:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0px #bd2f3b;
 }
 
 .btn-icon {
