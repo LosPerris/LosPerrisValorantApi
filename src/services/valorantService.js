@@ -1,9 +1,7 @@
 const axios = require('axios');
 const https = require('https');
-const cache = require('./cache');
-
+const cache = require('../utils/cache');
 const BASE_URL = 'https://api.henrikdev.xyz/valorant';
-
 const agent = new https.Agent({
     keepAlive: true,
     maxSockets: 100,

@@ -1,4 +1,4 @@
-const { getPUUID } = require('./henrikApi');
+const translations = require('../../public/js/translations');
 
 function getErrorMsg(status, lang) {
     const isEs = lang === 'es';
@@ -8,19 +8,6 @@ function getErrorMsg(status, lang) {
         case 500: return isEs ? 'Error del servidor' : 'Server error';
         default: return isEs ? 'Error desconocido' : 'Unknown error';
     }
-}
-
-async function getAccountData(name, tag, req, res) {
-    const accountData = await getPUUID(name, tag);
-    if (accountData.status !== 200) {
-        const lang = req.query.lang || 'en';
-        if (req.query.format === 'text') {
-            return res.send(`Error: ${getErrorMsg(accountData.status, lang)}`);
-        }
-        res.status(accountData.status).json(accountData);
-        return null;
-    }
-    return accountData;
 }
 
 function handleRouteError(req, res, error) {
@@ -33,8 +20,6 @@ function handleRouteError(req, res, error) {
     }
     res.status(status).json(error.data || { message: error.message });
 }
-
-const translations = require('../../public/js/translations');
 
 function translateRank(rankName, lang) {
     if (lang !== 'es' || !rankName) return rankName;
@@ -65,4 +50,4 @@ function sendResponse(req, res, data, textFormatter, extraData = null) {
     });
 }
 
-module.exports = { getAccountData, handleRouteError, translateRank, sendResponse };
+module.exports = { handleRouteError, translateRank, sendResponse, getErrorMsg };
