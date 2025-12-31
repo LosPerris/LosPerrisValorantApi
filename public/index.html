@@ -23,11 +23,7 @@
     <link rel="stylesheet" href="./style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload"
-        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@400;700&display=swap"
-        as="style">
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@400;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/chart.js@4.4.1/dist/chart.umd.js"></script>
 </head>
 
@@ -39,8 +35,11 @@
 
     <div class="main-container">
         <header>
-            <h1 id="title">LOSPERRIS - <span class="accent">VALORANT API</span></h1>
-            <p id="subtitle">Rango, Historial y Comandos</p>
+            <div class="logo-container">
+                <img src="./imgs/LosPerris-gamer.ico" alt="LosPerris Logo" class="site-logo">
+                <h1 id="title">LOSPERRIS <span class="accent">VALORANT API</span></h1>
+            </div>
+            <p id="subtitle">Valorant Stats & Bot Commands</p>
         </header>
 
         <div class="grid-layout">
@@ -236,10 +235,12 @@
         </div>
 
         <footer>
-            <p id="footer-created">Creado por <a href="https://www.instagram.com/ponss_jean/"
-                    target="_blank">Ponss17</a></p>
-            <p id="footer-other-api">Mira mis otras herramientas en <a href="https://www.losperris.site/api"
-                    target="_blank" class="highlight-link">LosPerris API Hub</a></p>
+            <div class="footer-content">
+                <p>&copy;
+                    <script>document.write(new Date().getFullYear())</script> <a href="https://losperris.site"
+                        target="_blank">losperris.site</a>. Todos los derechos reservados.
+                </p>
+            </div>
             <p class="disclaimer" id="footer-disclaimer">La API de Valorant de LosPerris no cuenta con el respaldo de
                 Riot Games y no refleja las opiniones ni los puntos de vista de Riot Games ni de ninguna persona
                 involucrada oficialmente en la producción o gestión de propiedades de Riot Games. Riot Games y todas las
