@@ -76,6 +76,11 @@
                             <td>Query</td>
                             <td><code>json</code> (default) o <code>text</code></td>
                         </tr>
+                        <tr>
+                            <td><code>lang</code></td>
+                            <td>Query</td>
+                            <td><code>en</code> (default) o <code>es</code></td>
+                        </tr>
                     </tbody>
                 </table>
 
@@ -87,19 +92,33 @@
                 </div>
                 <div class="code-block-container">
                     <div id="rank-curl" class="code-content active">
-                        <pre
-                            class="pre-code">curl -X GET "https://losperris.site/api/valorant/rank/na/PonssLoveless/8882"</pre>
+                        <pre class="pre-code"># JSON (Default)
+curl -X GET "https://losperris.site/api/valorant/rank/na/PonssLoveless/8882"
+
+# Texto Plano (Bots)
+curl -X GET "https://losperris.site/api/valorant/rank/na/PonssLoveless/8882?format=text"
+
+# Texto en Español
+curl -X GET "https://losperris.site/api/valorant/rank/na/PonssLoveless/8882?format=text&lang=es"</pre>
                     </div>
                     <div id="rank-js" class="code-content">
-                        <pre class="pre-code">fetch("https://losperris.site/api/valorant/rank/na/PonssLoveless/8882")
-  .then(response => response.json())
-  .then(data => console.log(data));</pre>
+                        <pre class="pre-code">// JSON
+fetch("https://losperris.site/api/valorant/rank/na/PonssLoveless/8882")
+  .then(res => res.json()).then(data => console.log(data));
+
+// Texto
+fetch("https://losperris.site/api/valorant/rank/na/PonssLoveless/8882?format=text")
+  .then(res => res.text()).then(text => console.log(text));</pre>
                     </div>
                     <div id="rank-py" class="code-content">
-                        <pre class="pre-code">import requests
+                        <pre
+                            class="pre-code">import requests
 
-response = requests.get("https://losperris.site/api/valorant/rank/na/PonssLoveless/8882")
-print(response.json())</pre>
+# JSON
+print(requests.get("https://losperris.site/api/valorant/rank/na/PonssLoveless/8882").json())
+
+# Texto
+print(requests.get("https://losperris.site/api/valorant/rank/na/PonssLoveless/8882", params={"format": "text"}).text)</pre>
                     </div>
                 </div>
 
@@ -138,12 +157,6 @@ print(response.json())</pre>
 
                 <h4>Parámetros</h4>
                 <table class="doc-table">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Ubicación</th>
-                            <th>Descripción</th>
-                        </tr>
                     </thead>
                     <tbody>
                         <tr>
@@ -161,6 +174,16 @@ print(response.json())</pre>
                             <td>Path</td>
                             <td>Tag del usuario</td>
                         </tr>
+                        <tr>
+                            <td><code>format</code></td>
+                            <td>Query</td>
+                            <td><code>json</code> (default) o <code>text</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>lang</code></td>
+                            <td>Query</td>
+                            <td><code>en</code> (default) o <code>es</code></td>
+                        </tr>
                     </tbody>
                 </table>
 
@@ -172,19 +195,33 @@ print(response.json())</pre>
                 </div>
                 <div class="code-block-container">
                     <div id="match-curl" class="code-content active">
-                        <pre
-                            class="pre-code">curl -X GET "https://losperris.site/api/valorant/match/last/na/PonssLoveless/8882"</pre>
+                        <pre class="pre-code"># JSON (Default)
+curl -X GET "https://losperris.site/api/valorant/match/last/na/PonssLoveless/8882"
+
+# Texto Plano
+curl -X GET "https://losperris.site/api/valorant/match/last/na/PonssLoveless/8882?format=text"
+
+# Texto en Español
+curl -X GET "https://losperris.site/api/valorant/match/last/na/PonssLoveless/8882?format=text&lang=es"</pre>
                     </div>
                     <div id="match-js" class="code-content">
-                        <pre class="pre-code">fetch("https://losperris.site/api/valorant/match/last/na/PonssLoveless/8882")
-  .then(response => response.json())
-  .then(data => console.log(data));</pre>
+                        <pre class="pre-code">// JSON
+fetch("https://losperris.site/api/valorant/match/last/na/PonssLoveless/8882")
+  .then(res => res.json()).then(data => console.log(data));
+
+// Texto
+fetch("https://losperris.site/api/valorant/match/last/na/PonssLoveless/8882?format=text")
+  .then(res => res.text()).then(text => console.log(text));</pre>
                     </div>
                     <div id="match-py" class="code-content">
-                        <pre class="pre-code">import requests
+                        <pre
+                            class="pre-code">import requests
 
-response = requests.get("https://losperris.site/api/valorant/match/last/na/PonssLoveless/8882")
-print(response.json())</pre>
+# JSON
+print(requests.get("https://losperris.site/api/valorant/match/last/na/PonssLoveless/8882").json())
+
+# Texto
+print(requests.get("https://losperris.site/api/valorant/match/last/na/PonssLoveless/8882", params={"format": "text"}).text)</pre>
                     </div>
                 </div>
 
