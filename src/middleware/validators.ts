@@ -1,12 +1,13 @@
-const { param, query, validationResult } = require('express-validator');
+import { Request, Response, NextFunction } from 'express';
+import { param, validationResult } from 'express-validator';
 
-const validateRegion = [
+export const validateRegion = [
     param('region')
         .isIn(['na', 'eu', 'ap', 'kr', 'latam', 'br'])
         .withMessage('Invalid region. Available regions: na, eu, ap, kr, latam, br'),
 ];
 
-const validateName = [
+export const validateName = [
     param('name')
         .trim()
         .notEmpty()
@@ -15,7 +16,7 @@ const validateName = [
         .withMessage('Name must be between 3 and 16 characters'),
 ];
 
-const validateTag = [
+export const validateTag = [
     param('tag')
         .trim()
         .notEmpty()
@@ -24,7 +25,7 @@ const validateTag = [
         .withMessage('Tag must be between 3 and 5 characters'),
 ];
 
-const validateRequest = (req, res, next) => {
+export const validateRequest = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         if (req.query.format === 'text') {
@@ -35,17 +36,9 @@ const validateRequest = (req, res, next) => {
     next();
 };
 
-const commonValidations = [
+export const commonValidations = [
     ...validateRegion,
     ...validateName,
     ...validateTag,
     validateRequest
 ];
-
-module.exports = {
-    validateRegion,
-    validateName,
-    validateTag,
-    validateRequest,
-    commonValidations
-};

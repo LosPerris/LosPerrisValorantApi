@@ -1,4 +1,4 @@
-const MAP_UUIDS = {
+export const MAP_UUIDS: Record<string, string> = {
     'Ascent': '7eaecc1b-4337-bbf6-6ab9-04b8f06b3319',
     'Split': 'd960549e-485c-e861-8d71-aa9d1aed12a2',
     'Fracture': 'b529448b-4d60-346e-e89e-00a4c527a405',
@@ -12,5 +12,3 @@ const MAP_UUIDS = {
     'Abyss': '224b0a95-48b9-f703-1bd8-67aca101a61f',
     'Corrode': '1c18ab1f-420d-0d8b-71d0-77ad3c439115'
 };
-
-module.exports = { MAP_UUIDS };

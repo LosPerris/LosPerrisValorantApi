@@ -1,8 +1,29 @@
-const { translateRank } = require('../utils/helpers');
-const { MAP_UUIDS } = require('../utils/constants');
+import { translateRank } from '../utils/helpers';
+import { MAP_UUIDS } from '../utils/constants';
 
+interface AccountData {
+    data: {
+        name: string;
+        tag: string;
+        puuid: string;
+        region: string;
+        card: any;
+    }
+}
 
-function formatRankData(accountData, mmrData) {
+interface MMRData {
+    data: {
+        current_data: {
+            currenttierpatched: string;
+            images: { large: string };
+            elo: number;
+            mmr_change_to_last_game: number;
+            ranking_in_tier: number;
+        }
+    }
+}
+
+export function formatRankData(accountData: AccountData, mmrData: MMRData) {
     const currentData = mmrData.data.current_data;
     return {
         name: accountData.data.name,
@@ -18,8 +39,8 @@ function formatRankData(accountData, mmrData) {
     };
 }
 
-function formatMatchData(matchData, puuid) {
-    const stats = matchData.players.all_players.find(p => p.puuid === puuid);
+export function formatMatchData(matchData: any, puuid: string) {
+    const stats = matchData.players.all_players.find((p: any) => p.puuid === puuid);
     if (!stats) return null;
 
     const totalShots = (stats.stats.headshots || 0) + (stats.stats.bodyshots || 0) + (stats.stats.legshots || 0);
@@ -52,8 +73,8 @@ function formatMatchData(matchData, puuid) {
     };
 }
 
-function formatHistoryData(historyData) {
-    return historyData.data.map(match => ({
+export function formatHistoryData(historyData: any) {
+    return historyData.data.map((match: any) => ({
         date: match.date,
         elo: match.elo,
         change: match.mmr_change_to_last_game,
@@ -61,7 +82,7 @@ function formatHistoryData(historyData) {
     })).reverse();
 }
 
-function formatRankText(data, lang, type) {
+export function formatRankText(data: any, lang: string, type: string) {
     const { rank, ranking_in_tier, elo, name, tag } = data;
     const user = `${name}#${tag}`;
     const rr = ranking_in_tier;
@@ -76,7 +97,7 @@ function formatRankText(data, lang, type) {
     return `${user}: ${translatedRank} - ${rr} RR`;
 }
 
-function formatMatchText(data, lang, type, mmrChange) {
+export function formatMatchText(data: any, lang: string, type: string, mmrChange: number) {
     const { derived } = data;
     const { map_name, is_win, kda, hs_percent, agent_name } = derived;
 
@@ -104,11 +125,3 @@ function formatMatchText(data, lang, type, mmrChange) {
 
     return `My last match was on ${map_name} with ${agent_name} ${resultVerb} ${pointsMsg} (${kda})`;
 }
-
-module.exports = {
-    formatRankData,
-    formatMatchData,
-    formatHistoryData,
-    formatRankText,
-    formatMatchText
-};

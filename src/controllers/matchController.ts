@@ -1,10 +1,11 @@
-const valorantService = require('../services/valorantService');
-const formatService = require('../services/formatService');
-const { handleRouteError, sendResponse } = require('../utils/helpers');
+import { Request, Response } from 'express';
+import * as valorantService from '../services/valorantService';
+import * as formatService from '../services/formatService';
+import { handleRouteError, sendResponse } from '../utils/helpers';
 
-const getLastMatch = async (req, res) => {
+export const getLastMatch = async (req: Request, res: Response) => {
     const { region } = req.params;
-    const { accountData, puuid } = req;
+    const { accountData, puuid } = req as any;
 
     try {
         const [matchesData, mmrData] = await Promise.all([
@@ -23,7 +24,7 @@ const getLastMatch = async (req, res) => {
             if (req.query.format === 'text') {
                 return res.send('No matches found');
             }
-            res.status(matchesData.status).json({
+            return res.status(matchesData.status).json({
                 status: matchesData.status,
                 message: 'No matches found or error fetching matches',
                 data: matchesData.data
@@ -34,5 +35,3 @@ const getLastMatch = async (req, res) => {
         handleRouteError(req, res, error);
     }
 };
-
-module.exports = { getLastMatch };

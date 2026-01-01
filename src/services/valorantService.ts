@@ -1,6 +1,7 @@
-const axios = require('axios');
-const https = require('https');
-const cache = require('../utils/cache');
+import axios from 'axios';
+import https from 'https';
+import cache from '../utils/cache';
+
 const BASE_URL = 'https://api.henrikdev.xyz/valorant';
 const agent = new https.Agent({
     keepAlive: true,
@@ -14,7 +15,7 @@ const axiosInstance = axios.create({
     timeout: 10000
 });
 
-function getApiKey() {
+function getApiKey(): string {
     const apiKey = process.env.HENRIK_API_KEY;
     if (!apiKey) {
         throw new Error('HENRIK_API_KEY is not configured');
@@ -22,7 +23,7 @@ function getApiKey() {
     return apiKey;
 }
 
-function handleApiError(error) {
+function handleApiError(error: any): never {
     if (error.response) {
         throw { status: error.response.status, data: error.response.data };
     } else {
@@ -30,14 +31,14 @@ function handleApiError(error) {
     }
 }
 
-async function fetchWithCache(key, fetchFunction, ttl = 60000) {
-    const cachedData = cache.get(key);
+async function fetchWithCache<T>(key: string, fetchFunction: () => Promise<T>, ttl: number = 60000): Promise<T> {
+    const cachedData = cache.get(key) as T | undefined;
     if (cachedData) {
         return cachedData;
     }
 
     try {
-        const data = await fetchFunction();
+        const data: any = await fetchFunction();
         if (data && data.status === 200) {
             cache.set(key, data, { ttl });
         }
@@ -47,7 +48,7 @@ async function fetchWithCache(key, fetchFunction, ttl = 60000) {
     }
 }
 
-async function getAccount(name, tag) {
+export async function getAccount(name: string, tag: string): Promise<any> {
     return fetchWithCache(`account:${name}:${tag}`, async () => {
         try {
             const response = await axiosInstance.get(`${BASE_URL}/v1/account/${name}/${tag}`, {
@@ -63,7 +64,7 @@ async function getAccount(name, tag) {
     }, 24 * 60 * 60 * 1000);
 }
 
-async function getMMRByPUUID(region, puuid) {
+export async function getMMRByPUUID(region: string, puuid: string): Promise<any> {
     return fetchWithCache(`mmr:${region}:${puuid}`, async () => {
         try {
             const response = await axiosInstance.get(`${BASE_URL}/v2/by-puuid/mmr/${region}/${puuid}`, {
@@ -79,7 +80,7 @@ async function getMMRByPUUID(region, puuid) {
     }, 60000);
 }
 
-async function getMatchesByPUUID(region, puuid, mode = 'competitive') {
+export async function getMatchesByPUUID(region: string, puuid: string, mode: string = 'competitive'): Promise<any> {
     return fetchWithCache(`matches:${region}:${puuid}:${mode}`, async () => {
         try {
             const response = await axiosInstance.get(`${BASE_URL}/v3/by-puuid/matches/${region}/${puuid}?mode=${mode}`, {
@@ -95,7 +96,7 @@ async function getMatchesByPUUID(region, puuid, mode = 'competitive') {
     }, 120000);
 }
 
-async function getMMRHistoryByPUUID(region, puuid) {
+export async function getMMRHistoryByPUUID(region: string, puuid: string): Promise<any> {
     return fetchWithCache(`history:${region}:${puuid}`, async () => {
         try {
             const response = await axiosInstance.get(`${BASE_URL}/v1/by-puuid/mmr-history/${region}/${puuid}`, {
@@ -111,7 +112,7 @@ async function getMMRHistoryByPUUID(region, puuid) {
     }, 300000);
 }
 
-async function getPUUID(name, tag) {
+export async function getPUUID(name: string, tag: string): Promise<any> {
     const cacheKey = `puuid:${name.toLowerCase()}:${tag.toLowerCase()}`;
     const cachedPUUID = cache.get(cacheKey);
 
@@ -130,5 +131,3 @@ async function getPUUID(name, tag) {
         throw error;
     }
 }
-
-module.exports = { getAccount, getMMRByPUUID, getMatchesByPUUID, getPUUID, getMMRHistoryByPUUID };

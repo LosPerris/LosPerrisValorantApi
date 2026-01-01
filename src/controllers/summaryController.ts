@@ -1,13 +1,14 @@
-const valorantService = require('../services/valorantService');
-const formatService = require('../services/formatService');
-const { LRUCache } = require('lru-cache');
+import { Request, Response } from 'express';
+import { LRUCache } from 'lru-cache';
+import * as valorantService from '../services/valorantService';
+import * as formatService from '../services/formatService';
 
 const summaryCache = new LRUCache({
     max: 500,
     ttl: 300 * 1000,
 });
 
-const getSummary = async (req, res) => {
+export const getSummary = async (req: Request, res: Response) => {
     const { region, name, tag } = req.params;
     const cacheKey = `${region.toLowerCase()}:${name.toLowerCase()}:${tag.toLowerCase()}`;
 
@@ -32,7 +33,7 @@ const getSummary = async (req, res) => {
             valorantService.getMMRHistoryByPUUID(region, puuid)
         ]);
 
-        const responseData = {
+        const responseData: any = {
             account: accountData.data,
             rank: null,
             match: null,
@@ -59,9 +60,9 @@ const getSummary = async (req, res) => {
 
         summaryCache.set(cacheKey, finalResponse);
 
-        res.json(finalResponse);
+        return res.json(finalResponse);
 
-    } catch (error) {
+    } catch (error: any) {
         const status = error.status || 500;
         let errorCode = 'SERVER_ERROR';
         let message = 'An unexpected error occurred';
@@ -77,7 +78,7 @@ const getSummary = async (req, res) => {
             message = 'Invalid API Key';
         }
 
-        res.status(status).json({
+        return res.status(status).json({
             status: status,
             error: errorCode,
             message: message,
@@ -85,5 +86,3 @@ const getSummary = async (req, res) => {
         });
     }
 };
-
-module.exports = { getSummary };

@@ -1,14 +1,15 @@
-const express = require('express');
-const path = require('path');
-const cors = require('cors');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
-const rankRoutes = require('./routes/rank');
-const matchRoutes = require('./routes/match');
-const historyRoutes = require('./routes/history');
-const previewRoutes = require('./routes/preview');
+import express, { Application, Request, Response, NextFunction } from 'express';
+import path from 'path';
+import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import rankRoutes from './routes/rank';
+import matchRoutes from './routes/match';
+import historyRoutes from './routes/history';
+import previewRoutes from './routes/preview';
+import summaryRoutes from './routes/summary';
 
-const app = express();
+const app: Application = express();
 
 app.set('trust proxy', 1);
 
@@ -38,15 +39,15 @@ app.use(limiter);
 
 app.use(express.json());
 
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
     if (req.url.startsWith('/api/valorant')) {
         req.url = req.url.replace('/api/valorant', '') || '/';
     }
     next();
 });
 
-// Riot Verification Route: Handle request to product.html/riot.txt
-app.get('/product.html/riot.txt', (req, res) => {
+// Riot Verification product.html/riot.txt
+app.get('/product.html/riot.txt', (req: Request, res: Response) => {
     res.sendFile(path.join(__dirname, '../public/riot.txt'));
 });
 
@@ -55,7 +56,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use('/rank', rankRoutes);
 app.use('/match', matchRoutes);
 app.use('/history', historyRoutes);
-app.use('/summary', require('./routes/summary'));
+app.use('/summary', summaryRoutes);
 app.use('/preview', previewRoutes);
 
-module.exports = app;
+export default app;

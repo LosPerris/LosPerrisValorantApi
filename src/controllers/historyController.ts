@@ -1,10 +1,11 @@
-const valorantService = require('../services/valorantService');
-const formatService = require('../services/formatService');
-const { handleRouteError } = require('../utils/helpers');
+import { Request, Response } from 'express';
+import * as valorantService from '../services/valorantService';
+import * as formatService from '../services/formatService';
+import { handleRouteError } from '../utils/helpers';
 
-const getHistory = async (req, res) => {
+export const getHistory = async (req: Request, res: Response) => {
     const { region } = req.params;
-    const { puuid } = req;
+    const { puuid } = req as any;
 
     try {
         const historyData = await valorantService.getMMRHistoryByPUUID(region, puuid);
@@ -12,17 +13,15 @@ const getHistory = async (req, res) => {
         if (historyData.status === 200) {
             const formattedHistory = formatService.formatHistoryData(historyData);
 
-            res.json({
+            return res.json({
                 status: 200,
                 data: formattedHistory
             });
         } else {
-            res.status(historyData.status).json(historyData);
+            return res.status(historyData.status).json(historyData);
         }
 
     } catch (error) {
         handleRouteError(req, res, error);
     }
 };
-
-module.exports = { getHistory };

@@ -1,6 +1,7 @@
 const translations = require('../../public/js/translations');
+import { Request, Response } from 'express';
 
-function getErrorMsg(status, lang) {
+export function getErrorMsg(status: number, lang: string): string {
     const isEs = lang === 'es';
     switch (status) {
         case 404: return isEs ? 'Jugador no encontrado' : 'Player not found';
@@ -10,18 +11,18 @@ function getErrorMsg(status, lang) {
     }
 }
 
-function handleRouteError(req, res, error) {
+export function handleRouteError(req: Request, res: Response, error: any): void | Response {
     console.error('API Error:', error);
     const status = error.status || 500;
-    const lang = req.query.lang || 'en';
+    const lang = (req.query.lang as string) || 'en';
 
     if (req.query.format === 'text') {
         return res.send(`Error: ${getErrorMsg(status, lang)}`);
     }
-    res.status(status).json(error.data || { message: error.message });
+    return res.status(status).json(error.data || { message: error.message });
 }
 
-function translateRank(rankName, lang) {
+export function translateRank(rankName: string, lang: string): string {
     if (lang !== 'es' || !rankName) return rankName;
 
     const parts = rankName.split(' ');
@@ -32,10 +33,16 @@ function translateRank(rankName, lang) {
     return tier ? `${translatedName} ${tier}` : translatedName;
 }
 
-function sendResponse(req, res, data, textFormatter, extraData = null) {
+export function sendResponse(
+    req: Request,
+    res: Response,
+    data: any,
+    textFormatter: ((data: any, lang: string, type: string, extraData?: any) => string) | null,
+    extraData: any = null
+): Response {
     if (req.query.format === 'text') {
-        const lang = req.query.lang || 'en';
-        const type = req.query.type || '1';
+        const lang = (req.query.lang as string) || 'en';
+        const type = (req.query.type as string) || '1';
 
         if (!textFormatter) {
             return res.status(400).send('Text format not supported for this endpoint');
@@ -44,10 +51,8 @@ function sendResponse(req, res, data, textFormatter, extraData = null) {
         return res.send(textFormatter(data, lang, type, extraData));
     }
 
-    res.json({
+    return res.json({
         status: 200,
         data: data
     });
 }
-
-module.exports = { handleRouteError, translateRank, sendResponse, getErrorMsg };

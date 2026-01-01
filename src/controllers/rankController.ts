@@ -1,10 +1,11 @@
-const valorantService = require('../services/valorantService');
-const formatService = require('../services/formatService');
-const { handleRouteError, sendResponse } = require('../utils/helpers');
+import { Request, Response } from 'express';
+import * as valorantService from '../services/valorantService';
+import * as formatService from '../services/formatService';
+import { handleRouteError, sendResponse } from '../utils/helpers';
 
-const getRank = async (req, res) => {
+export const getRank = async (req: Request, res: Response) => {
     const { region } = req.params;
-    const { accountData, puuid } = req;
+    const { accountData, puuid } = req as any;
 
     try {
         const mmrData = await valorantService.getMMRByPUUID(region, puuid);
@@ -16,12 +17,10 @@ const getRank = async (req, res) => {
             if (req.query.format === 'text') {
                 return res.send(`Error: ${mmrData.message || 'Could not fetch rank'}`);
             }
-            res.status(mmrData.status).json(mmrData);
+            return res.status(mmrData.status).json(mmrData);
         }
 
     } catch (error) {
         handleRouteError(req, res, error);
     }
 };
-
-module.exports = { getRank };

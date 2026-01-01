@@ -1,6 +1,7 @@
-const formatService = require('../services/formatService');
+import { Request, Response } from 'express';
+import * as formatService from '../services/formatService';
 
-const generatePreview = (req, res) => {
+export const generatePreview = (req: Request, res: Response) => {
     const { type, data, lang, botType, botMatchType } = req.body;
 
     if (!data) {
@@ -43,5 +44,3 @@ const generatePreview = (req, res) => {
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 };
-
-module.exports = { generatePreview };
