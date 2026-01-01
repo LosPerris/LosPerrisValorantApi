@@ -32,8 +32,8 @@ const translations = {
         errorUserNotFound: 'Player not found. Check Riot ID.',
         errorRateLimit: 'Too many requests. Please wait.',
         errorServer: 'Server error. Try again later.',
-        footerCreated: `Created by <a href="${CONFIG.authorUrl}" target="_blank">Ponss17</a>`,
-        footerOtherApi: `Check my other Api <a href="${CONFIG.siteUrl}" target="_blank" class="highlight-link">LosPerris Followage API</a>`,
+        footerCreated: `Created by <a href="${(typeof CONFIG !== 'undefined' ? CONFIG.authorUrl : '#')}" target="_blank">Ponss17</a>`,
+        footerOtherApi: `Check my other Api <a href="${(typeof CONFIG !== 'undefined' ? CONFIG.siteUrl : '#')}" target="_blank" class="highlight-link">LosPerris Followage API</a>`,
         footerDisclaimer: 'LosPerris Valorant API is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games and all associated properties are trademarks or registered trademarks of Riot Games, Inc.',
         exampleLabel: 'Example:'
     },
@@ -70,8 +70,8 @@ const translations = {
         errorUserNotFound: 'Jugador no encontrado. Revisa el Riot ID.',
         errorRateLimit: 'Demasiadas peticiones. Espera un poco.',
         errorServer: 'Error del servidor. Intenta más tarde.',
-        footerCreated: `Creado por <a href="${CONFIG.authorUrl}" target="_blank">Ponss17</a>`,
-        footerOtherApi: `Mira mi otra Api <a href="${CONFIG.siteUrl}" target="_blank" class="highlight-link">LosPerris Followage API</a>`,
+        footerCreated: `Creado por <a href="${(typeof CONFIG !== 'undefined' ? CONFIG.authorUrl : '#')}" target="_blank">Ponss17</a>`,
+        footerOtherApi: `Mira mi otra Api <a href="${(typeof CONFIG !== 'undefined' ? CONFIG.siteUrl : '#')}" target="_blank" class="highlight-link">LosPerris Followage API</a>`,
         footerDisclaimer: 'La API de Valorant de LosPerris no cuenta con el respaldo de Riot Games y no refleja las opiniones ni los puntos de vista de Riot Games ni de ninguna persona involucrada oficialmente en la producción o gestión de propiedades de Riot Games. Riot Games y todas las propiedades asociadas son marcas comerciales o marcas registradas de Riot Games, Inc.',
         exampleLabel: 'Ejemplo:'
     },
