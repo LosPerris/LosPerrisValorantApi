@@ -122,11 +122,19 @@ print(requests.get("https://losperris.site/api/valorant/rank/na/PonssLoveless/88
 print(requests.get("https://losperris.site/api/valorant/rank/na/PonssLoveless/8882", params={"format": "text"}).text)</pre>
                     </div>
                     <div id="rank-bots" class="code-content">
-                        <pre class="pre-code"># URL para Nightbot / StreamElements
-https://losperris.site/api/valorant/rank/na/PonssLoveless/8882?format=text&lang=es
+                        <div class="doc-note"
+                            style="margin-bottom: 15px; background: rgba(255, 70, 85, 0.1); border-left: 3px solid var(--primary-color); padding: 10px;">
+                            <p style="margin: 0; font-size: 0.9em;">💡 <strong>¿Quieres personalizarlo
+                                    fácil?</strong><br>
+                                Usa nuestro <a href="./"
+                                    style="color: var(--primary-color); text-decoration: underline;">Generador de
+                                    Comandos</a> en el inicio para elegir idioma, formato y plataforma visualmente.</p>
+                        </div>
+                        <pre class="pre-code"># Nightbot / StreamElements / Fossabot
+!addcom !rank $(urlfetch https://losperris.site/api/valorant/rank/na/PonssLoveless/8882?format=text&lang=es&type=1)
 
-# Ejemplo Comando Nightbot
-!addcom !rank $(urlfetch https://losperris.site/api/valorant/rank/na/PonssLoveless/8882?format=text&lang=es)</pre>
+# StreamLabs / Botrix
+https://losperris.site/api/valorant/rank/na/PonssLoveless/8882?format=text&lang=es&type=1</pre>
                     </div>
                 </div>
 
