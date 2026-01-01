@@ -24,6 +24,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="./js/config.js"></script>
     <script src="https://unpkg.com/chart.js@4.4.1/dist/chart.umd.js"></script>
 </head>
 
@@ -237,8 +238,10 @@
         <footer>
             <div class="footer-content">
                 <p>&copy;
-                    <script>document.write(new Date().getFullYear())</script> <a href="https://losperris.site"
-                        target="_blank">losperris.site</a>. Todos los derechos reservados.
+                    <script>
+                        document.write(new Date().getFullYear());
+                        document.write(` <a href="${CONFIG.siteUrl}" target="_blank">${CONFIG.domain}</a>`);
+                    </script>. Todos los derechos reservados.
                 </p>
             </div>
             <p class="disclaimer" id="footer-disclaimer">La API de Valorant de LosPerris no cuenta con el respaldo de
