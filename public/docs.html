@@ -86,9 +86,10 @@
 
                 <h4>Ejemplo de Solicitud</h4>
                 <div class="code-tabs">
-                    <button class="code-tab active" onclick="switchTab('rank', 'curl')">cURL</button>
-                    <button class="code-tab" onclick="switchTab('rank', 'js')">JavaScript</button>
-                    <button class="code-tab" onclick="switchTab('rank', 'py')">Python</button>
+                    <button class="code-tab active" onclick="selectTab('rank', 'curl')">cURL</button>
+                    <button class="code-tab" onclick="selectTab('rank', 'js')">JavaScript</button>
+                    <button class="code-tab" onclick="selectTab('rank', 'py')">Python</button>
+                    <button class="code-tab" onclick="selectTab('rank', 'bots')">Bots</button>
                 </div>
                 <div class="code-block-container">
                     <div id="rank-curl" class="code-content active">
@@ -120,12 +121,19 @@ print(requests.get("https://losperris.site/api/valorant/rank/na/PonssLoveless/88
 # Texto
 print(requests.get("https://losperris.site/api/valorant/rank/na/PonssLoveless/8882", params={"format": "text"}).text)</pre>
                     </div>
+                    <div id="rank-bots" class="code-content">
+                        <pre class="pre-code"># URL para Nightbot / StreamElements
+https://losperris.site/api/valorant/rank/na/PonssLoveless/8882?format=text&lang=es
+
+# Ejemplo Comando Nightbot
+!addcom !rank $(urlfetch https://losperris.site/api/valorant/rank/na/PonssLoveless/8882?format=text&lang=es)</pre>
+                    </div>
                 </div>
 
                 <h4>Respuesta de Ejemplo</h4>
                 <div class="code-tabs">
-                    <button class="code-tab active" onclick="switchTab('rank-res', 'json')">JSON</button>
-                    <button class="code-tab" onclick="switchTab('rank-res', 'text')">Texto</button>
+                    <button class="code-tab active" onclick="selectTab('rank-res', 'json')">JSON</button>
+                    <button class="code-tab" onclick="selectTab('rank-res', 'text')">Texto</button>
                 </div>
                 <div class="code-block-container">
                     <div id="rank-res-json" class="code-content active">
@@ -157,6 +165,12 @@ print(requests.get("https://losperris.site/api/valorant/rank/na/PonssLoveless/88
 
                 <h4>Parámetros</h4>
                 <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Ubicación</th>
+                            <th>Descripción</th>
+                        </tr>
                     </thead>
                     <tbody>
                         <tr>
@@ -189,9 +203,10 @@ print(requests.get("https://losperris.site/api/valorant/rank/na/PonssLoveless/88
 
                 <h4>Ejemplo de Solicitud</h4>
                 <div class="code-tabs">
-                    <button class="code-tab active" onclick="switchTab('match', 'curl')">cURL</button>
-                    <button class="code-tab" onclick="switchTab('match', 'js')">JavaScript</button>
-                    <button class="code-tab" onclick="switchTab('match', 'py')">Python</button>
+                    <button class="code-tab active" onclick="selectTab('match', 'curl')">cURL</button>
+                    <button class="code-tab" onclick="selectTab('match', 'js')">JavaScript</button>
+                    <button class="code-tab" onclick="selectTab('match', 'py')">Python</button>
+                    <button class="code-tab" onclick="selectTab('match', 'bots')">Bots</button>
                 </div>
                 <div class="code-block-container">
                     <div id="match-curl" class="code-content active">
@@ -223,10 +238,6 @@ print(requests.get("https://losperris.site/api/valorant/match/last/na/PonssLovel
 # Texto
 print(requests.get("https://losperris.site/api/valorant/match/last/na/PonssLoveless/8882", params={"format": "text"}).text)</pre>
                     </div>
-                </div>
-
-                <h4>Respuesta de Ejemplo</h4>
-                <div class="code-tabs">
                     <button class="code-tab active" onclick="switchTab('match-res', 'json')">JSON</button>
                     <button class="code-tab" onclick="switchTab('match-res', 'text')">Texto</button>
                 </div>
@@ -412,16 +423,23 @@ print(requests.get("https://losperris.site/api/valorant/summary/na/PonssLoveless
 
         function switchTab(endpoint, lang) {
             const tabs = document.querySelectorAll(`.code-tab[onclick*="'${endpoint}'"]`);
-            tabs.forEach(tab => tab.classList.remove('active'));
-
-            const clickedTab = event.currentTarget || event.target;
-            clickedTab.classList.add('active');
-
             const contents = document.querySelectorAll(`[id^="${endpoint}-"]`);
+            tabs.forEach(tab => tab.classList.remove('active'));
             contents.forEach(content => content.classList.remove('active'));
-
+            const clickedTab = event.currentTarget || document.querySelector(`.code-tab[onclick*="'${endpoint}', '${lang}'"]`);
+            if (clickedTab) clickedTab.classList.add('active');
             const content = document.getElementById(`${endpoint}-${lang}`);
             if (content) content.classList.add('active');
+        }
+
+        function selectTab(endpoint, type) {
+            switchTab(endpoint, type);
+            const responseEndpoint = endpoint + '-res';
+            if (type === 'bots') {
+                switchTab(responseEndpoint, 'text');
+            } else {
+                switchTab(responseEndpoint, 'json');
+            }
         }
     </script>
 </body>
