@@ -104,17 +104,28 @@ print(response.json())</pre>
                 </div>
 
                 <h4>Respuesta de Ejemplo</h4>
-                <div class="json-block">
-                    {
-                    <span class="json-key">"status"</span>: <span class="json-number">200</span>,
-                    <span class="json-key">"data"</span>: {
-                    <span class="json-key">"name"</span>: <span class="json-string">"PonssLoveless"</span>,
-                    <span class="json-key">"tag"</span>: <span class="json-string">"8882"</span>,
-                    <span class="json-key">"rank"</span>: <span class="json-string">"Ascendente 2"</span>,
-                    <span class="json-key">"elo"</span>: <span class="json-number">1250</span>,
-                    <span class="json-key">"mmr_change"</span>: <span class="json-number">15</span>
-                    }
-                    }
+                <div class="code-tabs">
+                    <button class="code-tab active" onclick="switchTab('rank-res', 'json')">JSON</button>
+                    <button class="code-tab" onclick="switchTab('rank-res', 'text')">Texto</button>
+                </div>
+                <div class="code-block-container">
+                    <div id="rank-res-json" class="code-content active">
+                        <div class="json-block">
+                            {
+                            <span class="json-key">"status"</span>: <span class="json-number">200</span>,
+                            <span class="json-key">"data"</span>: {
+                            <span class="json-key">"name"</span>: <span class="json-string">"PonssLoveless"</span>,
+                            <span class="json-key">"tag"</span>: <span class="json-string">"8882"</span>,
+                            <span class="json-key">"rank"</span>: <span class="json-string">"Ascidente 2"</span>,
+                            <span class="json-key">"elo"</span>: <span class="json-number">1250</span>,
+                            <span class="json-key">"mmr_change"</span>: <span class="json-number">15</span>
+                            }
+                            }
+                        </div>
+                    </div>
+                    <div id="rank-res-text" class="code-content">
+                        <pre class="pre-code">Ascendente 2 - 50 RR</pre>
+                    </div>
                 </div>
             </section>
 
@@ -178,16 +189,27 @@ print(response.json())</pre>
                 </div>
 
                 <h4>Respuesta de Ejemplo</h4>
-                <div class="json-block">
-                    {
-                    <span class="json-key">"data"</span>: {
-                    <span class="json-key">"map"</span>: <span class="json-string">"Ascent"</span>,
-                    <span class="json-key">"mode"</span>: <span class="json-string">"Competitive"</span>,
-                    <span class="json-key">"score"</span>: <span class="json-string">"13-10"</span>,
-                    <span class="json-key">"result"</span>: <span class="json-string">"Win"</span>,
-                    <span class="json-key">"kda"</span>: <span class="json-string">"18/12/5"</span>
-                    }
-                    }
+                <div class="code-tabs">
+                    <button class="code-tab active" onclick="switchTab('match-res', 'json')">JSON</button>
+                    <button class="code-tab" onclick="switchTab('match-res', 'text')">Texto</button>
+                </div>
+                <div class="code-block-container">
+                    <div id="match-res-json" class="code-content active">
+                        <div class="json-block">
+                            {
+                            <span class="json-key">"data"</span>: {
+                            <span class="json-key">"map"</span>: <span class="json-string">"Ascent"</span>,
+                            <span class="json-key">"mode"</span>: <span class="json-string">"Competitive"</span>,
+                            <span class="json-key">"score"</span>: <span class="json-string">"13-10"</span>,
+                            <span class="json-key">"result"</span>: <span class="json-string">"Win"</span>,
+                            <span class="json-key">"kda"</span>: <span class="json-string">"18/12/5"</span>
+                            }
+                            }
+                        </div>
+                    </div>
+                    <div id="match-res-text" class="code-content">
+                        <pre class="pre-code">Ascent - Competitive - Win 13-10 - KDA: 18/12/5</pre>
+                    </div>
                 </div>
             </section>
 
@@ -315,7 +337,7 @@ print(requests.get("https://losperris.site/api/valorant/summary/na/PonssLoveless
             </section>
 
             <section class="card" style="text-align: center;">
-                <a href="/" class="btn-primary"
+                <a href="./" class="btn-primary"
                     style="text-decoration: none; width: auto; display: inline-block;">VOLVER AL INICIO</a>
             </section>
 
