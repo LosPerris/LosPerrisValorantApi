@@ -8,10 +8,7 @@
         {
             "source": "/api/valorant/(.*)",
             "destination": "/api/index.js"
-        },
-        {
-            "source": "/(.*)",
-            "destination": "/api/index.js"
         }
-    ]
+    ],
+    "cleanUrls": true
 }
