@@ -1,13 +1,13 @@
 :root {
     --primary-color: #ff4655;
     --primary-hover: #d93d49;
-    --bg-dark: #0f1923;
-    --sidebar-bg: #111e2a;
-    --card-bg: #1c252e;
-    --card-border: #2d3b48;
-    --text-main: #ece8e1;
-    --text-dim: #9aa0a6;
-    --code-bg: #0a0a0c;
+    --bg-dark: #09090b;
+    --sidebar-bg: #0e0e11;
+    --card-bg: #131316;
+    --card-border: #27272a;
+    --text-main: #f4f4f5;
+    --text-dim: #a1a1aa;
+    --code-bg: #1a1a1f;
     --font-main: 'Outfit', sans-serif;
     --success-color: #10b981;
     --warning-color: #f59e0b;
