@@ -2,12 +2,13 @@ import { Request, Response } from 'express';
 import * as valorantService from '../services/valorantService';
 import * as formatService from '../services/formatService';
 import { handleRouteError } from '../utils/helpers';
+import { ValorantAccount, ValorantApiResponse, ValorantMMR, ValorantMatch, ValorantMMRHistoryItem } from '../types/valorant';
 
 export const getSummary = async (req: Request, res: Response) => {
     const { region, name, tag } = req.params;
 
     try {
-        const accountData = await valorantService.getPUUID(name, tag);
+        const accountData: ValorantApiResponse<ValorantAccount> = await valorantService.getPUUID(name, tag);
 
         if (accountData.status !== 200) {
             return res.status(accountData.status).json(accountData);

@@ -1,6 +1,13 @@
 import axios from 'axios';
 import https from 'https';
 import cache from '../utils/cache';
+import {
+    ValorantAccount,
+    ValorantApiResponse,
+    ValorantMMR,
+    ValorantMatch,
+    ValorantMMRHistoryItem
+} from '../types/valorant';
 
 const BASE_URL = 'https://api.henrikdev.xyz/valorant';
 const agent = new https.Agent({
@@ -31,14 +38,14 @@ function handleApiError(error: any): never {
     }
 }
 
-async function fetchWithCache<T>(key: string, fetchFunction: () => Promise<T>, ttl: number = 60000): Promise<T> {
-    const cachedData = cache.get(key) as T | undefined;
+async function fetchWithCache<T>(key: string, fetchFunction: () => Promise<ValorantApiResponse<T>>, ttl: number = 60000): Promise<ValorantApiResponse<T>> {
+    const cachedData = cache.get(key) as ValorantApiResponse<T> | undefined;
     if (cachedData) {
         return cachedData;
     }
 
     try {
-        const data: any = await fetchFunction();
+        const data = await fetchFunction();
         if (data && data.status === 200) {
             cache.set(key, data, { ttl });
         }
@@ -48,10 +55,10 @@ async function fetchWithCache<T>(key: string, fetchFunction: () => Promise<T>, t
     }
 }
 
-export async function getAccount(name: string, tag: string): Promise<any> {
+export async function getAccount(name: string, tag: string): Promise<ValorantApiResponse<ValorantAccount>> {
     return fetchWithCache(`account:${name}:${tag}`, async () => {
         try {
-            const response = await axiosInstance.get(`${BASE_URL}/v1/account/${name}/${tag}`, {
+            const response = await axiosInstance.get<ValorantApiResponse<ValorantAccount>>(`${BASE_URL}/v1/account/${name}/${tag}`, {
                 headers: {
                     'Authorization': getApiKey(),
                     'accept': 'application/json'
@@ -64,10 +71,10 @@ export async function getAccount(name: string, tag: string): Promise<any> {
     }, 24 * 60 * 60 * 1000);
 }
 
-export async function getMMRByPUUID(region: string, puuid: string): Promise<any> {
+export async function getMMRByPUUID(region: string, puuid: string): Promise<ValorantApiResponse<ValorantMMR>> {
     return fetchWithCache(`mmr:${region}:${puuid}`, async () => {
         try {
-            const response = await axiosInstance.get(`${BASE_URL}/v2/by-puuid/mmr/${region}/${puuid}`, {
+            const response = await axiosInstance.get<ValorantApiResponse<ValorantMMR>>(`${BASE_URL}/v2/by-puuid/mmr/${region}/${puuid}`, {
                 headers: {
                     'Authorization': getApiKey(),
                     'accept': 'application/json'
@@ -80,10 +87,10 @@ export async function getMMRByPUUID(region: string, puuid: string): Promise<any>
     }, 60000);
 }
 
-export async function getMatchesByPUUID(region: string, puuid: string, mode: string = 'competitive'): Promise<any> {
+export async function getMatchesByPUUID(region: string, puuid: string, mode: string = 'competitive'): Promise<ValorantApiResponse<ValorantMatch[]>> {
     return fetchWithCache(`matches:${region}:${puuid}:${mode}`, async () => {
         try {
-            const response = await axiosInstance.get(`${BASE_URL}/v3/by-puuid/matches/${region}/${puuid}?mode=${mode}`, {
+            const response = await axiosInstance.get<ValorantApiResponse<ValorantMatch[]>>(`${BASE_URL}/v3/by-puuid/matches/${region}/${puuid}?mode=${mode}`, {
                 headers: {
                     'Authorization': getApiKey(),
                     'accept': 'application/json'
@@ -96,10 +103,10 @@ export async function getMatchesByPUUID(region: string, puuid: string, mode: str
     }, 120000);
 }
 
-export async function getMMRHistoryByPUUID(region: string, puuid: string): Promise<any> {
+export async function getMMRHistoryByPUUID(region: string, puuid: string): Promise<ValorantApiResponse<ValorantMMRHistoryItem[]>> {
     return fetchWithCache(`history:${region}:${puuid}`, async () => {
         try {
-            const response = await axiosInstance.get(`${BASE_URL}/v1/by-puuid/mmr-history/${region}/${puuid}`, {
+            const response = await axiosInstance.get<ValorantApiResponse<ValorantMMRHistoryItem[]>>(`${BASE_URL}/v1/by-puuid/mmr-history/${region}/${puuid}`, {
                 headers: {
                     'Authorization': getApiKey(),
                     'accept': 'application/json'
@@ -112,12 +119,12 @@ export async function getMMRHistoryByPUUID(region: string, puuid: string): Promi
     }, 300000);
 }
 
-export async function getPUUID(name: string, tag: string): Promise<any> {
+export async function getPUUID(name: string, tag: string): Promise<ValorantApiResponse<ValorantAccount>> {
     const cacheKey = `puuid:${name.toLowerCase()}:${tag.toLowerCase()}`;
-    const cachedPUUID = cache.get(cacheKey);
+    const cachedPUUID = cache.get(cacheKey) as string | undefined;
 
     if (cachedPUUID) {
-        return { status: 200, data: { puuid: cachedPUUID, name, tag } };
+        return getAccount(name, tag);
     }
 
     try {
@@ -131,3 +138,4 @@ export async function getPUUID(name: string, tag: string): Promise<any> {
         throw error;
     }
 }
+
