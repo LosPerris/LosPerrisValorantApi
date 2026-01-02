@@ -318,18 +318,14 @@ async function updateExamplePreviews(data, botLang, botType, botMatchType) {
 function showLoading(lang) {
     const submitBtn = document.getElementById('submit-btn');
     submitBtn.disabled = true;
-    
-    const overlay = document.getElementById('loading-overlay');
-    overlay.classList.remove('hidden');
+
+    submitBtn.innerHTML = '<img src="./imgs/buscando_jugador.svg" class="btn-loader">';
 }
 
 function hideLoading(lang) {
     const submitBtn = document.getElementById('submit-btn');
     submitBtn.disabled = false;
     submitBtn.textContent = translations[lang].search;
-
-    const overlay = document.getElementById('loading-overlay');
-    overlay.classList.add('hidden');
 }
 
 function showResults() {
