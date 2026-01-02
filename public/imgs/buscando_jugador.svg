@@ -14,13 +14,13 @@
     <animate attributeName="opacity" values="0;1;1;0;0;0;0" keyTimes="0;0.05;0.3;0.35;0.95;1;1" dur="6s" repeatCount="indefinite" />
   </text>
 
-  <text x="50%" y="115" class="text-style" font-size="45" fill="#000000ff" letter-spacing="4">
+  <text x="50%" y="115" class="text-style" font-size="45" fill="#ece8e1" letter-spacing="4">
     LOSPERRIS
     <animate attributeName="opacity" values="0;0;0;1;1;0;0" keyTimes="0;0.3;0.35;0.4;0.65;0.7;1" dur="6s" repeatCount="indefinite" />
   </text>
 
   <g id="loader">
-    <circle cx="300" cy="100" r="25" fill="none" stroke="#000000ff" stroke-width="5" stroke-dasharray="140" stroke-dashoffset="100" stroke-linecap="round">
+    <circle cx="300" cy="100" r="25" fill="none" stroke="#ece8e1" stroke-width="5" stroke-dasharray="140" stroke-dashoffset="100" stroke-linecap="round">
       <animateTransform attributeName="transform" type="rotate" from="0 300 100" to="360 300 100" dur="0.8s" repeatCount="indefinite" />
     </circle>
     <animate attributeName="opacity" values="0;0;0;0;0;1;1" keyTimes="0;0.3;0.35;0.65;0.7;0.75;1" dur="6s" repeatCount="indefinite" />
