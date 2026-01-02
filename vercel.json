@@ -3,11 +3,11 @@
     "rewrites": [
         {
             "source": "/api/valorant",
-            "destination": "/api/index.js"
+            "destination": "/dist/api/index.js"
         },
         {
             "source": "/api/valorant/(.*)",
-            "destination": "/api/index.js"
+            "destination": "/dist/api/index.js"
         }
     ],
     "cleanUrls": true
