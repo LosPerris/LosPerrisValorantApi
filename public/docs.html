@@ -1,464 +1,247 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LosPerris - API Documentation</title>
-    <meta name="theme-color" content="#ff4655">
-    <link rel="icon" type="image/x-icon" href="./imgs/LosPerris-gamer.ico">
-    <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="./docs.css">
+    <title>Documentación | LosPerris Valorant API</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./docs.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="./imgs/LosPerris-gamer.ico">
     <script src="./js/config.js"></script>
 </head>
 
 <body>
-    <div id="dynamic-bg"></div>
-    <div class="main-container">
-        <header>
-            <div class="logo-container">
-                <a href="/">
-                    <img src="./imgs/LosPerris-gamer.ico" alt="LosPerris Logo" class="site-logo">
-                </a>
-                <h1 id="title">API <span class="accent">DOCS</span></h1>
+    <div class="docs-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="./imgs/LosPerris-gamer.ico" alt="Logo" class="sidebar-logo">
+                <h2>Docs API</h2>
             </div>
-            <p id="subtitle">Documentación oficial de la API de Valorant</p>
-        </header>
+            <nav class="sidebar-nav">
+                <a href="#intro" class="nav-item active"><i class="fa-solid fa-house"></i> Introducción</a>
 
-        <div class="grid-layout">
-            <section class="card">
-                <h3>Introducción</h3>
-                <p style="color: var(--text-muted); line-height: 1.6;">
-                    Bienvenido a la documentación de <strong>LosPerris Valorant API</strong>.
-                    Aquí encontrarás todos los endpoints disponibles para obtener información de jugadores, rangos y
-                    partidas.
-                    Todos los endpoints soportan respuestas en formato JSON (por defecto) y texto plano (ideal para
-                    bots).
-                </p>
+                <div class="nav-group">
+                    <span class="group-title">Endpoints</span>
+                    <a href="#rank" class="nav-item"><i class="fa-solid fa-medal"></i> Rank</a>
+                    <a href="#match" class="nav-item"><i class="fa-solid fa-gamepad"></i> Última Partida</a>
+                    <a href="#history" class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i> Historial</a>
+                    <a href="#summary" class="nav-item"><i class="fa-solid fa-user-astronaut"></i> Resumen Perfil</a>
+                    <a href="#status" class="nav-item"><i class="fa-solid fa-heart-pulse"></i> Status</a>
+                </div>
+
+                <div class="nav-group">
+                    <span class="group-title">Soporte</span>
+                    <a href="#errors" class="nav-item"><i class="fa-solid fa-triangle-exclamation"></i> Errores</a>
+                </div>
+
+                <a href="./" class="nav-item return-home"><i class="fa-solid fa-arrow-left"></i> Volver al Panel</a>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <section id="intro" class="doc-section">
+                <h1 class="main-title">Documentación <span class="accent">Valorant API</span></h1>
+                <p class="lead-text">Bienvenido a la documentación oficial de <strong>LosPerris Valorant API</strong>.
+                    Integra datos de rangos, historial de partidas y estadísticas detalladas en tus aplicaciones o bots
+                    de chat (Nightbot, StreamElements).</p>
+
+                <div class="endpoint-block"
+                    style="border-color: var(--success-color); background: rgba(16, 185, 129, 0.05);">
+                    <i class="fa-solid fa-circle-check" style="color: var(--success-color);"></i>
+                    <span style="font-weight: bold; color: var(--success-color);">API STATUS:</span>
+                    <a href="status.html" class="url" style="text-decoration: underline; cursor: pointer;">Comprobar
+                        estado del servicio</a>
+                </div>
             </section>
 
-            <section class="card">
-                <h3><span class="accent">GET</span> /rank</h3>
-                <p class="desc">Obtiene el rango actual, ELO y puntuación de un jugador.</p>
-                <div class="doc-item">
+            <section id="rank" class="doc-section">
+                <h2><i class="fa-solid fa-medal"></i> Obtener Rango (MMR)</h2>
+                <p>Devuelve el rango actual, ELO y puntuación de un jugador. Ideal para comandos <code>!rank</code>.</p>
+
+                <div class="endpoint-block">
+                    <span class="method get">GET</span>
                     <span class="url" id="url-rank">/api/valorant/rank/:region/:name/:tag</span>
                 </div>
 
-                <h4>Parámetros</h4>
+                <h3>Parámetros</h3>
                 <table class="doc-table">
                     <thead>
                         <tr>
-                            <th>Nombre</th>
-                            <th>Ubicación</th>
+                            <th>Parámetro</th>
+                            <th>Tipo</th>
                             <th>Descripción</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td><code>region</code></td>
-                            <td>Path</td>
-                            <td>Región (na, eu, ap, kr, latam, br)</td>
+                            <td>String</td>
+                            <td>na, eu, ap, kr, latam, br</td>
                         </tr>
                         <tr>
                             <td><code>name</code></td>
-                            <td>Path</td>
-                            <td>Nombre de usuario de Riot</td>
+                            <td>String</td>
+                            <td>Riot ID del jugador</td>
                         </tr>
                         <tr>
                             <td><code>tag</code></td>
-                            <td>Path</td>
-                            <td>Tag de Riot (sin el #)</td>
-                        </tr>
-                        <tr>
-                            <td><code>format</code></td>
-                            <td>Query</td>
-                            <td><code>json</code> (default) o <code>text</code></td>
-                        </tr>
-                        <tr>
-                            <td><code>lang</code></td>
-                            <td>Query</td>
-                            <td><code>en</code> (default) o <code>es</code></td>
+                            <td>String</td>
+                            <td>Tagline del jugador</td>
                         </tr>
                         <tr>
                             <td><code>type</code></td>
-                            <td>Query</td>
-                            <td>Estilo de respuesta (1, 2, 3)</td>
+                            <td>Number</td>
+                            <td>(Opcional) 1: Solo Rango, 2: +Puntos, 3: +ELO</td>
                         </tr>
                     </tbody>
                 </table>
 
-                <h4>Tipos de Respuesta (Format Types)</h4>
-                <p class="desc" style="font-size: 0.9em;">Estos tipos determinan qué tanta información devuelve el bot
-                    cuando <code>format=text</code> (útil para Nightbot).</p>
-                <table class="doc-table" style="font-size: 0.85em;">
-                    <thead>
-                        <tr>
-                            <th>Tipo</th>
-                            <th>Ejemplo de Salida (Rank)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>1</strong> (Simple)</td>
-                            <td>"Actualmente estoy en Ascendente 2"</td>
-                        </tr>
-                        <tr>
-                            <td><strong>2</strong> (Detallado)</td>
-                            <td>"Actualmente estoy en Ascendente 2 con 50 puntos"</td>
-                        </tr>
-                        <tr>
-                            <td><strong>3</strong> (Completo)</td>
-                            <td>"Actualmente estoy en Ascendente 2 con 50 puntos, mi mmr es de 1250"</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <h4>Ejemplo de Solicitud</h4>
+                <h3>Ejemplos de Uso</h3>
                 <div class="code-tabs">
-                    <button class="code-tab active" onclick="selectTab('rank', 'curl')">cURL</button>
-                    <button class="code-tab" onclick="selectTab('rank', 'js')">JavaScript</button>
-                    <button class="code-tab" onclick="selectTab('rank', 'py')">Python</button>
-                    <button class="code-tab" onclick="selectTab('rank', 'bots')">Bots</button>
+                    <button class="code-tab active" onclick="switchTab('rank', 'curl')">cURL</button>
+                    <button class="code-tab" onclick="switchTab('rank', 'js')">JavaScript</button>
+                    <button class="code-tab" onclick="switchTab('rank', 'py')">Python</button>
+                    <button class="code-tab" onclick="switchTab('rank', 'bots')">Comandos Bots</button>
                 </div>
+
                 <div class="code-block-container">
                     <div id="rank-curl" class="code-content active">
-                        <pre class="pre-code"># JSON (Default)
-curl -X GET "https://losperris.site/api/valorant/rank/na/PonssLoveless/8882"
-
-# Texto Plano (Bots)
-curl -X GET "https://losperris.site/api/valorant/rank/na/PonssLoveless/8882?format=text"
-
-# Texto en Español
-curl -X GET "https://losperris.site/api/valorant/rank/na/PonssLoveless/8882?format=text&lang=es"</pre>
+                        <pre
+                            class="pre-code">curl -X GET "https://losperris.site/api/valorant/rank/na/PonssLoveless/8882"</pre>
                     </div>
                     <div id="rank-js" class="code-content">
-                        <pre class="pre-code">// JSON
-fetch("https://losperris.site/api/valorant/rank/na/PonssLoveless/8882")
-  .then(res => res.json()).then(data => console.log(data));
-
-// Texto
-fetch("https://losperris.site/api/valorant/rank/na/PonssLoveless/8882?format=text")
-  .then(res => res.text()).then(text => console.log(text));</pre>
+                        <pre class="pre-code">fetch("https://losperris.site/api/valorant/rank/na/PonssLoveless/8882")
+  .then(res => res.json())
+  .then(data => console.log(data));</pre>
                     </div>
                     <div id="rank-py" class="code-content">
-                        <pre
-                            class="pre-code">import requests
-
-# JSON
-print(requests.get("https://losperris.site/api/valorant/rank/na/PonssLoveless/8882").json())
-
-# Texto
-print(requests.get("https://losperris.site/api/valorant/rank/na/PonssLoveless/8882", params={"format": "text"}).text)</pre>
+                        <pre class="pre-code">import requests
+res = requests.get("https://losperris.site/api/valorant/rank/na/PonssLoveless/8882")
+print(res.json())</pre>
                     </div>
                     <div id="rank-bots" class="code-content">
-                        <div class="doc-note"
-                            style="margin-bottom: 15px; background: rgba(255, 70, 85, 0.1); border-left: 3px solid var(--primary-color); padding: 10px;">
-                            <p style="margin: 0; font-size: 0.9em;">💡 <strong>¿Quieres personalizarlo
-                                    fácil?</strong><br>
-                                Usa nuestro <a href="./"
-                                    style="color: var(--primary-color); text-decoration: underline;">Generador de
-                                    Comandos</a> en el inicio para elegir idioma, formato y plataforma visualmente.</p>
-                        </div>
-                        <pre class="pre-code"># Nightbot / StreamElements / Fossabot
-!addcom !rank $(urlfetch https://losperris.site/api/valorant/rank/na/PonssLoveless/8882?format=text&lang=es&type=1)
-
-# StreamLabs / Botrix
-https://losperris.site/api/valorant/rank/na/PonssLoveless/8882?format=text&lang=es&type=1</pre>
+                        <p style="color: #888; font-size: 0.9em; margin-bottom: 10px;">Copia esto en tu Nightbot o
+                            StreamElements:</p>
+                        <pre
+                            class="pre-code">$(urlfetch https://losperris.site/api/valorant/rank/na/PonssLoveless/8882?format=text)</pre>
                     </div>
                 </div>
 
-                <h4>Respuesta de Ejemplo</h4>
-                <div class="code-tabs">
-                    <button class="code-tab active" onclick="selectTab('rank-res', 'json')">JSON</button>
-                    <button class="code-tab" onclick="selectTab('rank-res', 'text')">Texto</button>
-                </div>
-                <div class="code-block-container">
-                    <div id="rank-res-json" class="code-content active">
-                        <div class="json-block">
-                            {
-                            <span class="json-key">"status"</span>: <span class="json-number">200</span>,
-                            <span class="json-key">"data"</span>: {
-                            <span class="json-key">"name"</span>: <span class="json-string">"PonssLoveless"</span>,
-                            <span class="json-key">"tag"</span>: <span class="json-string">"8882"</span>,
-                            <span class="json-key">"rank"</span>: <span class="json-string">"Ascidente 2"</span>,
-                            <span class="json-key">"elo"</span>: <span class="json-number">1250</span>,
-                            <span class="json-key">"mmr_change"</span>: <span class="json-number">15</span>
-                            }
-                            }
-                        </div>
-                    </div>
-                    <div id="rank-res-text" class="code-content">
-                        <pre class="pre-code">Ascendente 2 - 50 RR</pre>
-                    </div>
+                <h3>Respuesta JSON</h3>
+                <div class="json-block">{
+                    <span class="json-key">"status"</span>: <span class="json-number">200</span>,
+                    <span class="json-key">"data"</span>: {
+                    <span class="json-key">"current_tier_patched"</span>: <span class="json-string">"Gold 1"</span>,
+                    <span class="json-key">"ranking_in_tier"</span>: <span class="json-number">50</span>,
+                    <span class="json-key">"mmr_change_to_last_game"</span>: <span class="json-number">15</span>,
+                    <span class="json-key">"elo"</span>: <span class="json-number">1250</span>
+                    }
+                    }
                 </div>
             </section>
 
-            <section class="card">
-                <h3><span class="accent">GET</span> /match</h3>
-                <p class="desc">Devuelve los detalles de la última partida competitiva.</p>
-                <div class="doc-item">
+            <section id="match" class="doc-section">
+                <h2><i class="fa-solid fa-gamepad"></i> Última Partida</h2>
+                <p>Obtiene estadísticas detalladas de la última partida competitiva jugada.</p>
+
+                <div class="endpoint-block">
+                    <span class="method get">GET</span>
                     <span class="url" id="url-match">/api/valorant/match/last/:region/:name/:tag</span>
                 </div>
 
-                <h4>Parámetros</h4>
-                <table class="doc-table">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Ubicación</th>
-                            <th>Descripción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><code>region</code></td>
-                            <td>Path</td>
-                            <td>Región del servidor</td>
-                        </tr>
-                        <tr>
-                            <td><code>name</code></td>
-                            <td>Path</td>
-                            <td>Nombre de usuario</td>
-                        </tr>
-                        <tr>
-                            <td><code>tag</code></td>
-                            <td>Path</td>
-                            <td>Tag del usuario</td>
-                        </tr>
-                        <tr>
-                            <td><code>format</code></td>
-                            <td>Query</td>
-                            <td><code>json</code> (default) o <code>text</code></td>
-                        </tr>
-                        <tr>
-                            <td><code>lang</code></td>
-                            <td>Query</td>
-                            <td><code>en</code> (default) o <code>es</code></td>
-                        </tr>
-                        <tr>
-                            <td><code>type</code></td>
-                            <td>Query</td>
-                            <td>Estilo de respuesta (1, 2, 3)</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <h4>Tipos de Respuesta (Format Types)</h4>
-                <p class="desc" style="font-size: 0.9em;">Igual que en Rank, define el nivel de detalle para
-                    <code>format=text</code>.
-                </p>
-                <table class="doc-table" style="font-size: 0.85em;">
-                    <thead>
-                        <tr>
-                            <th>Tipo</th>
-                            <th>Ejemplo de Salida (Match)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>1</strong> (Simple)</td>
-                            <td>"... gané 15 puntos"</td>
-                        </tr>
-                        <tr>
-                            <td><strong>2</strong> (Detallado)</td>
-                            <td>"... gané 15 puntos, mi KDA fue 18/12/5"</td>
-                        </tr>
-                        <tr>
-                            <td><strong>3</strong> (Completo)</td>
-                            <td>"... gané 15 puntos (18/12/5), HS: 25%"</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <h4>Ejemplo de Solicitud</h4>
                 <div class="code-tabs">
-                    <button class="code-tab active" onclick="selectTab('match', 'curl')">cURL</button>
-                    <button class="code-tab" onclick="selectTab('match', 'js')">JavaScript</button>
-                    <button class="code-tab" onclick="selectTab('match', 'py')">Python</button>
-                    <button class="code-tab" onclick="selectTab('match', 'bots')">Bots</button>
+                    <button class="code-tab active" onclick="switchTab('match', 'curl')">cURL</button>
+                    <button class="code-tab" onclick="switchTab('match', 'bots')">Bots</button>
                 </div>
                 <div class="code-block-container">
                     <div id="match-curl" class="code-content active">
-                        <pre class="pre-code"># JSON (Default)
-curl -X GET "https://losperris.site/api/valorant/match/last/na/PonssLoveless/8882"
-
-# Texto Plano
-curl -X GET "https://losperris.site/api/valorant/match/last/na/PonssLoveless/8882?format=text"
-
-# Texto en Español
-curl -X GET "https://losperris.site/api/valorant/match/last/na/PonssLoveless/8882?format=text&lang=es"</pre>
-                    </div>
-                    <div id="match-js" class="code-content">
-                        <pre class="pre-code">// JSON
-fetch("https://losperris.site/api/valorant/match/last/na/PonssLoveless/8882")
-  .then(res => res.json()).then(data => console.log(data));
-
-// Texto
-fetch("https://losperris.site/api/valorant/match/last/na/PonssLoveless/8882?format=text")
-  .then(res => res.text()).then(text => console.log(text));</pre>
-                    </div>
-                    <div id="match-py" class="code-content">
                         <pre
-                            class="pre-code">import requests
-
-# JSON
-print(requests.get("https://losperris.site/api/valorant/match/last/na/PonssLoveless/8882").json())
-
-# Texto
-print(requests.get("https://losperris.site/api/valorant/match/last/na/PonssLoveless/8882", params={"format": "text"}).text)</pre>
+                            class="pre-code">curl -X GET "https://losperris.site/api/valorant/match/last/na/PonssLoveless/8882"</pre>
                     </div>
-                    <button class="code-tab active" onclick="switchTab('match-res', 'json')">JSON</button>
-                    <button class="code-tab" onclick="switchTab('match-res', 'text')">Texto</button>
+                    <div id="match-bots" class="code-content">
+                        <pre
+                            class="pre-code">$(urlfetch https://losperris.site/api/valorant/match/last/na/PonssLoveless/8882?format=text)</pre>
+                    </div>
                 </div>
-                <div class="code-block-container">
-                    <div id="match-res-json" class="code-content active">
-                        <div class="json-block">
-                            {
-                            <span class="json-key">"data"</span>: {
-                            <span class="json-key">"map"</span>: <span class="json-string">"Ascent"</span>,
-                            <span class="json-key">"mode"</span>: <span class="json-string">"Competitive"</span>,
-                            <span class="json-key">"score"</span>: <span class="json-string">"13-10"</span>,
-                            <span class="json-key">"result"</span>: <span class="json-string">"Win"</span>,
-                            <span class="json-key">"kda"</span>: <span class="json-string">"18/12/5"</span>
-                            }
-                            }
-                        </div>
-                    </div>
-                    <div id="match-res-text" class="code-content">
-                        <pre class="pre-code">Ascent - Competitive - Win 13-10 - KDA: 18/12/5</pre>
-                    </div>
+
+                <h3>Respuesta JSON</h3>
+                <div class="json-block">{
+                    <span class="json-key">"status"</span>: <span class="json-number">200</span>,
+                    <span class="json-key">"data"</span>: {
+                    <span class="json-key">"map"</span>: <span class="json-string">"Ascent"</span>,
+                    <span class="json-key">"mode"</span>: <span class="json-string">"Competitive"</span>,
+                    <span class="json-key">"stats"</span>: {
+                    <span class="json-key">"character"</span>: <span class="json-string">"Jett"</span>,
+                    <span class="json-key">"kills"</span>: <span class="json-number">24</span>,
+                    <span class="json-key">"deaths"</span>: <span class="json-number">12</span>,
+                    <span class="json-key">"assists"</span>: <span class="json-number">5</span>
+                    },
+                    <span class="json-key">"won"</span>: <span class="json-boolean">true</span>
+                    }
+                    }
                 </div>
             </section>
 
-            <section class="card">
-                <h3><span class="accent">GET</span> /history</h3>
-                <p class="desc">Obtiene el historial de las últimas 5 partidas competitivas.</p>
-                <div class="doc-item">
+            <section id="history" class="doc-section">
+                <h2><i class="fa-solid fa-clock-rotate-left"></i> Historial (Gráfico)</h2>
+                <p>Devuelve un array con los últimos cambios de MMR para generar gráficos.</p>
+
+                <div class="endpoint-block">
+                    <span class="method get">GET</span>
                     <span class="url" id="url-history">/api/valorant/history/:region/:name/:tag</span>
                 </div>
 
-                <h4>Parámetros</h4>
-                <table class="doc-table">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Ubicación</th>
-                            <th>Descripción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><code>region</code></td>
-                            <td>Path</td>
-                            <td>Región</td>
-                        </tr>
-                        <tr>
-                            <td><code>name</code></td>
-                            <td>Path</td>
-                            <td>Nombre</td>
-                        </tr>
-                        <tr>
-                            <td><code>tag</code></td>
-                            <td>Path</td>
-                            <td>Tag</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <h4>Ejemplo de Solicitud</h4>
                 <div class="code-tabs">
-                    <button class="code-tab active" onclick="switchTab('history', 'curl')">cURL</button>
-                    <button class="code-tab" onclick="switchTab('history', 'js')">JavaScript</button>
-                    <button class="code-tab" onclick="switchTab('history', 'py')">Python</button>
+                    <button class="code-tab active" onclick="switchTab('history', 'js')">JavaScript</button>
                 </div>
                 <div class="code-block-container">
-                    <div id="history-curl" class="code-content active">
-                        <pre
-                            class="pre-code">curl -X GET "https://losperris.site/api/valorant/history/na/PonssLoveless/8882"</pre>
-                    </div>
-                    <div id="history-js" class="code-content">
+                    <div id="history-js" class="code-content active">
                         <pre class="pre-code">fetch("https://losperris.site/api/valorant/history/na/PonssLoveless/8882")
   .then(res => res.json())
   .then(data => console.log(data));</pre>
                     </div>
-                    <div id="history-py" class="code-content">
-                        <pre class="pre-code">import requests
-print(requests.get("https://losperris.site/api/valorant/history/na/PonssLoveless/8882").json())</pre>
-                    </div>
-                </div>
-
-                <h4>Respuesta de Ejemplo</h4>
-                <div class="json-block">
-                    {
-                    <span class="json-key">"status"</span>: <span class="json-number">200</span>,
-                    <span class="json-key">"data"</span>: [
-                    {
-                    <span class="json-key">"map"</span>: <span class="json-string">"Haven"</span>,
-                    <span class="json-key">"score"</span>: <span class="json-string">"13-11"</span>,
-                    <span class="json-key">"result"</span>: <span class="json-string">"Win"</span>,
-                    <span class="json-key">"kda"</span>: <span class="json-string">"22/15/8"</span>
-                    },
-                    {
-                    <span class="json-key">"map"</span>: <span class="json-string">"Bind"</span>,
-                    <span class="json-key">"score"</span>: <span class="json-string">"5-13"</span>,
-                    <span class="json-key">"result"</span>: <span class="json-string">"Loss"</span>,
-                    <span class="json-key">"kda"</span>: <span class="json-string">"10/18/4"</span>
-                    }
-                    ]
-                    }
                 </div>
             </section>
 
-            <section class="card">
-                <h3><span class="accent">GET</span> /summary</h3>
-                <p class="desc">Resumen completo del perfil (Account, Rank, Match, History).</p>
-                <div class="doc-item">
+            <section id="summary" class="doc-section">
+                <h2><i class="fa-solid fa-user-astronaut"></i> Resumen de Perfil</h2>
+                <p>Endpoint "Todo en Uno". Devuelve cuenta, rango, última partida e historial en una sola llamada.</p>
+
+                <div class="endpoint-block">
+                    <span class="method get">GET</span>
                     <span class="url" id="url-summary">/api/valorant/summary/:region/:name/:tag</span>
                 </div>
 
-                <h4>Ejemplo de Solicitud</h4>
-                <div class="code-tabs">
-                    <button class="code-tab active" onclick="switchTab('summary', 'curl')">cURL</button>
-                    <button class="code-tab" onclick="switchTab('summary', 'js')">JavaScript</button>
-                    <button class="code-tab" onclick="switchTab('summary', 'py')">Python</button>
-                </div>
-                <div class="code-block-container">
-                    <div id="summary-curl" class="code-content active">
-                        <pre
-                            class="pre-code">curl -X GET "https://losperris.site/api/valorant/summary/na/PonssLoveless/8882"</pre>
-                    </div>
-                    <div id="summary-js" class="code-content">
-                        <pre class="pre-code">fetch("https://losperris.site/api/valorant/summary/na/PonssLoveless/8882")
-  .then(res => res.json())
-  .then(data => console.log(data));</pre>
-                    </div>
-                    <div id="summary-py" class="code-content">
-                        <pre class="pre-code">import requests
-print(requests.get("https://losperris.site/api/valorant/summary/na/PonssLoveless/8882").json())</pre>
-                    </div>
-                </div>
-
-                <h4>Respuesta de Ejemplo</h4>
-                <div class="json-block">
-                    {
-                    <span class="json-key">"account"</span>: { <span class="json-key">"name"</span>: <span
-                        class="json-string">"PonssLoveless"</span> },
-                    <span class="json-key">"rank"</span>: { <span class="json-key">"rank"</span>: <span
-                        class="json-string">"Ascendente 2"</span> },
-                    <span class="json-key">"match"</span>: { <span class="json-key">"map"</span>: <span
-                        class="json-string">"Ascent"</span>, <span class="json-key">"result"</span>: <span
-                        class="json-string">"Win"</span> },
-                    <span class="json-key">"history"</span>: [ ... ]
+                <div class="json-block">{
+                    <span class="json-key">"status"</span>: <span class="json-number">200</span>,
+                    <span class="json-key">"data"</span>: {
+                    <span class="json-key">"account"</span>: { ... },
+                    <span class="json-key">"rank"</span>: { ... },
+                    <span class="json-key">"match"</span>: { ... }
+                    }
+                    }
                 </div>
             </section>
 
-            <section class="card">
-                <h3><span class="accent">INFO</span> Manejo de Errores</h3>
-                <p class="desc">Códigos de estado HTTP comunes que devuelve la API.</p>
+            <section id="status" class="doc-section">
+                <h2><i class="fa-solid fa-heart-pulse"></i> Status Check</h2>
+                <p>Comprueba la salud de la API.</p>
 
+                <div class="endpoint-block">
+                    <span class="method get">GET</span>
+                    <span class="url" id="url-status">/api/valorant/status</span>
+                </div>
+
+                <p>Consulta la página visual de estado aquí: <a href="status.html" class="accent" target="_blank">Status
+                        Dashboard &rarr;</a></p>
+            </section>
+
+            <section id="errors" class="doc-section">
+                <h2><i class="fa-solid fa-triangle-exclamation"></i> Códigos de Error</h2>
                 <table class="doc-table">
                     <thead>
                         <tr>
@@ -469,98 +252,56 @@ print(requests.get("https://losperris.site/api/valorant/summary/na/PonssLoveless
                     </thead>
                     <tbody>
                         <tr>
-                            <td><span style="color:var(--primary-color)">200</span></td>
-                            <td>OK</td>
-                            <td>La solicitud fue exitosa.</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color:#eab308">400</span></td>
+                            <td><span style="color:var(--warning-color)">400</span></td>
                             <td>Bad Request</td>
                             <td>Faltan parámetros o la región es inválida.</td>
                         </tr>
                         <tr>
                             <td><span style="color:#64748b">404</span></td>
                             <td>Not Found</td>
-                            <td>El jugador (Name/Tag) no existe o tiene el perfil privado.</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color:#f97316">429</span></td>
-                            <td>Rate Limit</td>
-                            <td>Has excedido el límite de solicitudes. Espera unos segundos.</td>
+                            <td>El jugador no existe o perfil privado.</td>
                         </tr>
                         <tr>
                             <td><span style="color:#ef4444">500</span></td>
                             <td>Server Error</td>
-                            <td>Error interno o problema de conexión con Riot Games.</td>
+                            <td>Error del servidor o de Riot API.</td>
                         </tr>
                     </tbody>
                 </table>
             </section>
 
-            <section class="card" style="text-align: center;">
-                <a href="./" class="btn-primary"
-                    style="text-decoration: none; width: auto; display: inline-block;">VOLVER AL INICIO</a>
-            </section>
-
-        </div>
-
-        <footer>
-            <div class="footer-content">
+            <footer style="margin-top: 50px; border-top: 1px solid var(--card-border); padding-top: 30px;">
                 <p>&copy;
-                    <script>
-                        document.write(new Date().getFullYear());
-                        document.write(` <a href="${CONFIG.siteUrl}" target="_blank">${CONFIG.domain}</a>`);
-                    </script>. Todos los derechos reservados.
+                    <script>document.write(new Date().getFullYear())</script> LosPerris Valorant API.
                 </p>
-            </div>
-            <p class="disclaimer" id="footer-disclaimer">La API de Valorant de LosPerris no cuenta con el respaldo de
-                Riot Games y no refleja las opiniones ni los puntos de vista de Riot Games ni de ninguna persona
-                involucrada oficialmente en la producción o gestión de propiedades de Riot Games. Riot Games y todas las
-                propiedades asociadas son marcas comerciales o marcas registradas de Riot Games, Inc.</p>
-        </footer>
+            </footer>
+        </main>
     </div>
+
     <script src="./js/background.js"></script>
+    <script src="./js/docs.js"></script>
     <script>
-        const updateUrls = () => {
-            const rankUrl = document.getElementById('url-rank');
-            const matchUrl = document.getElementById('url-match');
-            if (rankUrl) rankUrl.textContent = `${CONFIG.siteUrl}/api/valorant/rank/:region/:name/:tag`;
-            if (matchUrl) matchUrl.textContent = `${CONFIG.siteUrl}/api/valorant/match/last/:region/:name/:tag`;
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.doc-section');
+            const navItems = document.querySelectorAll('.nav-item');
 
-            const historyUrl = document.getElementById('url-history');
-            const summaryUrl = document.getElementById('url-summary');
-            if (historyUrl) historyUrl.textContent = `${CONFIG.siteUrl}/api/valorant/history/:region/:name/:tag`;
-            if (summaryUrl) summaryUrl.textContent = `${CONFIG.siteUrl}/api/valorant/summary/:region/:name/:tag`;
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (scrollY >= (sectionTop - 150)) {
+                        current = section.getAttribute('id');
+                    }
+                });
 
-            const codeBlocks = document.querySelectorAll('.pre-code');
-            codeBlocks.forEach(block => {
-                let content = block.innerHTML;
-                content = content.replace(/https:\/\/losperris\.site/g, CONFIG.siteUrl);
-                block.innerHTML = content;
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.getAttribute('href') === `#${current}`) {
+                        item.classList.add('active');
+                    }
+                });
             });
-        }
-        updateUrls();
-
-        function switchTab(endpoint, lang) {
-            const tabs = document.querySelectorAll(`.code-tab[onclick*="'${endpoint}'"]`);
-            const contents = document.querySelectorAll(`[id^="${endpoint}-"]`);
-            tabs.forEach(tab => tab.classList.remove('active'));
-            contents.forEach(content => content.classList.remove('active'));
-            const clickedTab = event.currentTarget || document.querySelector(`.code-tab[onclick*="'${endpoint}', '${lang}'"]`);
-            if (clickedTab) clickedTab.classList.add('active');
-            const content = document.getElementById(`${endpoint}-${lang}`);
-            if (content) content.classList.add('active');
-        }
-
-        function selectTab(endpoint, type) {
-            switchTab(endpoint, type);
-            const responseEndpoint = endpoint + '-res';
-            if (type === 'bots') {
-                switchTab(responseEndpoint, 'text');
-            } else {
-                switchTab(responseEndpoint, 'json');
-            }
-        }
+        });
     </script>
 </body>
 

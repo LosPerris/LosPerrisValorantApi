@@ -5,10 +5,10 @@ import { handleRouteError, sendResponse } from '../utils/helpers';
 
 export const getRank = async (req: Request, res: Response) => {
     const { region } = req.params;
-    const { accountData, puuid } = req as any;
+    const { accountData, puuid } = req;
 
     try {
-        const mmrData = await valorantService.getMMRByPUUID(region, puuid);
+        const mmrData = await valorantService.getMMRByPUUID(region, puuid as string);
 
         if (mmrData.status === 200) {
             const formattedData = formatService.formatRankData(accountData, mmrData);

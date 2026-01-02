@@ -8,6 +8,7 @@ import matchRoutes from './routes/match';
 import historyRoutes from './routes/history';
 import previewRoutes from './routes/preview';
 import summaryRoutes from './routes/summary';
+import statusRoutes from './routes/status';
 
 const app: Application = express();
 
@@ -58,5 +59,6 @@ app.use('/match', matchRoutes);
 app.use('/history', historyRoutes);
 app.use('/summary', summaryRoutes);
 app.use('/preview', previewRoutes);
+app.use('/status', statusRoutes);
 
 export default app;

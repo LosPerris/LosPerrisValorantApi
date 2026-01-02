@@ -5,10 +5,10 @@ import { handleRouteError } from '../utils/helpers';
 
 export const getHistory = async (req: Request, res: Response) => {
     const { region } = req.params;
-    const { puuid } = req as any;
+    const { puuid } = req;
 
     try {
-        const historyData = await valorantService.getMMRHistoryByPUUID(region, puuid);
+        const historyData = await valorantService.getMMRHistoryByPUUID(region, puuid as string);
 
         if (historyData.status === 200) {
             const formattedHistory = formatService.formatHistoryData(historyData);

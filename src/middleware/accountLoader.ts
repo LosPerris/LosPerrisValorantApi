@@ -25,8 +25,8 @@ export async function withAccountData(req: Request, res: Response, next: NextFun
             return res.status(accountData.status).json(accountData);
         }
 
-        (req as any).accountData = accountData;
-        (req as any).puuid = accountData.data.puuid;
+        req.accountData = accountData;
+        req.puuid = accountData.data.puuid;
         next();
     } catch (error: any) {
         console.error('Account Loader Error:', error);

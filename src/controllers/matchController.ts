@@ -5,17 +5,17 @@ import { handleRouteError, sendResponse } from '../utils/helpers';
 
 export const getLastMatch = async (req: Request, res: Response) => {
     const { region } = req.params;
-    const { accountData, puuid } = req as any;
+    const { accountData, puuid } = req;
 
     try {
         const [matchesData, mmrData] = await Promise.all([
-            valorantService.getMatchesByPUUID(region, puuid, 'competitive'),
-            valorantService.getMMRByPUUID(region, puuid)
+            valorantService.getMatchesByPUUID(region, puuid as string, 'competitive'),
+            valorantService.getMMRByPUUID(region, puuid as string)
         ]);
 
         if (matchesData.status === 200 && matchesData.data.length > 0) {
             const lastMatch = matchesData.data[0];
-            const formattedData = formatService.formatMatchData(lastMatch, puuid);
+            const formattedData = formatService.formatMatchData(lastMatch, puuid as string);
 
             const mmrChange = (mmrData.status === 200) ? mmrData.data.current_data.mmr_change_to_last_game : 0;
 
