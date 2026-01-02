@@ -41,3 +41,27 @@ function selectTab(endpoint, type) {
         switchTab(responseEndpoint, 'json');
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const navItems = document.querySelectorAll('.nav-item');
+    const sections = document.querySelectorAll('.doc-section');
+
+    const observerOptions = {
+        root: null,
+        rootMargin: '-100px 0px -70% 0px',
+        threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                navItems.forEach(item => item.classList.remove('active'));
+                const activeItem = document.querySelector(`.nav-item[href="#${id}"]`);
+                if (activeItem) activeItem.classList.add('active');
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => observer.observe(section));
+});

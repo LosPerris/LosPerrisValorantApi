@@ -273,23 +273,18 @@ async function updateExamplePreviews(data, botLang, botType, botMatchType) {
     const m = data.data.match;
 
     try {
-        const response = await fetch(`${apiBase}/preview`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                type: 'rank',
-                lang: botLang,
-                botType: botType,
-                data: {
-                    rank: r.rank,
-                    rr: r.ranking_in_tier,
-                    elo: r.elo,
-                    name: r.name,
-                    tag: r.tag
-                }
-            })
+        const result = await fetchPreview({
+            type: 'rank',
+            lang: botLang,
+            botType: botType,
+            data: {
+                rank: r.rank,
+                rr: r.ranking_in_tier,
+                elo: r.elo,
+                name: r.name,
+                tag: r.tag
+            }
         });
-        const result = await response.json();
         document.getElementById('example-rank').textContent = result.text;
     } catch (e) {
         console.error('Preview Error (Rank):', e);
@@ -300,24 +295,19 @@ async function updateExamplePreviews(data, botLang, botType, botMatchType) {
             const stats = m.players.all_players.find(p => p.puuid === r.puuid);
             const isWin = m.teams.red.has_won ? (stats.team === 'Red') : (stats.team === 'Blue');
 
-            const response = await fetch(`${apiBase}/preview`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    type: 'match',
-                    lang: botLang,
-                    botMatchType: botMatchType,
-                    data: {
-                        map: m.metadata.map,
-                        isWin: isWin,
-                        kda: `${stats.stats.kills}/${stats.stats.deaths}/${stats.stats.assists}`,
-                        hs: m.derived.hs_percent,
-                        agent: m.derived.agent_name,
-                        mmrChange: r.mmr_change
-                    }
-                })
+            const result = await fetchPreview({
+                type: 'match',
+                lang: botLang,
+                botMatchType: botMatchType,
+                data: {
+                    map: m.metadata.map,
+                    isWin: isWin,
+                    kda: `${stats.stats.kills}/${stats.stats.deaths}/${stats.stats.assists}`,
+                    hs: m.derived.hs_percent,
+                    agent: m.derived.agent_name,
+                    mmrChange: r.mmr_change
+                }
             });
-            const result = await response.json();
             document.getElementById('example-match').textContent = result.text;
         } catch (e) {
             console.error('Preview Error (Match):', e);
