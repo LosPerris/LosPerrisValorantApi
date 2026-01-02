@@ -406,7 +406,8 @@
 
             try {
                 const start = Date.now();
-                const endpoint = typeof CONFIG !== 'undefined' ? `${CONFIG.siteUrl}/api/valorant/status` : '/api/valorant/status';
+                const baseUrl = (typeof CONFIG !== 'undefined' && CONFIG.siteUrl) ? CONFIG.siteUrl : '';
+                const endpoint = `${baseUrl}/api/valorant/status`;
                 const res = await fetch(endpoint);
                 const data = await res.json();
                 const latency = Date.now() - start;
