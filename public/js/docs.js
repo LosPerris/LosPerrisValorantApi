@@ -1,11 +1,8 @@
 const updateUrls = () => {
     const rankUrl = document.getElementById('url-rank');
     const matchUrl = document.getElementById('url-match');
-    const statusUrl = document.getElementById('url-status');
-
     if (rankUrl) rankUrl.textContent = `${CONFIG.siteUrl}/api/valorant/rank/:region/:name/:tag`;
     if (matchUrl) matchUrl.textContent = `${CONFIG.siteUrl}/api/valorant/match/last/:region/:name/:tag`;
-    if (statusUrl) statusUrl.textContent = `${CONFIG.siteUrl}/api/valorant/status`;
 
     const historyUrl = document.getElementById('url-history');
     const summaryUrl = document.getElementById('url-summary');
@@ -64,4 +61,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }, observerOptions);
 
     sections.forEach(section => observer.observe(section));
+
+    const menuToggle = document.getElementById('menu-toggle');
+    const sidebar = document.querySelector('.sidebar');
+    const navLinks = document.querySelectorAll('.nav-item');
+
+    if (menuToggle) {
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-xmark');
+        });
+    }
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 900) {
+                sidebar.classList.remove('open');
+                const icon = menuToggle.querySelector('i');
+                icon.classList.add('fa-bars');
+                icon.classList.remove('fa-xmark');
+            }
+        });
+    });
 });

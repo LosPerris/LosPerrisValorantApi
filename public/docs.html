@@ -15,6 +15,9 @@
 </head>
 
 <body>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Menu">
+        <i class="fa-solid fa-bars"></i>
+    </button>
     <div class="docs-container">
         <aside class="sidebar">
             <div class="sidebar-header">
@@ -30,7 +33,6 @@
                     <a href="#match" class="nav-item"><i class="fa-solid fa-gamepad"></i> Última Partida</a>
                     <a href="#history" class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i> Historial</a>
                     <a href="#summary" class="nav-item"><i class="fa-solid fa-user-astronaut"></i> Resumen Perfil</a>
-                    <a href="#status" class="nav-item"><i class="fa-solid fa-heart-pulse"></i> Status</a>
                 </div>
 
                 <div class="nav-group">
@@ -49,13 +51,6 @@
                     Integra datos de rangos, historial de partidas y estadísticas detalladas en tus aplicaciones o bots
                     de chat (Nightbot, StreamElements).</p>
 
-                <div class="endpoint-block"
-                    style="border-color: var(--success-color); background: rgba(16, 185, 129, 0.05);">
-                    <i class="fa-solid fa-circle-check" style="color: var(--success-color);"></i>
-                    <span style="font-weight: bold; color: var(--success-color);">API STATUS:</span>
-                    <a href="status.html" class="url" style="text-decoration: underline; cursor: pointer;">Comprobar
-                        estado del servicio</a>
-                </div>
             </section>
 
             <section id="rank" class="doc-section">
@@ -227,18 +222,7 @@ print(res.json())</pre>
                 </div>
             </section>
 
-            <section id="status" class="doc-section">
-                <h2><i class="fa-solid fa-heart-pulse"></i> Status Check</h2>
-                <p>Comprueba la salud de la API.</p>
 
-                <div class="endpoint-block">
-                    <span class="method get">GET</span>
-                    <span class="url" id="url-status">/api/valorant/status</span>
-                </div>
-
-                <p>Consulta la página visual de estado aquí: <a href="status.html" class="accent" target="_blank">Status
-                        Dashboard &rarr;</a></p>
-            </section>
 
             <section id="errors" class="doc-section">
                 <h2><i class="fa-solid fa-triangle-exclamation"></i> Códigos de Error</h2>
