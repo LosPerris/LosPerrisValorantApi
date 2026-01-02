@@ -318,13 +318,18 @@ async function updateExamplePreviews(data, botLang, botType, botMatchType) {
 function showLoading(lang) {
     const submitBtn = document.getElementById('submit-btn');
     submitBtn.disabled = true;
-    submitBtn.textContent = lang === 'es' ? 'Buscando jugador...' : 'Searching...';
+    
+    const overlay = document.getElementById('loading-overlay');
+    overlay.classList.remove('hidden');
 }
 
 function hideLoading(lang) {
     const submitBtn = document.getElementById('submit-btn');
     submitBtn.disabled = false;
     submitBtn.textContent = translations[lang].search;
+
+    const overlay = document.getElementById('loading-overlay');
+    overlay.classList.add('hidden');
 }
 
 function showResults() {
