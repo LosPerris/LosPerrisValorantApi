@@ -717,20 +717,6 @@ option {
     gap: 8px;
 }
 
-.method {
-    color: var(--accent-color);
-    font-weight: bold;
-    font-family: monospace;
-}
-
-.url {
-    font-family: monospace;
-    color: white;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 4px 8px;
-    display: inline-block;
-}
-
 .desc {
     color: var(--text-muted);
     font-size: 0.9rem;
@@ -862,7 +848,7 @@ footer a:hover {
     #title {
         font-size: 1.8rem;
     }
-    
+
     #subtitle {
         font-size: 1rem;
     }
@@ -900,41 +886,21 @@ footer a:hover {
         padding: 12px;
         border-radius: 0 0 8px 8px;
     }
-    
+
     .example-box {
         flex-direction: column;
         align-items: flex-start;
         gap: 5px;
         font-size: 0.8rem;
     }
-    
+
     .match-header {
         flex-direction: column;
         gap: 8px;
         text-align: center;
     }
-    
+
     footer {
         padding-bottom: 20px;
     }
 }
-/* Documentation Table Styles */
-.doc-table { width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 15px; font-size: 0.9rem; }
-.doc-table th, .doc-table td { padding: 10px; text-align: left; border-bottom: 1px solid var(--card-border); }
-.doc-table th { color: var(--accent-color); font-weight: 600; text-transform: uppercase; font-size: 0.8rem; }
-.doc-table td { color: var(--text-muted); }
-.doc-table code { background: rgba(255, 255, 255, 0.05); padding: 2px 6px; border-radius: 4px; font-family: monospace; color: var(--text-color); }
-.json-block { background: rgba(0, 0, 0, 0.5); padding: 15px; border-radius: 8px; overflow-x: auto; font-family: monospace; color: #a6e22e; font-size: 0.85rem; margin-top: 10px; }
-.json-key { color: #f92672; }
-.json-string { color: #e6db74; }
-.json-number { color: #ae81ff; }
-
-/* Code Tabs */
-.code-tabs { display: flex; gap: 10px; margin-top: 20px; margin-bottom: 0px; }
-.code-tab { background: transparent; border: 1px solid var(--card-border); color: var(--text-muted); padding: 8px 16px; border-radius: 6px 6px 0 0; cursor: pointer; font-family: var(--font-header); font-size: 0.85rem; border-bottom: none; transition: all 0.2s; position: relative; top: 1px; }
-.code-tab:hover { background: rgba(255, 255, 255, 0.05); color: white; }
-.code-tab.active { background: var(--bg-color); border: 1px solid var(--accent-color); border-bottom: 1px solid var(--bg-color); color: var(--accent-color); font-weight: bold; }
-.code-block-container { border: 1px solid var(--card-border); border-top: 1px solid var(--accent-color); background: #000; border-radius: 0 8px 8px 8px; padding: 15px; margin-top: 0; }
-.code-content { display: none; }
-.code-content.active { display: block; }
-.pre-code { font-family: monospace; color: #a6e22e; font-size: 0.85rem; overflow-x: auto; white-space: pre-wrap; margin: 0; }

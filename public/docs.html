@@ -8,6 +8,7 @@
     <meta name="theme-color" content="#ff4655">
     <link rel="icon" type="image/x-icon" href="./imgs/LosPerris-gamer.ico">
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./docs.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -80,6 +81,37 @@
                             <td><code>lang</code></td>
                             <td>Query</td>
                             <td><code>en</code> (default) o <code>es</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>type</code></td>
+                            <td>Query</td>
+                            <td>Estilo de respuesta (1, 2, 3)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Tipos de Respuesta (Format Types)</h4>
+                <p class="desc" style="font-size: 0.9em;">Estos tipos determinan qué tanta información devuelve el bot
+                    cuando <code>format=text</code> (útil para Nightbot).</p>
+                <table class="doc-table" style="font-size: 0.85em;">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Ejemplo de Salida (Rank)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1</strong> (Simple)</td>
+                            <td>"Actualmente estoy en Ascendente 2"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2</strong> (Detallado)</td>
+                            <td>"Actualmente estoy en Ascendente 2 con 50 puntos"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3</strong> (Completo)</td>
+                            <td>"Actualmente estoy en Ascendente 2 con 50 puntos, mi mmr es de 1250"</td>
                         </tr>
                     </tbody>
                 </table>
@@ -205,6 +237,38 @@ https://losperris.site/api/valorant/rank/na/PonssLoveless/8882?format=text&lang=
                             <td><code>lang</code></td>
                             <td>Query</td>
                             <td><code>en</code> (default) o <code>es</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>type</code></td>
+                            <td>Query</td>
+                            <td>Estilo de respuesta (1, 2, 3)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Tipos de Respuesta (Format Types)</h4>
+                <p class="desc" style="font-size: 0.9em;">Igual que en Rank, define el nivel de detalle para
+                    <code>format=text</code>.
+                </p>
+                <table class="doc-table" style="font-size: 0.85em;">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Ejemplo de Salida (Match)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1</strong> (Simple)</td>
+                            <td>"... gané 15 puntos"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2</strong> (Detallado)</td>
+                            <td>"... gané 15 puntos, mi KDA fue 18/12/5"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3</strong> (Completo)</td>
+                            <td>"... gané 15 puntos (18/12/5), HS: 25%"</td>
                         </tr>
                     </tbody>
                 </table>
@@ -388,8 +452,49 @@ print(requests.get("https://losperris.site/api/valorant/summary/na/PonssLoveless
                         class="json-string">"Ascent"</span>, <span class="json-key">"result"</span>: <span
                         class="json-string">"Win"</span> },
                     <span class="json-key">"history"</span>: [ ... ]
-                    }
                 </div>
+            </section>
+
+            <section class="card">
+                <h3><span class="accent">INFO</span> Manejo de Errores</h3>
+                <p class="desc">Códigos de estado HTTP comunes que devuelve la API.</p>
+
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Significado</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span style="color:var(--primary-color)">200</span></td>
+                            <td>OK</td>
+                            <td>La solicitud fue exitosa.</td>
+                        </tr>
+                        <tr>
+                            <td><span style="color:#eab308">400</span></td>
+                            <td>Bad Request</td>
+                            <td>Faltan parámetros o la región es inválida.</td>
+                        </tr>
+                        <tr>
+                            <td><span style="color:#64748b">404</span></td>
+                            <td>Not Found</td>
+                            <td>El jugador (Name/Tag) no existe o tiene el perfil privado.</td>
+                        </tr>
+                        <tr>
+                            <td><span style="color:#f97316">429</span></td>
+                            <td>Rate Limit</td>
+                            <td>Has excedido el límite de solicitudes. Espera unos segundos.</td>
+                        </tr>
+                        <tr>
+                            <td><span style="color:#ef4444">500</span></td>
+                            <td>Server Error</td>
+                            <td>Error interno o problema de conexión con Riot Games.</td>
+                        </tr>
+                    </tbody>
+                </table>
             </section>
 
             <section class="card" style="text-align: center;">
