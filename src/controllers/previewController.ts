@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import * as formatService from '../services/formatService';
+import { RankTextData, MatchTextData } from '../types/valorant';
 
 export const generatePreview = (req: Request, res: Response) => {
     const { type, data, lang, botType, botMatchType } = req.body;
@@ -11,7 +12,7 @@ export const generatePreview = (req: Request, res: Response) => {
     try {
         if (type === 'rank') {
             const { rank, rr, elo, name, tag } = data;
-            const rankData = {
+            const rankData: RankTextData = {
                 name,
                 tag,
                 rank,
@@ -24,15 +25,17 @@ export const generatePreview = (req: Request, res: Response) => {
 
         if (type === 'match') {
             const { map, isWin, kda, hs, agent, mmrChange } = data;
-            const matchData = {
+            const matchData: MatchTextData = {
                 derived: {
                     map_name: map,
                     is_win: isWin,
                     kda: kda,
                     hs_percent: hs,
-                    agent_name: agent
-                },
-                mmr_change: mmrChange
+                    agent_name: agent,
+                    agent_icon: '',
+                    agent_image: '',
+                    map_image: null
+                }
             };
             const text = formatService.formatMatchText(matchData, lang, botMatchType, mmrChange);
             return res.json({ text });

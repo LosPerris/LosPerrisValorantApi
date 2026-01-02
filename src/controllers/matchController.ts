@@ -18,6 +18,13 @@ export const getLastMatch = async (req: Request, res: Response) => {
             const lastMatch = matchesData.data[0];
             const formattedData = formatService.formatMatchData(lastMatch, puuid as string);
 
+            if (!formattedData) {
+                return res.status(404).json({
+                    status: 404,
+                    message: 'Player not found in match data'
+                });
+            }
+
             const mmrChange = (mmrData.status === 200) ? mmrData.data.current_data.mmr_change_to_last_game : 0;
 
             sendResponse(req, res, formattedData, formatService.formatMatchText, mmrChange);

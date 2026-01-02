@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import * as valorantService from '../services/valorantService';
 import * as formatService from '../services/formatService';
 import { handleRouteError } from '../utils/helpers';
-import { ValorantAccount, ValorantApiResponse, ValorantMMR, ValorantMatch, ValorantMMRHistoryItem } from '../types/valorant';
+import { ValorantAccount, ValorantApiResponse, ValorantMMR, ValorantMatch, ValorantMMRHistoryItem, SummaryResponse } from '../types/valorant';
 
 export const getSummary = async (req: Request, res: Response) => {
     const { region, name, tag } = req.params;
@@ -22,7 +22,7 @@ export const getSummary = async (req: Request, res: Response) => {
             valorantService.getMMRHistoryByPUUID(region, puuid)
         ]);
 
-        const responseData: any = {
+        const responseData: SummaryResponse = {
             account: accountData.data,
             rank: null,
             match: null,

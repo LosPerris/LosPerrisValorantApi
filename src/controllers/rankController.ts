@@ -8,6 +8,10 @@ export const getRank = async (req: Request, res: Response) => {
     const { region } = req.params;
     const { accountData, puuid } = req;
 
+    if (!accountData) {
+        return handleRouteError(req, res, { status: 404, message: 'Account not found' });
+    }
+
     try {
         const mmrData: ValorantApiResponse<ValorantMMR> = await valorantService.getMMRByPUUID(region, puuid as string);
 

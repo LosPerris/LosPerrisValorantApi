@@ -1,30 +1,22 @@
 import { translateRank } from '../utils/helpers';
 import { MAP_UUIDS } from '../utils/constants';
+import {
+    ValorantAccount,
+    ValorantApiResponse,
+    ValorantMMR,
+    ValorantMatch,
+    ValorantMMRHistoryItem,
+    FormattedRankData,
+    FormattedMatchData,
+    FormattedHistoryMatch,
+    DerivedMatchData,
+    RankTextData,
+    MatchTextData
+} from '../types/valorant';
 
-interface AccountData {
-    data: {
-        name: string;
-        tag: string;
-        puuid: string;
-        region: string;
-        card: any;
-    }
-}
-
-interface MMRData {
-    data: {
-        current_data: {
-            currenttierpatched: string;
-            images: { large: string };
-            elo: number;
-            mmr_change_to_last_game: number;
-            ranking_in_tier: number;
-        }
-    }
-}
-
-export function formatRankData(accountData: AccountData, mmrData: MMRData) {
+export function formatRankData(accountData: ValorantApiResponse<ValorantAccount>, mmrData: ValorantApiResponse<ValorantMMR>): FormattedRankData {
     const currentData = mmrData.data.current_data;
+
     return {
         name: accountData.data.name,
         tag: accountData.data.tag,
@@ -39,8 +31,8 @@ export function formatRankData(accountData: AccountData, mmrData: MMRData) {
     };
 }
 
-export function formatMatchData(matchData: any, puuid: string) {
-    const stats = matchData.players.all_players.find((p: any) => p.puuid === puuid);
+export function formatMatchData(matchData: ValorantMatch, puuid: string): FormattedMatchData | null {
+    const stats = matchData.players.all_players.find((p) => p.puuid === puuid);
     if (!stats) return null;
 
     const totalShots = (stats.stats.headshots || 0) + (stats.stats.bodyshots || 0) + (stats.stats.legshots || 0);
@@ -51,30 +43,31 @@ export function formatMatchData(matchData: any, puuid: string) {
     const agentImage = stats.assets.agent.bust || stats.assets.agent.full || agentIcon;
 
     const mapName = matchData.metadata.map;
-    const mapUuid = MAP_UUIDS[mapName];
+    const mapUuid = MAP_UUIDS[mapName] || '';
     const mapImage = mapUuid ? `https://media.valorant-api.com/maps/${mapUuid}/splash.png` : null;
 
     const isWin = matchData.teams.red.has_won ? (stats.team === 'Red') : (stats.team === 'Blue');
     const kda = `${stats.stats.kills}/${stats.stats.deaths}/${stats.stats.assists}`;
 
+    const derived: DerivedMatchData = {
+        map_name: mapName,
+        is_win: isWin,
+        kda: kda,
+        hs_percent: hsPercentage,
+        agent_name: agentName,
+        agent_icon: agentIcon,
+        agent_image: agentImage,
+        map_image: mapImage
+    };
 
     return {
         ...matchData,
-        derived: {
-            is_win: isWin,
-            kda: kda,
-            hs_percent: hsPercentage,
-            agent_name: agentName,
-            agent_icon: agentIcon,
-            agent_image: agentImage,
-            map_image: mapImage,
-            map_name: mapName
-        }
+        derived
     };
 }
 
-export function formatHistoryData(historyData: any) {
-    return historyData.data.map((match: any) => ({
+export function formatHistoryData(historyData: ValorantApiResponse<ValorantMMRHistoryItem[]>): FormattedHistoryMatch[] {
+    return historyData.data.map((match) => ({
         date: match.date,
         elo: match.elo,
         change: match.mmr_change_to_last_game,
@@ -82,13 +75,13 @@ export function formatHistoryData(historyData: any) {
     })).reverse();
 }
 
-export function formatRankText(data: any, lang: string, type: string) {
+export function formatRankText(data: RankTextData, lang: string, type: string): string {
     const { rank, ranking_in_tier, elo, name, tag } = data;
     const user = `${name}#${tag}`;
     const rr = ranking_in_tier;
 
-    const isEs = lang === 'es';
     const translatedRank = translateRank(rank, lang);
+    const isEs = lang === 'es';
 
     if (type === '1') return isEs ? `Actualmente estoy en ${translatedRank}` : `Currently I am in ${translatedRank}`;
     if (type === '2') return isEs ? `Actualmente estoy en ${translatedRank} con ${rr} puntos` : `Currently I am in ${translatedRank} with ${rr} RR`;
@@ -97,12 +90,10 @@ export function formatRankText(data: any, lang: string, type: string) {
     return `${user}: ${translatedRank} - ${rr} RR`;
 }
 
-export function formatMatchText(data: any, lang: string, type: string, mmrChange: number) {
+export function formatMatchText(data: MatchTextData, lang: string, type: string, mmrChange: number): string {
     const { derived } = data;
     const { map_name, is_win, kda, hs_percent, agent_name } = derived;
-
-    const change = mmrChange !== undefined ? mmrChange : (data.mmr_change || 0);
-
+    const change = mmrChange !== undefined ? mmrChange : 0;
     const isEs = lang === 'es';
 
     if (isEs) {

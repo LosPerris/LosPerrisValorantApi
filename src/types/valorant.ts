@@ -71,6 +71,7 @@ export interface ValorantMatchPlayer {
         agent: {
             small: string;
             bust: string;
+            full: string;
             killfeed: string;
         };
     };
@@ -176,4 +177,51 @@ export interface ValorantMMRHistoryItem {
     elo: number;
     date: string;
     date_raw: number;
+}
+
+export interface RankTextData {
+    name: string;
+    tag: string;
+    rank: string;
+    ranking_in_tier: number;
+    elo: number;
+}
+
+export interface FormattedRankData extends RankTextData {
+    puuid: string;
+    region: string;
+    rank_image: string;
+    mmr_change: number;
+    card: any;
+}
+
+export interface DerivedMatchData {
+    map_name: string;
+    is_win: boolean;
+    kda: string;
+    hs_percent: string | number;
+    agent_name: string;
+    agent_icon: string;
+    agent_image: string;
+    map_image: string | null;
+}
+
+export interface MatchTextData {
+    derived: DerivedMatchData;
+}
+
+export interface FormattedMatchData extends ValorantMatch, MatchTextData { }
+
+export interface FormattedHistoryMatch {
+    date: string;
+    elo: number;
+    change: number;
+    map: string;
+}
+
+export interface SummaryResponse {
+    account: ValorantAccount;
+    rank: FormattedRankData | null;
+    match: FormattedMatchData | null;
+    history: FormattedHistoryMatch[] | null;
 }

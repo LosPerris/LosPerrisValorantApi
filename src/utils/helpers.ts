@@ -11,8 +11,8 @@ export function getErrorMsg(status: number, lang: string): string {
     }
 }
 
-export function handleRouteError(req: Request, res: Response, error: any): void | Response {
-    const status = error.status || 500;
+export function handleRouteError(req: Request, res: Response, error: unknown): void | Response {
+    const status = (error as any).status || 500;
     const lang = (req.query.lang as string) || 'en';
 
     if (req.query.format === 'text') {
@@ -27,7 +27,7 @@ export function handleRouteError(req: Request, res: Response, error: any): void 
         status: status,
         error: errorCode,
         message: getErrorMsg(status, lang),
-        details: error.data || error.message
+        details: (error as any).data || (error as any).message
     });
 }
 
@@ -42,11 +42,11 @@ export function translateRank(rankName: string, lang: string): string {
     return rankName;
 }
 
-export function sendResponse(
+export function sendResponse<T>(
     req: Request,
     res: Response,
-    data: any,
-    textFormatter: ((data: any, lang: string, type: string, extraData?: any) => string) | null,
+    data: T,
+    textFormatter: ((data: T, lang: string, type: string, extraData?: any) => string) | null,
     extraData: any = null
 ): Response {
     if (req.query.format === 'text') {
