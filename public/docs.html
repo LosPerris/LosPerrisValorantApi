@@ -531,6 +531,13 @@ print(requests.get("https://losperris.site/api/valorant/summary/na/PonssLoveless
             const summaryUrl = document.getElementById('url-summary');
             if (historyUrl) historyUrl.textContent = `${CONFIG.siteUrl}/api/valorant/history/:region/:name/:tag`;
             if (summaryUrl) summaryUrl.textContent = `${CONFIG.siteUrl}/api/valorant/summary/:region/:name/:tag`;
+
+            const codeBlocks = document.querySelectorAll('.pre-code');
+            codeBlocks.forEach(block => {
+                let content = block.innerHTML;
+                content = content.replace(/https:\/\/losperris\.site/g, CONFIG.siteUrl);
+                block.innerHTML = content;
+            });
         }
         updateUrls();
 
