@@ -64,12 +64,15 @@ safeAddEventListener('rank-form', 'submit', async (e) => {
 
     try {
         const data = await fetchPlayerSummary(region, name, tag);
+        console.log('API Data received:', data);
         fullSummaryData = data;
         saveRecentSearch(region, name, tag);
 
+        console.log('Rendering Rank Card...');
         renderRankCard(data.data.rank, currentLang);
 
         if (data.data.match) {
+            console.log('Rendering Match Card...');
             renderMatchCard(data.data.match, data.data.rank.puuid, currentLang);
         }
 
@@ -78,6 +81,7 @@ safeAddEventListener('rank-form', 'submit', async (e) => {
         }
 
         updateCommandsUI(fullSummaryData);
+        console.log('Showing Results...');
         showResults();
 
     } catch (error) {
