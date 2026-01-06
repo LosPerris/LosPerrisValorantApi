@@ -39,9 +39,14 @@ function updateLanguageUI(lang) {
     updateBotCommandLabels(botLang);
 
     document.getElementById('docs-title').textContent = t.docsTitle;
-    document.getElementById('docs-desc-rank').textContent = t.docsDescRank;
-    document.getElementById('docs-desc-match').textContent = t.docsDescMatch;
-    document.getElementById('docs-note').innerHTML = t.docsNote;
+    const docsDescRank = document.getElementById('docs-desc-rank');
+    if (docsDescRank) docsDescRank.textContent = t.docsDescRank;
+
+    const docsDescMatch = document.getElementById('docs-desc-match');
+    if (docsDescMatch) docsDescMatch.textContent = t.docsDescMatch;
+
+    const docsNote = document.getElementById('docs-note');
+    if (docsNote) docsNote.innerHTML = t.docsNote;
 
     document.getElementById('footer-created').innerHTML = t.footerCreated;
     document.getElementById('footer-other-api').innerHTML = t.footerOtherApi;
