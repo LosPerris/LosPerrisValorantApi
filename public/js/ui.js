@@ -76,28 +76,32 @@ function updateLanguageUI(lang) {
 }
 
 function renderRankCard(data, lang) {
-    document.getElementById('player-name').textContent = `${data.name}#${data.tag}`;
+    safeSetText('player-name', `${data.name}#${data.tag}`);
 
     const displayRank = formatRankName(data.rank, lang);
-    document.getElementById('rank-text').textContent = displayRank;
+    safeSetText('rank-text', displayRank);
 
-    document.getElementById('rank-img').src = data.rank_image;
-    document.getElementById('elo').textContent = data.elo;
+    safeSetSrc('rank-img', data.rank_image);
+    safeSetText('elo', data.elo);
 
     const mmrChange = data.mmr_change;
     const mmrEl = document.getElementById('mmr-change');
-    mmrEl.textContent = mmrChange > 0 ? `+${mmrChange}` : mmrChange;
-    mmrEl.style.color = mmrChange >= 0 ? 'var(--success)' : 'var(--danger)';
+    if (mmrEl) {
+        mmrEl.textContent = mmrChange > 0 ? `+${mmrChange}` : mmrChange;
+        mmrEl.style.color = mmrChange >= 0 ? 'var(--success)' : 'var(--danger)';
+    }
 
     const rr = data.ranking_in_tier || 0;
-    document.getElementById('rank-progress').style.width = `${rr}%`;
+    const progressEl = document.getElementById('rank-progress');
+    if (progressEl) progressEl.style.width = `${rr}%`;
 
     if (data.card) {
         if (data.card.wide) {
-            document.getElementById('player-card-bg').style.backgroundImage = `url('${data.card.wide}')`;
+            const bgEl = document.getElementById('player-card-bg');
+            if (bgEl) bgEl.style.backgroundImage = `url('${data.card.wide}')`;
         }
         if (data.card.small) {
-            document.getElementById('player-card-small').src = data.card.small;
+            safeSetSrc('player-card-small', data.card.small);
         }
     }
 }
@@ -109,31 +113,36 @@ function renderMatchCard(matchData, playerPuuid, lang) {
     const stats = matchData.players.all_players.find(p => p.puuid === playerPuuid);
     const isWin = matchData.teams.red.has_won ? (stats.team === 'Red') : (stats.team === 'Blue');
 
-    document.getElementById('match-map').textContent = meta.map;
+    safeSetText('match-map', meta.map);
 
     const matchDate = new Date(meta.game_start * 1000);
     const dateOptions = { day: 'numeric', month: 'short' };
-    document.getElementById('match-date').textContent = matchDate.toLocaleDateString(lang, dateOptions);
+    safeSetText('match-date', matchDate.toLocaleDateString(lang, dateOptions));
 
     const resultEl = document.getElementById('match-result');
-    resultEl.textContent = formatMatchResult(isWin, lang);
-    resultEl.className = `match-result ${isWin ? 'win' : 'loss'}`;
+    if (resultEl) {
+        resultEl.textContent = formatMatchResult(isWin, lang);
+        resultEl.className = `match-result ${isWin ? 'win' : 'loss'}`;
+    }
 
-    document.getElementById('match-kda').textContent = `${stats.stats.kills}/${stats.stats.deaths}/${stats.stats.assists}`;
+    safeSetText('match-kda', `${stats.stats.kills}/${stats.stats.deaths}/${stats.stats.assists}`);
 
     if (matchData.derived) {
-        document.getElementById('match-hs').textContent = `${matchData.derived.hs_percent}%`;
-        document.getElementById('match-agent-icon').src = matchData.derived.agent_icon;
+        safeSetText('match-hs', `${matchData.derived.hs_percent}%`);
+        safeSetSrc('match-agent-icon', matchData.derived.agent_icon);
 
         const bgImage = matchData.derived.map_image || matchData.derived.agent_image;
         if (bgImage) {
-            document.querySelector('.match-card').style.setProperty('--match-bg', `url('${bgImage}')`);
+            const cardEl = document.querySelector('.match-card');
+            if (cardEl) cardEl.style.setProperty('--match-bg', `url('${bgImage}')`);
         }
     }
 }
 
 function renderChart(history) {
-    const ctx = document.getElementById('mmrChart').getContext('2d');
+    const canvas = document.getElementById('mmrChart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
 
     if (mmrChartInstance) {
         mmrChartInstance.destroy();
@@ -235,6 +244,7 @@ function renderChart(history) {
 
 function renderRecentSearches(searches, onSearchClick) {
     const container = document.getElementById('recent-searches');
+    if (!container) return; // Silent fail if container missing
 
     if (searches.length === 0) {
         container.classList.add('hidden');
@@ -254,26 +264,44 @@ function renderRecentSearches(searches, onSearchClick) {
 }
 
 function updateCommandsUI(fullSummaryData) {
-    const botLang = document.getElementById('bot-lang').value;
+    const botLangEl = document.getElementById('bot-lang');
+    if (!botLangEl) return;
+    const botLang = botLangEl.value;
+
     updateBotCommandLabels(botLang);
 
     if (!fullSummaryData) return;
 
-    const region = document.getElementById('region').value;
-    const name = document.getElementById('name').value;
-    const tag = document.getElementById('tag').value;
+    const regionEl = document.getElementById('region');
+    const nameEl = document.getElementById('name');
+    const tagEl = document.getElementById('tag');
 
-    const botPlatform = document.getElementById('bot-platform').value;
-    const botType = document.getElementById('bot-type').value;
-    const botMatchType = document.getElementById('bot-match-type').value;
+    if (!regionEl || !nameEl || !tagEl) return;
 
-    const baseUrl = window.location.origin + apiBase;
+    const region = regionEl.value;
+    const name = nameEl.value;
+    const tag = tagEl.value;
+
+    const botPlatformEl = document.getElementById('bot-platform');
+    const botTypeEl = document.getElementById('bot-type');
+    const botMatchTypeEl = document.getElementById('bot-match-type');
+
+    if (!botPlatformEl || !botTypeEl || !botMatchTypeEl) return;
+
+    const botPlatform = botPlatformEl.value;
+    const botType = botTypeEl.value;
+    const botMatchType = botMatchTypeEl.value;
+
+    const baseUrl = window.location.origin + CONFIG.apiBaseUrl;
 
     const rankUrl = `${baseUrl}/rank/${region}/${name}/${tag}?format=text&lang=${botLang}&type=${botType}`;
     const matchUrl = `${baseUrl}/match/last/${region}/${name}/${tag}?format=text&lang=${botLang}&type=${botMatchType}`;
 
-    document.getElementById('cmd-rank').value = getCommandSyntax(botPlatform, rankUrl);
-    document.getElementById('cmd-match').value = getCommandSyntax(botPlatform, matchUrl);
+    const cmdRankEl = document.getElementById('cmd-rank');
+    if (cmdRankEl) cmdRankEl.value = getCommandSyntax(botPlatform, rankUrl);
+
+    const cmdMatchEl = document.getElementById('cmd-match');
+    if (cmdMatchEl) cmdMatchEl.value = getCommandSyntax(botPlatform, matchUrl);
 
     updateExamplePreviews(fullSummaryData, botLang, botType, botMatchType);
     updateBotCommandLabels(botLang);
@@ -282,8 +310,8 @@ function updateCommandsUI(fullSummaryData) {
 function updateBotCommandLabels(botLang) {
     const t = translations[botLang];
     if (t) {
-        document.getElementById('lbl-cmd-rank').textContent = t.cmdRank;
-        document.getElementById('lbl-cmd-match').textContent = t.cmdMatch;
+        safeSetText('lbl-cmd-rank', t.cmdRank);
+        safeSetText('lbl-cmd-match', t.cmdMatch);
 
         document.querySelectorAll('.example-label').forEach(el => {
             el.textContent = t.exampleLabel;
@@ -308,7 +336,8 @@ async function updateExamplePreviews(data, botLang, botType, botMatchType) {
                 tag: r.tag
             }
         });
-        document.getElementById('example-rank').textContent = result.text;
+        const exRank = document.getElementById('example-rank');
+        if (exRank) exRank.textContent = result.text;
     } catch (e) {
         console.error('Preview Error (Rank):', e);
     }
@@ -331,7 +360,8 @@ async function updateExamplePreviews(data, botLang, botType, botMatchType) {
                     mmrChange: r.mmr_change
                 }
             });
-            document.getElementById('example-match').textContent = result.text;
+            const exMatch = document.getElementById('example-match');
+            if (exMatch) exMatch.textContent = result.text;
         } catch (e) {
             console.error('Preview Error (Match):', e);
         }
@@ -340,30 +370,39 @@ async function updateExamplePreviews(data, botLang, botType, botMatchType) {
 
 function showLoading(lang) {
     const submitBtn = document.getElementById('submit-btn');
-    submitBtn.disabled = true;
-
-    submitBtn.innerHTML = '<img src="./imgs/buscando_jugador.svg" class="btn-loader">';
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<img src="./imgs/buscando_jugador.svg" class="btn-loader">';
+    }
 }
 
 function hideLoading(lang) {
     const submitBtn = document.getElementById('submit-btn');
-    submitBtn.disabled = false;
-    submitBtn.textContent = translations[lang].search;
+    if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = translations[lang].search;
+    }
 }
 
 function showResults() {
     const resultContainer = document.getElementById('result');
+    if (!resultContainer) return;
+
     resultContainer.classList.remove('hidden');
     resultContainer.classList.remove('fade-in');
-    void resultContainer.offsetWidth;
+    void resultContainer.offsetWidth; // Force reflow
     resultContainer.classList.add('fade-in');
-    document.getElementById('error').classList.add('hidden');
+
+    const errorEl = document.getElementById('error');
+    if (errorEl) errorEl.classList.add('hidden');
 }
 
 function showError(error, lang) {
-    document.getElementById('result').classList.add('hidden');
+    const resultContainer = document.getElementById('result');
+    if (resultContainer) resultContainer.classList.add('hidden');
+
     const errorDiv = document.getElementById('error');
-    errorDiv.classList.remove('hidden');
+    if (errorDiv) errorDiv.classList.remove('hidden');
 
     const t = translations[lang];
     let msg = t.error;
@@ -374,21 +413,26 @@ function showError(error, lang) {
         else if (error.error === 'SERVER_ERROR') msg = t.errorServer;
     }
 
-    document.getElementById('error-msg').textContent = msg;
+    safeSetText('error-msg', msg);
 }
 
 function toggleConfigMode(mode) {
-    document.getElementById('btn-config-rank').classList.toggle('active', mode === 'rank');
-    document.getElementById('btn-config-match').classList.toggle('active', mode === 'match');
+    const btnRank = document.getElementById('btn-config-rank');
+    if (btnRank) btnRank.classList.toggle('active', mode === 'rank');
+
+    const btnMatch = document.getElementById('btn-config-match');
+    if (btnMatch) btnMatch.classList.toggle('active', mode === 'match');
 
     const rankGroup = document.getElementById('group-rank-format');
     const matchGroup = document.getElementById('group-match-format');
 
-    if (mode === 'rank') {
-        rankGroup.classList.remove('hidden');
-        matchGroup.classList.add('hidden');
-    } else {
-        rankGroup.classList.add('hidden');
-        matchGroup.classList.remove('hidden');
+    if (rankGroup && matchGroup) {
+        if (mode === 'rank') {
+            rankGroup.classList.remove('hidden');
+            matchGroup.classList.add('hidden');
+        } else {
+            rankGroup.classList.add('hidden');
+            matchGroup.classList.remove('hidden');
+        }
     }
 }

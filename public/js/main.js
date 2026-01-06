@@ -85,6 +85,8 @@ safeAddEventListener('rank-form', 'submit', async (e) => {
         showResults();
 
     } catch (error) {
+        console.error('CRITICAL RENDER/FETCH ERROR:', error);
+        if (error.stack) console.error(error.stack);
         showError(error, currentLang);
     } finally {
         hideLoading(currentLang);
