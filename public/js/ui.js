@@ -1,56 +1,74 @@
+const safeSetText = (id, text) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+};
+
+const safeSetHtml = (id, html) => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = html;
+};
+
+const safeSetSrc = (id, src) => {
+    const el = document.getElementById(id);
+    if (el) el.src = src;
+};
+
+const safeSetQueryText = (selector, text) => {
+    const el = document.querySelector(selector);
+    if (el) el.textContent = text;
+};
+
 let mmrChartInstance = null;
 
 function updateLanguageUI(lang) {
     const t = translations[lang];
-    document.getElementById('title').innerHTML = t.title;
-    document.getElementById('subtitle').textContent = t.subtitle;
-    document.querySelector('label[for="region"]').textContent = t.region;
-    document.querySelector('label[for="name"]').textContent = t.riotId;
-    document.querySelector('label[for="tag"]').textContent = t.tag;
-    document.getElementById('submit-btn').textContent = t.search;
-    document.getElementById('last-match-title').textContent = t.lastMatch;
-    document.getElementById('error-msg').textContent = t.error;
+    safeSetHtml('title', t.title);
+    safeSetText('subtitle', t.subtitle);
+    safeSetQueryText('label[for="region"]', t.region);
+    safeSetQueryText('label[for="name"]', t.riotId);
+    safeSetQueryText('label[for="tag"]', t.tag);
+    safeSetText('submit-btn', t.search);
+    safeSetText('last-match-title', t.lastMatch);
+    safeSetText('error-msg', t.error);
 
-    const chartTitle = document.getElementById('chart-title');
-    if (chartTitle) chartTitle.textContent = t.chartTitle;
+    safeSetText('chart-title', t.chartTitle);
 
-    document.querySelector('.config-card h3').textContent = t.botConfig;
-    document.querySelector('label[for="bot-platform"]').textContent = t.botPlatform;
-    document.querySelector('label[for="bot-lang"]').textContent = t.botLang;
+    safeSetQueryText('.config-card h3', t.botConfig);
+    safeSetQueryText('label[for="bot-platform"]', t.botPlatform);
+    safeSetQueryText('label[for="bot-lang"]', t.botLang);
 
-    document.querySelector('label[for="bot-type"]').textContent = t.rankFormat;
+    safeSetQueryText('label[for="bot-type"]', t.rankFormat);
     const typeSelect = document.getElementById('bot-type');
-    typeSelect.options[0].text = t.format1;
-    typeSelect.options[1].text = t.format2;
-    typeSelect.options[2].text = t.format3;
+    if (typeSelect) {
+        typeSelect.options[0].text = t.format1;
+        typeSelect.options[1].text = t.format2;
+        typeSelect.options[2].text = t.format3;
+    }
 
-    document.querySelector('label[for="bot-match-type"]').textContent = t.matchFormat;
+    safeSetQueryText('label[for="bot-match-type"]', t.matchFormat);
     const matchTypeSelect = document.getElementById('bot-match-type');
-    matchTypeSelect.options[0].text = t.matchType1;
-    matchTypeSelect.options[1].text = t.matchType2;
-    matchTypeSelect.options[2].text = t.matchType3;
+    if (matchTypeSelect) {
+        matchTypeSelect.options[0].text = t.matchType1;
+        matchTypeSelect.options[1].text = t.matchType2;
+        matchTypeSelect.options[2].text = t.matchType3;
+    }
 
-    document.getElementById('btn-config-rank').textContent = t.rankConfig;
-    document.getElementById('btn-config-match').textContent = t.matchConfig;
+    safeSetText('btn-config-rank', t.rankConfig);
+    safeSetText('btn-config-match', t.matchConfig);
 
-    document.querySelector('.commands-card h3').textContent = t.botCmds;
+    safeSetQueryText('.commands-card h3', t.botCmds);
 
     const botLang = document.getElementById('bot-lang').value;
     updateBotCommandLabels(botLang);
 
-    document.getElementById('docs-title').textContent = t.docsTitle;
-    const docsDescRank = document.getElementById('docs-desc-rank');
-    if (docsDescRank) docsDescRank.textContent = t.docsDescRank;
+    safeSetText('docs-title', t.docsTitle);
+    safeSetText('docs-desc-rank', t.docsDescRank);
+    safeSetText('docs-desc-match', t.docsDescMatch);
+    safeSetHtml('docs-note', t.docsNote);
 
-    const docsDescMatch = document.getElementById('docs-desc-match');
-    if (docsDescMatch) docsDescMatch.textContent = t.docsDescMatch;
-
-    const docsNote = document.getElementById('docs-note');
-    if (docsNote) docsNote.innerHTML = t.docsNote;
-
-    document.getElementById('footer-created').innerHTML = t.footerCreated;
-    document.getElementById('footer-other-api').innerHTML = t.footerOtherApi;
-    document.getElementById('footer-disclaimer').textContent = t.footerDisclaimer;
+    safeSetHtml('footer-created', t.footerCreated);
+    safeSetHtml('footer-other-api', t.footerOtherApi);
+    safeSetText('footer-disclaimer', t.footerDisclaimer);
 
     document.querySelectorAll('.example-label').forEach(el => {
         el.textContent = t.exampleLabel;

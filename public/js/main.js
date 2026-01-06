@@ -3,6 +3,11 @@ let fullSummaryData = null;
 let currentConfigMode = 'rank';
 const MAX_RECENT_SEARCHES = 3;
 
+const safeAddEventListener = (id, event, handler) => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener(event, handler);
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     renderRecentSearchesMain();
     updateLanguageUI(currentLang);
@@ -23,13 +28,13 @@ document.querySelectorAll('.lang-btn').forEach(btn => {
     });
 });
 
-document.getElementById('btn-config-rank').addEventListener('click', () => {
+safeAddEventListener('btn-config-rank', 'click', () => {
     currentConfigMode = 'rank';
     toggleConfigMode('rank');
     updateCommandsUI(fullSummaryData);
 });
 
-document.getElementById('btn-config-match').addEventListener('click', () => {
+safeAddEventListener('btn-config-match', 'click', () => {
     currentConfigMode = 'match';
     toggleConfigMode('match');
     updateCommandsUI(fullSummaryData);
@@ -37,17 +42,23 @@ document.getElementById('btn-config-match').addEventListener('click', () => {
 
 const configInputs = ['bot-platform', 'bot-lang', 'bot-type', 'bot-match-type'];
 configInputs.forEach(id => {
-    document.getElementById(id).addEventListener('change', () => {
+    safeAddEventListener(id, 'change', () => {
         updateCommandsUI(fullSummaryData);
     });
 });
 
-document.getElementById('rank-form').addEventListener('submit', async (e) => {
+safeAddEventListener('rank-form', 'submit', async (e) => {
     e.preventDefault();
 
-    const region = document.getElementById('region').value;
-    const name = document.getElementById('name').value;
-    const tag = document.getElementById('tag').value;
+    const regionEl = document.getElementById('region');
+    const nameEl = document.getElementById('name');
+    const tagEl = document.getElementById('tag');
+
+    if (!regionEl || !nameEl || !tagEl) return;
+
+    const region = regionEl.value;
+    const name = nameEl.value;
+    const tag = tagEl.value;
 
     showLoading(currentLang);
 
@@ -80,8 +91,10 @@ document.querySelectorAll('.btn-copy').forEach(btn => {
     btn.addEventListener('click', () => {
         const targetId = btn.dataset.target;
         const input = document.getElementById(targetId);
-        input.select();
-        document.execCommand('copy');
+        if (input) {
+            input.select();
+            document.execCommand('copy');
+        }
 
         const originalText = btn.textContent;
         btn.textContent = 'COPIED!';
@@ -89,15 +102,17 @@ document.querySelectorAll('.btn-copy').forEach(btn => {
     });
 });
 
-document.getElementById('btn-copy-json').addEventListener('click', () => {
+safeAddEventListener('btn-copy-json', 'click', () => {
     if (!fullSummaryData) return;
 
     const jsonStr = JSON.stringify(fullSummaryData, null, 2);
     navigator.clipboard.writeText(jsonStr).then(() => {
         const btn = document.getElementById('btn-copy-json');
-        const originalHtml = btn.innerHTML;
-        btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
-        setTimeout(() => btn.innerHTML = originalHtml, 2000);
+        if (btn) {
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+            setTimeout(() => btn.innerHTML = originalHtml, 2000);
+        }
     });
 });
 
@@ -115,9 +130,14 @@ function saveRecentSearch(region, name, tag) {
 function renderRecentSearchesMain() {
     const searches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
     renderRecentSearches(searches, (s) => {
-        document.getElementById('region').value = s.region;
-        document.getElementById('name').value = s.name;
-        document.getElementById('tag').value = s.tag;
-        document.getElementById('submit-btn').click();
+        const regionEl = document.getElementById('region');
+        const nameEl = document.getElementById('name');
+        const tagEl = document.getElementById('tag');
+        const submitBtn = document.getElementById('submit-btn');
+
+        if (regionEl) regionEl.value = s.region;
+        if (nameEl) nameEl.value = s.name;
+        if (tagEl) tagEl.value = s.tag;
+        if (submitBtn) submitBtn.click();
     });
 }
