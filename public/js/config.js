@@ -3,11 +3,7 @@ const CONFIG = {
     siteUrl: window.location.origin,
 
     get apiBaseUrl() {
-        const path = window.location.pathname;
-        if (path.startsWith('/api/valorant')) {
-            return '/api/valorant';
-        }
-        return '';
+        return '/api/valorant';
     },
 
     contactEmail: 'contacto@losperris.site',
