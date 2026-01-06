@@ -1,13 +1,3 @@
-const getBaseUrl = () => {
-    const path = window.location.pathname;
-    if (path.startsWith('/api/valorant')) {
-        return '/api/valorant';
-    }
-    return '';
-};
-
-const apiBase = getBaseUrl();
-
 function getCommandSyntax(platform, url) {
     switch (platform) {
         case 'nightbot':

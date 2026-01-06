@@ -1,5 +1,5 @@
 async function fetchPlayerSummary(region, name, tag) {
-    const response = await fetch(`${apiBase}/summary/${region}/${name}/${tag}`);
+    const response = await fetch(`${CONFIG.apiBaseUrl}/summary/${region}/${name}/${tag}`);
     const data = await response.json();
 
     if (!response.ok) {
@@ -10,7 +10,7 @@ async function fetchPlayerSummary(region, name, tag) {
 }
 
 async function fetchPreview(payload) {
-    const response = await fetch(`${apiBase}/preview`, {
+    const response = await fetch(`${CONFIG.apiBaseUrl}/preview`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
