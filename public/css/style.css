@@ -160,6 +160,7 @@ h1 {
     background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 0.5rem;
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 .accent {
@@ -186,9 +187,9 @@ header {
 }
 
 .site-logo {
-    width: 60px;
-    height: 60px;
-    border-radius: 12px;
+    width: 75px;
+    height: 75px;
+    border-radius: 60px;
     object-fit: contain;
     filter: drop-shadow(0 0 15px rgba(255, 70, 85, 0.4));
 }
