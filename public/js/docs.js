@@ -4,9 +4,7 @@ const updateUrls = () => {
     if (rankUrl) rankUrl.textContent = `${CONFIG.siteUrl}/api/valorant/rank/:region/:name/:tag`;
     if (matchUrl) matchUrl.textContent = `${CONFIG.siteUrl}/api/valorant/match/last/:region/:name/:tag`;
 
-    const historyUrl = document.getElementById('url-history');
     const summaryUrl = document.getElementById('url-summary');
-    if (historyUrl) historyUrl.textContent = `${CONFIG.siteUrl}/api/valorant/history/:region/:name/:tag`;
     if (summaryUrl) summaryUrl.textContent = `${CONFIG.siteUrl}/api/valorant/summary/:region/:name/:tag`;
 
     const codeBlocks = document.querySelectorAll('.pre-code');
