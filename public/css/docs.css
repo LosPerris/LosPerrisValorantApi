@@ -29,7 +29,6 @@ body {
 }
 
 .docs-container {
-    display: flex;
     min-height: 100vh;
 }
 
@@ -271,7 +270,7 @@ code {
     color: var(--text-dim);
     width: 100%;
     margin-left: 280px;
-    width: calc(100% - 280px);
+    width: auto;
 }
 
 .json-key {
