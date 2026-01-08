@@ -306,11 +306,10 @@ print(res.json())</pre>
                 </table>
             </section>
 
-            <footer style="margin-top: 50px; border-top: 1px solid var(--card-border); padding-top: 30px;">
-                <p>&copy;
-                    <script>document.write(new Date().getFullYear())</script> LosPerris Valorant API.
-                </p>
+            <footer class="docs-footer">
+                <p>&copy; <span id="year"></span> LosPerris Valorant API. Todos los derechos reservados.</p>
             </footer>
+            <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
         </main>
     </div>
 
