@@ -782,42 +782,70 @@ footer a:hover {
 
 @media (max-width: 768px) {
     body {
-        padding: 15px 10px;
+        padding: 20px 15px;
     }
 
     #title {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
     }
 
     .lang-selector {
-        top: 10px;
-        right: 10px;
+        top: 15px;
+        right: 15px;
     }
 
     .lang-btn {
-        padding: 4px 10px;
-        font-size: 0.75rem;
+        padding: 6px 12px;
+        font-size: 0.8rem;
     }
 
     .card {
-        padding: 20px;
+        padding: 25px;
+        /* Increased padding */
     }
 
     .card-header {
         flex-direction: column;
         align-items: center;
-        gap: 15px;
+        gap: 10px;
+        text-align: center;
     }
 
     .header-content {
         flex-direction: column;
         text-align: center;
+        width: 100%;
+        gap: 15px;
+    }
+
+    .rank-icon {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 5px;
+    }
+
+    .info h2 {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+
+    .rank-badge {
+        font-size: 1rem;
+        padding: 4px 12px;
+    }
+
+    .stats {
+        justify-content: center;
+        margin-top: 10px;
     }
 
     .btn-icon {
         position: absolute;
-        top: 15px;
-        right: 15px;
+        top: 20px;
+        right: 20px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
     }
 
     .form-row {
@@ -829,6 +857,10 @@ footer a:hover {
         flex-wrap: wrap;
         gap: 20px;
         justify-content: center;
+        background: rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        border-radius: 12px;
+        margin-top: 15px;
     }
 
     .stat-group {
@@ -847,53 +879,73 @@ footer a:hover {
     }
 
     .site-logo {
-        width: 45px;
-        height: 45px;
+        width: 50px;
+        height: 50px;
     }
 
     .card {
-        padding: 15px;
-    }
-
-    .info h2 {
-        font-size: 1.5rem;
-    }
-
-    .rank-icon {
-        width: 60px;
-        height: 60px;
+        padding: 20px;
     }
 
     .copy-box {
         flex-direction: column;
+        gap: 0;
     }
 
     .copy-box input {
-        border-bottom: 1px solid var(--card-border);
-        border-right: none;
         border-radius: 8px 8px 0 0;
+        border-bottom: 1px solid var(--card-border);
+        border-right: 1px solid var(--card-border);
+        padding: 15px;
+        font-size: 1rem;
     }
 
     .btn-copy {
         width: 100%;
-        padding: 12px;
+        padding: 15px;
         border-radius: 0 0 8px 8px;
+        font-size: 1rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
     .example-box {
         flex-direction: column;
         align-items: flex-start;
-        gap: 5px;
-        font-size: 0.8rem;
+        gap: 8px;
+        font-size: 0.85rem;
+        margin-top: 15px;
+        padding: 15px;
     }
 
     .match-header {
         flex-direction: column;
         gap: 8px;
         text-align: center;
+        padding-bottom: 15px;
+    }
+
+    .map-name {
+        font-size: 1.2rem;
+        color: var(--accent-color);
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+
+    .match-date {
+        opacity: 0.8;
+    }
+
+    .match-result {
+        width: 100%;
+        display: block;
+        text-align: center;
+        margin-top: 5px;
+        padding: 6px;
     }
 
     footer {
-        padding-bottom: 20px;
+        padding-bottom: 30px;
     }
 }
