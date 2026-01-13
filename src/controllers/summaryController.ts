@@ -18,7 +18,7 @@ export const getSummary = async (req: Request, res: Response) => {
 
         const [mmrData, matchesData, historyData] = await Promise.all([
             valorantService.getMMRByPUUID(region, puuid),
-            valorantService.getMatchesByPUUID(region, puuid, 'competitive'),
+            valorantService.getMatchesByPUUID(region, puuid, 'competitive', 1),
             valorantService.getMMRHistoryByPUUID(region, puuid)
         ]);
 

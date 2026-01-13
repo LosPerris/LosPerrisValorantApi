@@ -10,7 +10,7 @@ export const getLastMatch = async (req: Request, res: Response) => {
 
     try {
         const [matchesData, mmrData] = await Promise.all([
-            valorantService.getMatchesByPUUID(region, puuid as string, 'competitive'),
+            valorantService.getMatchesByPUUID(region, puuid as string, 'competitive', 1),
             valorantService.getMMRByPUUID(region, puuid as string)
         ]);
 

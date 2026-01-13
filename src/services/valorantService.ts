@@ -87,10 +87,10 @@ export async function getMMRByPUUID(region: string, puuid: string): Promise<Valo
     }, 60000);
 }
 
-export async function getMatchesByPUUID(region: string, puuid: string, mode: string = 'competitive'): Promise<ValorantApiResponse<ValorantMatch[]>> {
-    return fetchWithCache(`matches:${region}:${puuid}:${mode}`, async () => {
+export async function getMatchesByPUUID(region: string, puuid: string, mode: string = 'competitive', size: number = 5): Promise<ValorantApiResponse<ValorantMatch[]>> {
+    return fetchWithCache(`matches:${region}:${puuid}:${mode}:${size}`, async () => {
         try {
-            const response = await axiosInstance.get<ValorantApiResponse<ValorantMatch[]>>(`${BASE_URL}/v3/by-puuid/matches/${region}/${puuid}?mode=${mode}`, {
+            const response = await axiosInstance.get<ValorantApiResponse<ValorantMatch[]>>(`${BASE_URL}/v3/by-puuid/matches/${region}/${puuid}?mode=${mode}&size=${size}`, {
                 headers: {
                     'Authorization': getApiKey(),
                     'accept': 'application/json'
