@@ -2,11 +2,11 @@ import { Request, Response } from 'express';
 import * as valorantService from '../services/valorantService';
 import * as formatService from '../services/formatService';
 import { handleRouteError, sendResponse } from '../utils/helpers';
-import { ValorantApiResponse, ValorantMatch, ValorantMMR } from '../types/valorant';
+import { FormattedMatchData } from '../types/valorant';
 
 export const getLastMatch = async (req: Request, res: Response) => {
     const { region } = req.params;
-    const { accountData, puuid } = req;
+    const { puuid } = req;
 
     try {
         const [matchesData, mmrData] = await Promise.all([
@@ -27,7 +27,7 @@ export const getLastMatch = async (req: Request, res: Response) => {
 
             const mmrChange = (mmrData.status === 200) ? mmrData.data.current_data.mmr_change_to_last_game : 0;
 
-            sendResponse(req, res, formattedData, formatService.formatMatchText, mmrChange);
+            sendResponse<FormattedMatchData, number>(req, res, formattedData, formatService.formatMatchText, mmrChange);
         } else {
             if (req.query.format === 'text') {
                 return res.send('No matches found');
@@ -39,7 +39,7 @@ export const getLastMatch = async (req: Request, res: Response) => {
             });
         }
 
-    } catch (error) {
-        handleRouteError(req, res, error);
+    } catch (error: unknown) {
+        handleRouteError(req, res, error as { status?: number; message?: string; data?: unknown });
     }
 };

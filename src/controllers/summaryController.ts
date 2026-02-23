@@ -2,26 +2,58 @@ import { Request, Response } from 'express';
 import * as valorantService from '../services/valorantService';
 import * as formatService from '../services/formatService';
 import { handleRouteError } from '../utils/helpers';
-import { ValorantAccount, ValorantApiResponse, ValorantMMR, ValorantMatch, ValorantMMRHistoryItem, SummaryResponse } from '../types/valorant';
+import cache from '../utils/cache';
+import { config } from '../config';
+import {
+    ValorantAccount,
+    ValorantApiResponse,
+    ValorantMMR,
+    ValorantMatch,
+    ValorantMMRHistoryItem,
+    SummaryResponse
+} from '../types/valorant';
 
 export const getSummary = async (req: Request, res: Response) => {
     const { region, name, tag } = req.params;
 
     try {
-        const accountData: ValorantApiResponse<ValorantAccount> = await valorantService.getPUUID(name, tag);
+        const cachedPuuid = valorantService.getCachedPUUID(name, tag);
+
+        let accountData: ValorantApiResponse<ValorantAccount>;
+        let mmrData: ValorantApiResponse<ValorantMMR>;
+        let matchesData: ValorantApiResponse<ValorantMatch[]>;
+        let historyData: ValorantApiResponse<ValorantMMRHistoryItem[]>;
+
+        if (cachedPuuid) {
+            [accountData, mmrData, matchesData, historyData] = await Promise.all([
+                valorantService.getAccount(name, tag),
+                valorantService.getMMRByPUUID(region, cachedPuuid),
+                valorantService.getMatchesByPUUID(region, cachedPuuid, 'competitive', 1),
+                valorantService.getMMRHistoryByPUUID(region, cachedPuuid)
+            ]);
+        } else {
+            accountData = await valorantService.getAccount(name, tag);
+
+            if (accountData.status !== 200) {
+                return res.status(accountData.status).json(accountData);
+            }
+
+            const puuid = accountData.data.puuid;
+            const cacheKey = `puuid:${name.toLowerCase()}:${tag.toLowerCase()}`;
+            cache.set(cacheKey, puuid, { ttl: config.cacheTtl.account });
+
+            [mmrData, matchesData, historyData] = await Promise.all([
+                valorantService.getMMRByPUUID(region, puuid),
+                valorantService.getMatchesByPUUID(region, puuid, 'competitive', 1),
+                valorantService.getMMRHistoryByPUUID(region, puuid)
+            ]);
+        }
 
         if (accountData.status !== 200) {
             return res.status(accountData.status).json(accountData);
         }
 
         const puuid = accountData.data.puuid;
-
-        const [mmrData, matchesData, historyData] = await Promise.all([
-            valorantService.getMMRByPUUID(region, puuid),
-            valorantService.getMatchesByPUUID(region, puuid, 'competitive', 1),
-            valorantService.getMMRHistoryByPUUID(region, puuid)
-        ]);
-
         const responseData: SummaryResponse = {
             account: accountData.data,
             rank: null,
@@ -47,7 +79,7 @@ export const getSummary = async (req: Request, res: Response) => {
             data: responseData
         });
 
-    } catch (error: any) {
-        return handleRouteError(req, res, error);
+    } catch (error: unknown) {
+        return handleRouteError(req, res, error as { status?: number; message?: string; data?: unknown });
     }
 };

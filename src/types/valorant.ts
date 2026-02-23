@@ -1,7 +1,7 @@
 export interface ValorantApiResponse<T> {
     status: number;
     data: T;
-    errors?: any[];
+    errors?: unknown[];
     message?: string;
 }
 
@@ -123,7 +123,7 @@ export interface ValorantMatchTeam {
     has_won: boolean;
     rounds_won: number;
     rounds_lost: number;
-    roster: any;
+    roster: ValorantMatchPlayer[];
 }
 
 export interface ValorantMatchMetadata {
@@ -154,7 +154,7 @@ export interface ValorantMatch {
         red: ValorantMatchTeam;
         blue: ValorantMatchTeam;
     };
-    rounds: any[];
+    rounds: ValorantRound[];
 }
 
 export interface ValorantMMRHistoryItem {
@@ -192,7 +192,7 @@ export interface FormattedRankData extends RankTextData {
     region: string;
     rank_image: string;
     mmr_change: number;
-    card: any;
+    card: ValorantAccount['card'];
 }
 
 export interface DerivedMatchData {
@@ -208,6 +208,11 @@ export interface DerivedMatchData {
 
 export interface MatchTextData {
     derived: DerivedMatchData;
+}
+
+export interface ValorantRound {
+    round_num: number;
+    player_stats: ValorantMatchPlayer[];
 }
 
 export interface FormattedMatchData extends ValorantMatch, MatchTextData { }

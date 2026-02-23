@@ -90,7 +90,7 @@ export function formatRankText(data: RankTextData, lang: string, type: string): 
     return `${user}: ${translatedRank} - ${rr} RR`;
 }
 
-export function formatMatchText(data: MatchTextData, lang: string, type: string, mmrChange: number): string {
+export function formatMatchText(data: MatchTextData, lang: string, type: string, mmrChange?: number): string {
     const { derived } = data;
     const { map_name, is_win, kda, hs_percent, agent_name } = derived;
     const change = mmrChange !== undefined ? mmrChange : 0;

@@ -22,7 +22,7 @@ export const getHistory = async (req: Request, res: Response) => {
             return res.status(historyData.status).json(historyData);
         }
 
-    } catch (error) {
-        handleRouteError(req, res, error);
+    } catch (error: unknown) {
+        handleRouteError(req, res, error as { status?: number; message?: string; data?: unknown });
     }
 };

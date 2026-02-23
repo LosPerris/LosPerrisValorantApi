@@ -19,6 +19,21 @@ const safeSetQueryText = (selector, text) => {
 };
 
 let mmrChartInstance = null;
+let chartJSLoaded = false;
+
+async function loadChartJS() {
+    if (chartJSLoaded) return true;
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/chart.js@4.4.1/dist/chart.umd.js';
+        script.onload = () => {
+            chartJSLoaded = true;
+            resolve(true);
+        };
+        script.onerror = reject;
+        document.head.appendChild(script);
+    });
+}
 
 function updateLanguageUI(lang) {
     const t = translations[lang];
@@ -139,9 +154,12 @@ function renderMatchCard(matchData, playerPuuid, lang) {
     }
 }
 
-function renderChart(history) {
+async function renderChart(history) {
     const canvas = document.getElementById('mmrChart');
     if (!canvas) return;
+
+    await loadChartJS();
+
     const ctx = canvas.getContext('2d');
 
     if (mmrChartInstance) {
@@ -244,8 +262,7 @@ function renderChart(history) {
 
 function renderRecentSearches(searches, onSearchClick) {
     const container = document.getElementById('recent-searches');
-    if (!container) return; // Silent fail if container missing
-
+    if (!container) return;
     if (searches.length === 0) {
         container.classList.add('hidden');
         return;
@@ -374,6 +391,10 @@ function showLoading(lang) {
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<img src="./imgs/buscando_jugador.svg" class="btn-loader">';
     }
+
+    document.querySelectorAll('#player-name, #rank-text, #elo, #mmr-change, #match-map, #match-result, #match-kda, #match-hs').forEach(el => {
+        el.classList.add('skeleton', 'skeleton-text');
+    });
 }
 
 function hideLoading(lang) {
@@ -382,6 +403,10 @@ function hideLoading(lang) {
         submitBtn.disabled = false;
         submitBtn.textContent = translations[lang].search;
     }
+
+    document.querySelectorAll('.skeleton').forEach(el => {
+        el.classList.remove('skeleton', 'skeleton-text');
+    });
 }
 
 function showResults() {
