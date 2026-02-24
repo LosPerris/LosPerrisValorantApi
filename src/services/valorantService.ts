@@ -26,17 +26,21 @@ export async function getMMRHistoryByPUUID(region: string, puuid: string): Promi
 }
 
 export async function getPUUID(name: string, tag: string): Promise<ValorantApiResponse<ValorantAccount>> {
-    const cacheKey = `puuid:${name.toLowerCase()}:${tag.toLowerCase()}`;
-    const cachedPUUID = cache.get(cacheKey) as string | undefined;
+    const cacheKey = `account_obj:${name.toLowerCase()}:${tag.toLowerCase()}`;
+    const cachedAccount = cache.get(cacheKey) as ValorantApiResponse<ValorantAccount> | undefined;
 
-    if (cachedPUUID) {
-        return getAccount(name, tag);
+    if (cachedAccount) {
+        return cachedAccount;
     }
 
     const accountData = await getAccount(name, tag);
     if (accountData.status === 200) {
-        // El PUUID nunca cambia, lo guardamos por 24 horas (máximo posible en esta caché)
-        cache.set(cacheKey, accountData.data.puuid, { ttl: 24 * 60 * 60 * 1000 });
+        // Guardamos el perfil completo por 1 hora para evitar re-consultas de perfil
+        cache.set(cacheKey, accountData, { ttl: 60 * 60 * 1000 });
+
+        // También guardamos el PUUID por separado (opcional por compatibilidad)
+        const puuidKey = `puuid:${name.toLowerCase()}:${tag.toLowerCase()}`;
+        cache.set(puuidKey, accountData.data.puuid, { ttl: 24 * 60 * 60 * 1000 });
     }
     return accountData;
 }
