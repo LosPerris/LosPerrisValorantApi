@@ -30,7 +30,11 @@ app.use(helmet({
     }
 }));
 app.use(cors());
-app.use(compression());
+app.use(
+    compression({
+        threshold: 1024 // Evita comprimir respuestas menores a 1KB
+    })
+);
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,

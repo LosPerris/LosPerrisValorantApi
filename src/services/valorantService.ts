@@ -35,7 +35,8 @@ export async function getPUUID(name: string, tag: string): Promise<ValorantApiRe
 
     const accountData = await getAccount(name, tag);
     if (accountData.status === 200) {
-        cache.set(cacheKey, accountData.data.puuid, { ttl: config.cacheTtl.account });
+        // El PUUID nunca cambia, lo guardamos por 24 horas (máximo posible en esta caché)
+        cache.set(cacheKey, accountData.data.puuid, { ttl: 24 * 60 * 60 * 1000 });
     }
     return accountData;
 }
