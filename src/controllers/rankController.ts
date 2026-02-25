@@ -1,12 +1,15 @@
 import { Request, Response } from 'express';
 import * as valorantService from '../services/valorantService';
 import * as formatService from '../services/formatService';
-import { handleRouteError, sendResponse } from '../utils/helpers';
+import { handleRouteError, sendResponse, setEdgeCache } from '../utils/helpers';
 import { ValorantApiResponse, ValorantMMR } from '../types/valorant';
 
 export const getRank = async (req: Request, res: Response) => {
     const { region } = req.params;
     const { accountData, puuid } = req;
+
+    // Cacheamos la respuesta en el borde por 1 minuto
+    setEdgeCache(res, 60);
 
     if (!accountData) {
         return handleRouteError(req, res, { status: 404, message: 'Account not found' });

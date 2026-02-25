@@ -1,7 +1,13 @@
 import path from 'path';
 import { Request, Response } from 'express';
 
+// Cargamos traducciones una sola vez al inicio
 const translations = require(path.join(process.cwd(), 'public/js/translations'));
+
+// Pre-calculamos un Map para traducciones de rangos O(1)
+const rankTranslationsMap = new Map<string, string>(
+    Object.entries(translations.rankNames || {}) as [string, string][]
+);
 
 export function getErrorMsg(status: number, lang: string): string {
     const t = translations[lang] || translations['en'];
@@ -39,15 +45,26 @@ export function handleRouteError(req: Request, res: Response, error: RouteError)
     });
 }
 
+// Optimizado: Búsqueda O(1) en lugar de bucle entries().find()
 export function translateRank(rankName: string, lang: string): string {
     if (lang !== 'es' || !rankName) return rankName;
 
-    for (const [eng, esp] of Object.entries(translations.rankNames)) {
+    // Buscamos la base del rango (ej. 'Platinum' en 'Platinum 3')
+    for (const [eng, esp] of rankTranslationsMap) {
         if (rankName.includes(eng)) {
-            return rankName.replace(eng, esp as string);
+            return rankName.replace(eng, esp);
         }
     }
     return rankName;
+}
+
+/**
+ * Añade cabeceras de caché para Vercel Edge Network
+ * s-maxage: Tiempo que Vercel guarda la respuesta en el borde
+ * stale-while-revalidate: Tiempo que sirve lo viejo mientras lo actualiza en segundo plano
+ */
+export function setEdgeCache(res: Response, seconds: number = 60): void {
+    res.setHeader('Cache-Control', `s-maxage=${seconds}, stale-while-revalidate=${Math.floor(seconds / 2)}`);
 }
 
 export function sendResponse<T, TExtra = unknown>(
@@ -57,6 +74,9 @@ export function sendResponse<T, TExtra = unknown>(
     textFormatter: ((data: T, lang: string, type: string, extraData?: TExtra) => string) | null,
     extraData?: TExtra
 ): Response {
+    // Aplicamos caché de 1 minuto por defecto para respuestas exitosas
+    setEdgeCache(res, 60);
+
     if (req.query.format === 'text') {
         const lang = (req.query.lang as string) || 'en';
         const type = (req.query.type as string) || '1';

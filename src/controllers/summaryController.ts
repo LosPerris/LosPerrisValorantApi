@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as valorantService from '../services/valorantService';
 import * as formatService from '../services/formatService';
-import { handleRouteError } from '../utils/helpers';
+import { handleRouteError, setEdgeCache } from '../utils/helpers';
 import cache from '../utils/cache';
 import { config } from '../config';
 import {
@@ -17,6 +17,7 @@ export const getSummary = async (req: Request, res: Response) => {
     const { region, name, tag } = req.params;
 
     try {
+        setEdgeCache(res, 60);
         const cachedPuuid = valorantService.getCachedPUUID(name, tag);
 
         let accountData: ValorantApiResponse<ValorantAccount>;

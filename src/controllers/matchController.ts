@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as valorantService from '../services/valorantService';
 import * as formatService from '../services/formatService';
-import { handleRouteError, sendResponse } from '../utils/helpers';
+import { handleRouteError, sendResponse, setEdgeCache } from '../utils/helpers';
 import { FormattedMatchData } from '../types/valorant';
 
 export const getLastMatch = async (req: Request, res: Response) => {
@@ -9,6 +9,7 @@ export const getLastMatch = async (req: Request, res: Response) => {
     const { puuid } = req;
 
     try {
+        setEdgeCache(res, 60);
         const [matchesData, mmrData] = await Promise.all([
             valorantService.getMatchesByPUUID(region, puuid as string, 'competitive', 1),
             valorantService.getMMRByPUUID(region, puuid as string)

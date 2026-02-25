@@ -2,7 +2,6 @@ import express, { Application, Request, Response, NextFunction } from 'express';
 import path from 'path';
 import cors from 'cors';
 import helmet from 'helmet';
-import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import rankRoutes from './routes/rank';
 import matchRoutes from './routes/match';
@@ -30,11 +29,6 @@ app.use(helmet({
     }
 }));
 app.use(cors());
-app.use(
-    compression({
-        threshold: 1024 // Evita comprimir respuestas menores a 1KB
-    })
-);
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,

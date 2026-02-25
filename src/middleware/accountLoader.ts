@@ -1,20 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
 import * as valorantService from '../services/valorantService';
-
-function getErrorMsg(status: number, lang: string): string {
-    const isEs = lang === 'es';
-    switch (status) {
-        case 404: return isEs ? 'Jugador no encontrado' : 'Player not found';
-        case 429: return isEs ? 'Demasiadas peticiones' : 'Rate limit exceeded';
-        case 500: return isEs ? 'Error del servidor' : 'Server error';
-        default: return isEs ? 'Error desconocido' : 'Unknown error';
-    }
-}
+import { getErrorMsg } from '../utils/helpers';
 
 export async function withAccountData(req: Request, res: Response, next: NextFunction) {
     const { name, tag } = req.params;
 
     try {
+        // Primero intentamos recuperar el PUUID de la caché para evitar una petición a Henrik
+        const cachedPuuid = valorantService.getCachedPUUID(name, tag);
+
+        if (cachedPuuid) {
+            req.puuid = cachedPuuid;
+        }
+
         const accountData = await valorantService.getPUUID(name, tag);
 
         if (accountData.status !== 200) {

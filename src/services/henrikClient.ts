@@ -6,9 +6,9 @@ import { ValorantApiResponse } from '../types/valorant';
 
 const agent = new https.Agent({
     keepAlive: true,
-    maxSockets: 100,
-    maxFreeSockets: 10,
-    timeout: 60000
+    maxSockets: 25,
+    maxFreeSockets: 5,
+    timeout: 30000
 });
 
 const axiosInstance: AxiosInstance = axios.create({
