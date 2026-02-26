@@ -52,7 +52,6 @@ body {
     align-items: center;
     padding: 40px 20px;
     position: relative;
-    /* Fondo estático premium y profundo */
     background: radial-gradient(circle at 50% 0%, #1a1a1e 0%, #09090b 80%);
 }
 
