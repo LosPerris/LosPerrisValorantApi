@@ -29,6 +29,18 @@
     ],
     "rewrites": [
         {
+            "source": "/api/valorant/css/(.*)",
+            "destination": "/css/$1"
+        },
+        {
+            "source": "/api/valorant/js/(.*)",
+            "destination": "/js/$1"
+        },
+        {
+            "source": "/api/valorant/imgs/(.*)",
+            "destination": "/imgs/$1"
+        },
+        {
             "source": "/api/valorant",
             "destination": "/dist/api/index.js"
         },

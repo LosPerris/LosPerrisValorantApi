@@ -49,10 +49,10 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 // Riot Verification product.html/riot.txt
 app.get('/product.html/riot.txt', (req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, '../public/riot.txt'));
+    res.sendFile(path.join(process.cwd(), 'public/riot.txt'));
 });
 
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(process.cwd(), 'public')));
 
 app.use('/rank', rankRoutes);
 app.use('/match', matchRoutes);
