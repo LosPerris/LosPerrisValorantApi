@@ -8,9 +8,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/docs.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="./imgs/LosPerris-minimal.svg">
+    <link rel="stylesheet" href="./css/modules/base.css">
+    <link rel="stylesheet" href="./css/modules/components.css">
+    <link rel="stylesheet" href="./css/modules/animations.css">
+    <link rel="stylesheet" href="./css/modules/responsive.css">
+
+    <link rel="stylesheet" href="./css/docs.css">
     <script src="./js/config.js"></script>
 </head>
 
@@ -50,6 +54,12 @@
                 <p class="lead-text">Bienvenido a la documentación oficial de <strong>LosPerris Valorant API</strong>.
                     Integra datos de rangos, historial de partidas y estadísticas detalladas en tus aplicaciones o bots
                     de chat (Nightbot, StreamElements).</p>
+                <footer class="docs-footer">
+                    <p>&copy; <span id="current-year"></span> LosPerris • <span id="footer-info"></span></p>
+                    <p class="disclaimer" id="footer-disclaimer"
+                        style="margin: 10px auto; opacity: 0.6; font-size: 11px;"></p>
+                </footer>
+                <script>document.getElementById('current-year').textContent = new Date().getFullYear();</script>
 
             </section>
 

@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderRecentSearchesMain();
     updateLanguageUI(currentLang);
     updateCommandsUI(null);
+    if (typeof setUIState === 'function') setUIState('INITIAL');
 });
 
 document.querySelectorAll('.lang-btn').forEach(btn => {

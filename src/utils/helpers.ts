@@ -14,7 +14,7 @@ export function getErrorMsg(status: number, lang: string): string {
     switch (status) {
         case 404: return t.errorUserNotFound || t.error;
         case 429: return t.errorRateLimit;
-        case 500: return t.errorServer;
+        case 401: return t.errorUnauthorized || 'Unauthorized (Invalid API Key)';
         default: return t.error;
     }
 }
@@ -36,6 +36,7 @@ export function handleRouteError(req: Request, res: Response, error: RouteError)
     let errorCode = 'SERVER_ERROR';
     if (status === 404) errorCode = 'USER_NOT_FOUND';
     else if (status === 429) errorCode = 'RATE_LIMIT';
+    else if (status === 401) errorCode = 'UNAUTHORIZED';
 
     return res.status(status).json({
         status: status,

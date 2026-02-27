@@ -21,6 +21,42 @@ const safeSetQueryText = (selector, text) => {
 let mmrChartInstance = null;
 let chartJSLoaded = false;
 
+function setUIState(state) {
+    const sections = {
+        results: document.getElementById('results-section'),
+        docs: document.getElementById('docs-section'),
+        error: document.getElementById('error-section')
+    };
+
+    Object.values(sections).forEach(section => {
+        if (section) section.classList.add('view-hidden');
+    });
+
+    switch (state) {
+        case 'INITIAL':
+            if (sections.docs) sections.docs.classList.remove('view-hidden');
+            break;
+        case 'LOADING':
+            break;
+        case 'RESULTS':
+            if (sections.results) {
+                sections.results.classList.remove('view-hidden', 'hidden');
+                sections.results.classList.remove('fade-in');
+                void sections.results.offsetWidth;
+                sections.results.classList.add('fade-in');
+            }
+            break;
+        case 'ERROR':
+            if (sections.error) {
+                sections.error.classList.remove('view-hidden', 'hidden');
+                sections.error.classList.remove('fade-in');
+                void sections.error.offsetWidth;
+                sections.error.classList.add('fade-in');
+            }
+            break;
+    }
+}
+
 async function loadChartJS() {
     if (chartJSLoaded) return true;
     return new Promise((resolve, reject) => {
@@ -81,8 +117,7 @@ function updateLanguageUI(lang) {
     safeSetText('docs-desc-match', t.docsDescMatch);
     safeSetHtml('docs-note', t.docsNote);
 
-    safeSetHtml('footer-created', t.footerCreated);
-    safeSetHtml('footer-other-api', t.footerOtherApi);
+    safeSetHtml('footer-info', t.footerInfo);
     safeSetText('footer-disclaimer', t.footerDisclaimer);
 
     document.querySelectorAll('.example-label').forEach(el => {
@@ -110,14 +145,9 @@ function renderRankCard(data, lang) {
     const progressEl = document.getElementById('rank-progress');
     if (progressEl) progressEl.style.width = `${rr}%`;
 
-    if (data.card) {
-        if (data.card.wide) {
-            const bgEl = document.getElementById('player-card-bg');
-            if (bgEl) bgEl.style.backgroundImage = `url('${data.card.wide}')`;
-        }
-        if (data.card.small) {
-            safeSetSrc('player-card-small', data.card.small);
-        }
+    if (data.card && data.card.wide) {
+        const bgEl = document.getElementById('player-card-bg');
+        if (bgEl) bgEl.style.backgroundImage = `url('${data.card.wide}')`;
     }
 }
 
@@ -386,11 +416,15 @@ async function updateExamplePreviews(data, botLang, botType, botMatchType) {
 }
 
 function showLoading(lang) {
+    setUIState('LOADING');
     const submitBtn = document.getElementById('submit-btn');
     if (submitBtn) {
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<img src="./imgs/buscando_jugador.svg" class="btn-loader">';
     }
+
+    const errorSmall = document.getElementById('error-msg');
+    if (errorSmall) errorSmall.classList.add('hidden');
 
     document.querySelectorAll('#player-name, #rank-text, #elo, #mmr-change, #match-map, #match-result, #match-kda, #match-hs').forEach(el => {
         el.classList.add('skeleton', 'skeleton-text');
@@ -410,24 +444,11 @@ function hideLoading(lang) {
 }
 
 function showResults() {
-    const resultContainer = document.getElementById('result');
-    if (!resultContainer) return;
-
-    resultContainer.classList.remove('hidden');
-    resultContainer.classList.remove('fade-in');
-    void resultContainer.offsetWidth; // Force reflow
-    resultContainer.classList.add('fade-in');
-
-    const errorEl = document.getElementById('error');
-    if (errorEl) errorEl.classList.add('hidden');
+    setUIState('RESULTS');
 }
 
 function showError(error, lang) {
-    const resultContainer = document.getElementById('result');
-    if (resultContainer) resultContainer.classList.add('hidden');
-
-    const errorDiv = document.getElementById('error');
-    if (errorDiv) errorDiv.classList.remove('hidden');
+    setUIState('ERROR');
 
     const t = translations[lang];
     let msg = t.error;
@@ -436,9 +457,13 @@ function showError(error, lang) {
         if (error.error === 'USER_NOT_FOUND') msg = t.errorUserNotFound;
         else if (error.error === 'RATE_LIMIT') msg = t.errorRateLimit;
         else if (error.error === 'SERVER_ERROR') msg = t.errorServer;
+        else if (error.error === 'UNAUTHORIZED') msg = t.errorUnauthorized;
     }
 
+    safeSetText('error-msg-main', msg);
     safeSetText('error-msg', msg);
+    const errorSmall = document.getElementById('error-msg');
+    if (errorSmall) errorSmall.classList.remove('hidden');
 }
 
 function toggleConfigMode(mode) {
