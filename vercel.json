@@ -6,7 +6,7 @@
             "headers": [
                 {
                     "key": "Content-Security-Policy",
-                    "value": "upgrade-insecure-requests; frame-ancestors 'self'"
+                    "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://media.valorant-api.com; connect-src 'self' https://api.henrikdev.xyz https://valorant-api.com https://unpkg.com; object-src 'none'; upgrade-insecure-requests; frame-ancestors 'self'"
                 },
                 {
                     "key": "X-Frame-Options",
