@@ -25,7 +25,8 @@ function setUIState(state) {
     const sections = {
         results: document.getElementById('results-section'),
         docs: document.getElementById('docs-section'),
-        error: document.getElementById('error-section')
+        error: document.getElementById('error-section'),
+        overlay: document.getElementById('overlay-section')
     };
 
     Object.values(sections).forEach(section => {
@@ -44,6 +45,12 @@ function setUIState(state) {
                 sections.results.classList.remove('fade-in');
                 void sections.results.offsetWidth;
                 sections.results.classList.add('fade-in');
+            }
+            if (sections.overlay) {
+                sections.overlay.classList.remove('view-hidden', 'hidden');
+                sections.overlay.classList.remove('fade-in');
+                void sections.overlay.offsetWidth;
+                sections.overlay.classList.add('fade-in');
             }
             break;
         case 'ERROR':
