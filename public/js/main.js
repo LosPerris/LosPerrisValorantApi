@@ -194,6 +194,11 @@ safeAddEventListener('rank-form', 'submit', async (e) => {
             renderChart(data.data.history);
         }
 
+        // Cargar bot-config y overlay-config la primera vez que hay resultados
+        if (typeof window.loadResultComponents === 'function') {
+            await window.loadResultComponents();
+        }
+
         updateCommandsUI(fullSummaryData);
         updateOverlayUI(fullSummaryData);
         showResults();
