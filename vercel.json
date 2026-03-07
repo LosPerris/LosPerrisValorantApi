@@ -2,6 +2,24 @@
     "version": 2,
     "headers": [
         {
+            "source": "/(.*\\.(js|css|svg|png|webp|jpg|jpeg|gif|woff2?|ico))",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "public, max-age=604800, immutable"
+                }
+            ]
+        },
+        {
+            "source": "/(.*\\.(html))",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "public, max-age=3600"
+                }
+            ]
+        },
+        {
             "source": "/(.*)",
             "headers": [
                 {

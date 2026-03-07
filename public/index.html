@@ -159,26 +159,22 @@
         <div id="footer-slot"></div>
     </div>
 
-    <script src="./js/config.js"></script>
     <script src="./js/loader.js"></script>
     <script>
         document.addEventListener('componentsLoaded', function () {
-            const scripts = [
-                './js/translations.js',
-                './js/utils.js',
-                './js/api.js',
-                './js/ui.js',
-                './js/main.js'
-            ];
-            scripts.reduce((chain, src) => {
-                return chain.then(() => new Promise((resolve, reject) => {
+            const parallel = ['./js/translations.js', './js/utils.js', './js/api.js', './js/ui.js'];
+
+            function addScript(src) {
+                return new Promise((resolve, reject) => {
                     const s = document.createElement('script');
                     s.src = src;
                     s.onload = resolve;
                     s.onerror = reject;
                     document.body.appendChild(s);
-                }));
-            }, Promise.resolve());
+                });
+            }
+
+            Promise.all(parallel.map(addScript)).then(() => addScript('./js/main.js'));
         });
     </script>
 </body>
