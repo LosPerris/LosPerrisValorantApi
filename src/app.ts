@@ -12,6 +12,9 @@ import summaryRoutes from './routes/summary';
 
 const app: Application = express();
 
+app.set('view engine', 'ejs');
+app.set('views', path.join(process.cwd(), 'views'));
+
 app.set('trust proxy', 1);
 
 app.use(helmet({
@@ -35,8 +38,14 @@ const limiter = rateLimit({
     max: 100,
     standardHeaders: true,
     legacyHeaders: false,
+    handler: (req, res) => {
+        res.status(429).json({
+            status: 429,
+            error: 'RATE_LIMIT',
+            message: 'Too many requests, please try again later.'
+        });
+    }
 });
-app.use(limiter);
 
 app.use(express.json());
 
@@ -53,6 +62,13 @@ app.get('/product.html/riot.txt', (req: Request, res: Response) => {
 });
 
 app.use(express.static(path.join(process.cwd(), 'public')));
+
+app.get('/', (req: Request, res: Response) => {
+    res.render('index');
+});
+
+// Limitador de peticiones solo para las rutas de la API, no para los archivos estáticos
+app.use(limiter);
 
 app.use('/rank', rankRoutes);
 app.use('/match', matchRoutes);

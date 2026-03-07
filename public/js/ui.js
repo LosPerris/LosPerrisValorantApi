@@ -120,6 +120,11 @@ function updateLanguageUI(lang) {
     safeSetHtml('footer-info', t.footerInfo);
     safeSetText('footer-disclaimer', t.footerDisclaimer);
 
+    safeSetText('overlay-title', t.overlayTitle);
+    safeSetQueryText('label[for="overlay-lang"]', t.overlayLang);
+    safeSetText('lbl-overlay-url', t.overlayUrl);
+    safeSetText('lbl-overlay-preview', t.overlayPreview);
+
     document.querySelectorAll('.example-label').forEach(el => {
         el.textContent = t.exampleLabel;
     });

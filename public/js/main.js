@@ -41,12 +41,125 @@ safeAddEventListener('btn-config-match', 'click', () => {
     updateCommandsUI(fullSummaryData);
 });
 
-const configInputs = ['bot-platform', 'bot-lang', 'bot-type', 'bot-match-type'];
+const configInputs = ['bot-platform', 'bot-lang', 'bot-type', 'bot-match-type', 'overlay-lang', 'overlay-color', 'overlay-bg-color', 'overlay-text-color', 'overlay-twitch', 'overlay-align', 'overlay-scale', 'overlay-hide-rr', 'overlay-hide-mmr', 'overlay-layout', 'overlay-autohide', 'overlay-progress', 'overlay-kda'];
+
+let colorDebounceTimer;
+
 configInputs.forEach(id => {
     safeAddEventListener(id, 'change', () => {
         updateCommandsUI(fullSummaryData);
+        updateOverlayUI(fullSummaryData);
     });
+
+    if (id.startsWith('overlay-')) {
+        safeAddEventListener(id, 'input', () => {
+            updateOverlayUrlOnly();
+
+            clearTimeout(colorDebounceTimer);
+            colorDebounceTimer = setTimeout(() => {
+                updateOverlayIframeOnly();
+            }, 800);
+        });
+    }
 });
+
+function getOverlayUrlStr() {
+    const regionEl = document.getElementById('region');
+    const nameEl = document.getElementById('name');
+    const tagEl = document.getElementById('tag');
+    const langEl = document.getElementById('overlay-lang');
+    const colorEl = document.getElementById('overlay-color');
+    const bgEl = document.getElementById('overlay-bg-color');
+    const textEl = document.getElementById('overlay-text-color');
+    const twitchEl = document.getElementById('overlay-twitch');
+
+    const alignEl = document.getElementById('overlay-align');
+    const scaleEl = document.getElementById('overlay-scale');
+    const hideRrEl = document.getElementById('overlay-hide-rr');
+    const hideMmrEl = document.getElementById('overlay-hide-mmr');
+
+    const layoutEl = document.getElementById('overlay-layout');
+    const progressEl = document.getElementById('overlay-progress');
+    const autohideEl = document.getElementById('overlay-autohide');
+    const kdaEl = document.getElementById('overlay-kda');
+
+    if (!regionEl || !nameEl || !tagEl || !langEl) return null;
+
+    let colorValue = colorEl ? colorEl.value.replace('#', '') : 'ff4655';
+    if (!colorValue) colorValue = 'ff4655';
+
+    let bgValue = bgEl ? bgEl.value.replace('#', '') : '0A0F16';
+    if (!bgValue) bgValue = '0A0F16';
+
+    let textValue = textEl ? textEl.value.replace('#', '') : 'ECE8E1';
+    if (!textValue) textValue = 'ECE8E1';
+
+    let urlParams = new URLSearchParams({
+        region: regionEl.value,
+        name: nameEl.value,
+        tag: tagEl.value,
+        lang: langEl.value,
+        color: colorValue,
+        bg: bgValue,
+        text: textValue
+    });
+
+    if (twitchEl && twitchEl.value.trim()) {
+        urlParams.append('twitch', twitchEl.value.trim());
+    }
+
+    if (alignEl && alignEl.value !== 'left') {
+        urlParams.append('align', alignEl.value);
+    }
+    if (scaleEl && scaleEl.value !== '1') {
+        urlParams.append('scale', scaleEl.value);
+    }
+    if (hideRrEl && hideRrEl.checked) {
+        urlParams.append('hide_rr', 'true');
+    }
+    if (hideMmrEl && hideMmrEl.checked) {
+        urlParams.append('hide_mmr', 'true');
+    }
+
+    if (layoutEl && layoutEl.value !== 'default') {
+        urlParams.append('layout', layoutEl.value);
+    }
+    if (progressEl && progressEl.checked) {
+        urlParams.append('progress', 'true');
+    }
+    if (autohideEl && autohideEl.checked) {
+        urlParams.append('autohide', 'true');
+    }
+    if (kdaEl && kdaEl.checked) {
+        urlParams.append('kda', 'true');
+    }
+
+    return `${window.location.origin}/overlay.html?${urlParams.toString()}`;
+}
+
+function updateOverlayUrlOnly() {
+    const urlStr = getOverlayUrlStr();
+    if (!urlStr) return;
+
+    const inputUrl = document.getElementById('overlay-url');
+    if (inputUrl) inputUrl.value = urlStr;
+}
+
+function updateOverlayIframeOnly() {
+    const urlStr = getOverlayUrlStr();
+    if (!urlStr) return;
+
+    const iframe = document.getElementById('overlay-iframe');
+    if (iframe && iframe.src !== urlStr) {
+        iframe.src = urlStr;
+    }
+}
+
+function updateOverlayUI(data) {
+    if (!data) return;
+    updateOverlayUrlOnly();
+    updateOverlayIframeOnly();
+}
 
 safeAddEventListener('rank-form', 'submit', async (e) => {
     e.preventDefault();
@@ -79,6 +192,7 @@ safeAddEventListener('rank-form', 'submit', async (e) => {
         }
 
         updateCommandsUI(fullSummaryData);
+        updateOverlayUI(fullSummaryData);
         showResults();
 
     } catch (error) {

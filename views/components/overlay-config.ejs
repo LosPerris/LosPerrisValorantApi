@@ -1,0 +1,133 @@
+<section class="card overlay-card" style="margin-top:20px; border-color: var(--accent-color);">
+    <h3 id="overlay-title" style="color:var(--accent-color);">OBS Overlay Personalizable</h3>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="overlay-lang" id="lbl-overlay-lang">Idioma / Language</label>
+            <select id="overlay-lang">
+                <option value="es">Español</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="overlay-color" id="lbl-overlay-color">Color Primario (Hex)</label>
+            <input type="color" id="overlay-color" value="#ff4655">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="overlay-bg-color" id="lbl-overlay-bg-color">Color Fondo (Hex)</label>
+            <input type="color" id="overlay-bg-color" value="#0a0f16">
+        </div>
+        <div class="form-group">
+            <label for="overlay-text-color" id="lbl-overlay-text-color">Color Texto (Hex)</label>
+            <input type="color" id="overlay-text-color" value="#ece8e1">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="overlay-twitch" id="lbl-overlay-twitch">Canal de Twitch (Opcional)</label>
+            <input type="text" id="overlay-twitch" placeholder="TuCanal">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="overlay-align" id="lbl-overlay-align">Alineación</label>
+            <select id="overlay-align">
+                <option value="left">Izquierda</option>
+                <option value="center" selected>Centro</option>
+                <option value="right">Derecha</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="overlay-scale" id="lbl-overlay-scale">Escala</label>
+            <input type="number" id="overlay-scale" value="1" step="0.1" min="0.1" max="3">
+        </div>
+    </div>
+    <div class="form-row"
+        style="align-items: center; margin-bottom: 25px; margin-top: 15px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; border: 1px solid var(--card-border);">
+        <div class="form-group"
+            style="flex-direction: row; gap: 12px; flex: 0 1 auto; margin-bottom: 0px; align-items: center;">
+            <label class="toggle-switch">
+                <input type="checkbox" id="overlay-hide-rr">
+                <div class="toggle-slider"></div>
+            </label>
+            <label for="overlay-hide-rr" id="lbl-overlay-hide-rr"
+                style="margin: 0; font-size: 13px; color: var(--text-color); font-weight: 600; cursor: pointer;">Ocultar
+                RR</label>
+        </div>
+        <div class="form-group"
+            style="flex-direction: row; gap: 12px; margin-left: auto; flex: 0 1 auto; margin-bottom: 0px; align-items: center;">
+            <label class="toggle-switch">
+                <input type="checkbox" id="overlay-hide-mmr">
+                <div class="toggle-slider"></div>
+            </label>
+            <label for="overlay-hide-mmr" id="lbl-overlay-hide-mmr"
+                style="margin: 0; font-size: 13px; color: var(--text-color); font-weight: 600; cursor: pointer;">Ocultar
+                MMR</label>
+        </div>
+    </div>
+
+
+    <h4 style="color:var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; text-transform: uppercase;">
+        Nuevas Funciones dinámicas</h4>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="overlay-layout" id="lbl-overlay-layout">Layout (Diseño)</label>
+            <select id="overlay-layout">
+                <option value="default">Horizontal (Por defecto)</option>
+                <option value="compact">Compacto (VerticalFacecam)</option>
+            </select>
+        </div>
+        <div class="form-group" style="flex-direction: row; gap: 12px; align-items: center; margin-top: 25px;">
+            <label class="toggle-switch">
+                <input type="checkbox" id="overlay-autohide">
+                <div class="toggle-slider"></div>
+            </label>
+            <label for="overlay-autohide" id="lbl-overlay-autohide"
+                style="margin: 0; font-size: 13px; color: var(--text-color); font-weight: 600; cursor: pointer;">Auto-ocultar
+                (10s)</label>
+        </div>
+    </div>
+
+    <div class="form-row"
+        style="align-items: center; margin-bottom: 25px; margin-top: 5px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; border: 1px solid var(--card-border);">
+        <div class="form-group"
+            style="flex-direction: row; gap: 12px; flex: 0 1 auto; margin-bottom: 0px; align-items: center;">
+            <label class="toggle-switch">
+                <input type="checkbox" id="overlay-progress">
+                <div class="toggle-slider"></div>
+            </label>
+            <label for="overlay-progress" id="lbl-overlay-progress"
+                style="margin: 0; font-size: 13px; color: var(--text-color); font-weight: 600; cursor: pointer;">Barra
+                RR Visual</label>
+        </div>
+        <div class="form-group"
+            style="flex-direction: row; gap: 12px; margin-left: auto; flex: 0 1 auto; margin-bottom: 0px; align-items: center;">
+            <label class="toggle-switch">
+                <input type="checkbox" id="overlay-kda">
+                <div class="toggle-slider"></div>
+            </label>
+            <label for="overlay-kda" id="lbl-overlay-kda"
+                style="margin: 0; font-size: 13px; color: var(--text-color); font-weight: 600; cursor: pointer;">Estadísticas
+                KDA</label>
+        </div>
+    </div>
+
+    <div class="command-item">
+        <label id="lbl-overlay-url" style="color:var(--text-muted);">URL de Browser Source (OBS)</label>
+        <div class="copy-box">
+            <input type="text" id="overlay-url" readonly>
+            <button class="btn-copy" data-target="overlay-url">COPY</button>
+        </div>
+    </div>
+    <div class="overlay-preview">
+        <label id="lbl-overlay-preview"
+            style="display:block;margin-top:15px;margin-bottom:8px;font-size:12px;color:var(--text-muted);font-weight:600;text-transform:uppercase;">Previsualización
+            (OBS Simulator)</label>
+        <div
+            style="background: repeating-linear-gradient(45deg, #1f1f1f, #1f1f1f 10px, #2a2a2a 10px, #2a2a2a 20px); padding: 15px; border-radius: 8px; display:flex; justify-content:center; overflow: hidden; height: 280px; box-shadow: inset 0 4px 10px rgba(0,0,0,0.5);">
+            <iframe id="overlay-iframe" src="" width="100%" height="100%" style="border:none; overflow:hidden;"
+                allowtransparency="true"></iframe>
+        </div>
+    </div>
+</section>

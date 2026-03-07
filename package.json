@@ -4,6 +4,7 @@
   "main": "api/index.js",
   "scripts": {
     "build": "tsc",
+    "postbuild": "npx shx cp -r views dist/ && npx shx cp -r public dist/",
     "start": "node -r dotenv/config dist/api/index.js",
     "dev": "ts-node --files -r dotenv/config api/index.ts",
     "lint": "eslint src/**/*.ts api/**/*.ts",
@@ -37,6 +38,7 @@
     "compression": "^1.8.1",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
+    "ejs": "^5.0.1",
     "express": "^5.1.0",
     "express-rate-limit": "^8.2.1",
     "express-validator": "^7.3.1",
@@ -55,6 +57,7 @@
     "husky": "^9.1.7",
     "jest": "^30.2.0",
     "lint-staged": "^16.2.7",
+    "shx": "^0.4.0",
     "supertest": "^7.1.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"

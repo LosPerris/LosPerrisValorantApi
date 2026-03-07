@@ -35,7 +35,11 @@ const translations = {
         errorUnauthorized: 'Invalid API Key. Check your .env configuration.',
         footerInfo: `By <a href="${(typeof CONFIG !== 'undefined' ? CONFIG.authorUrl : '#')}" target="_blank">Ponss17</a> • Powered by <a href="https://docs.henrikdev.xyz/" target="_blank">HenrikDev API</a>`,
         footerDisclaimer: 'LosPerris Valorant API is not endorsed by Riot Games and does not reflect their views.',
-        exampleLabel: 'Example:'
+        exampleLabel: 'Example:',
+        overlayTitle: 'OBS Overlay',
+        overlayLang: 'Overlay Language',
+        overlayUrl: 'Browser Source URL (OBS)',
+        overlayPreview: 'Preview (OBS Simulator)'
     },
     es: {
         title: 'LOSPERRIS <span class="accent">VALORANT API</span>',
@@ -73,7 +77,11 @@ const translations = {
         errorUnauthorized: 'API Key inválida. Revisa tu configuración en .env.',
         footerInfo: `Por <a href="${(typeof CONFIG !== 'undefined' ? CONFIG.authorUrl : '#')}" target="_blank">Ponss17</a> • Extensión de <a href="https://docs.henrikdev.xyz/" target="_blank">HenrikDev API</a>`,
         footerDisclaimer: 'La API de Valorant de LosPerris no cuenta con el respaldo de Riot Games y no refleja sus opiniones.',
-        exampleLabel: 'Ejemplo:'
+        exampleLabel: 'Ejemplo:',
+        overlayTitle: 'OBS Overlay',
+        overlayLang: 'Idioma del Overlay',
+        overlayUrl: 'URL de Browser Source (OBS)',
+        overlayPreview: 'Previsualización (OBS Simulator)'
     },
     rankNames: {
         'Iron': 'Hierro',
