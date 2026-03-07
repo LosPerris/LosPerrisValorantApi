@@ -24,7 +24,6 @@ let chartJSLoaded = false;
 function setUIState(state) {
     const sections = {
         results: document.getElementById('results-section'),
-        docs: document.getElementById('docs-section'),
         error: document.getElementById('error-section'),
         overlay: document.getElementById('overlay-section')
     };
