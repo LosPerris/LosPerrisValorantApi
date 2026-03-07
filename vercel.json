@@ -2,7 +2,7 @@
     "version": 2,
     "headers": [
         {
-            "source": "/(.*\\.(js|css|svg|png|webp|jpg|jpeg|gif|woff2?|ico))",
+            "source": "/js/:path*",
             "headers": [
                 {
                     "key": "Cache-Control",
@@ -11,7 +11,25 @@
             ]
         },
         {
-            "source": "/(.*\\.(html))",
+            "source": "/css/:path*",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "public, max-age=604800, immutable"
+                }
+            ]
+        },
+        {
+            "source": "/imgs/:path*",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "public, max-age=604800, immutable"
+                }
+            ]
+        },
+        {
+            "source": "/components/:path*",
             "headers": [
                 {
                     "key": "Cache-Control",
