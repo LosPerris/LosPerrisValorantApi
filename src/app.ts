@@ -13,7 +13,9 @@ import summaryRoutes from './routes/summary';
 const app: Application = express();
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(process.cwd(), 'views'));
+const viewsPath = path.join(process.cwd(), 'views');
+const distViewsPath = path.join(process.cwd(), 'dist/views');
+app.set('views', [viewsPath, distViewsPath]);
 
 app.set('trust proxy', 1);
 
@@ -49,38 +51,50 @@ const limiter = rateLimit({
 
 app.use(express.json());
 
+const publicPath = path.join(process.cwd(), 'public');
+const distPublicPath = path.join(process.cwd(), 'dist/public');
+const staticOptions = { extensions: ['html'] };
+
+// Middleware de prefijo para la API
 app.use((req: Request, res: Response, next: NextFunction) => {
-    if (req.url.startsWith('/api/valorant')) {
-        const newUrl = req.url.replace('/api/valorant', '');
-        req.url = newUrl.startsWith('/') ? newUrl : '/' + newUrl;
-        if (req.url === '') req.url = '/';
-    }
+    // Si la ruta no empieza con /api/valorant y no es un archivo estático, 
+    // podríamos redirigir o manejarlo, pero por ahora dejamos que pase
     next();
 });
 
+// Configuración de estáticos con prefijo (Producción Vercel)
+app.use('/api/valorant', express.static(publicPath, staticOptions));
+app.use('/api/valorant', express.static(distPublicPath, staticOptions));
+
+// Configuración de estáticos sin prefijo (Fallback)
+app.use(express.static(publicPath, staticOptions));
+app.use(express.static(distPublicPath, staticOptions));
+
 // Riot Verification product.html/riot.txt
 app.get('/product.html/riot.txt', (req: Request, res: Response) => {
-    res.sendFile(path.join(process.cwd(), 'public/riot.txt'));
+    res.sendFile(path.join(publicPath, 'riot.txt'));
 });
 
-// Servir archivos estáticos con soporte para extensiones .html opcionales (Clean URLs)
-app.use(express.static(path.join(process.cwd(), 'public'), {
-    extensions: ['html'],
-    index: false // Evitamos que index.html sea servido estáticamente si queremos renderizar index.ejs
-}));
-
-app.get('/', (req: Request, res: Response) => {
+app.get(['/', '/api/valorant', '/api/valorant/'], (req: Request, res: Response) => {
     res.render('index');
 });
 
 // Limitador de peticiones solo para las rutas de la API, no para los archivos estáticos
 app.use(limiter);
 
-app.use('/rank', rankRoutes);
-app.use('/match', matchRoutes);
-app.use('/history', historyRoutes);
-app.use('/summary', summaryRoutes);
-app.use('/preview', previewRoutes);
+// Rutas de la API (Suelen ir con el prefijo /api/valorant en el cliente)
+// Pero Express puede manejarlas con o sin prefijo si las montamos bien.
+const registerRoutes = (prefix: string) => {
+    app.use(`${prefix}/rank`, rankRoutes);
+    app.use(`${prefix}/match`, matchRoutes);
+    app.use(`${prefix}/history`, historyRoutes);
+    app.use(`${prefix}/summary`, summaryRoutes);
+    app.use(`${prefix}/preview`, previewRoutes);
+};
+
+registerRoutes('/api/valorant');
+registerRoutes(''); // Fallback para compatibilidad local o directa
+
 
 
 export default app;

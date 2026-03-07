@@ -134,7 +134,7 @@ function getOverlayUrlStr() {
         urlParams.append('kda', 'true');
     }
 
-    return `${window.location.origin}${CONFIG.apiBaseUrl}/overlay.html?${urlParams.toString()}`;
+    return `${window.location.origin}${CONFIG.apiBaseUrl}/overlay?${urlParams.toString()}`;
 }
 
 function updateOverlayUrlOnly() {

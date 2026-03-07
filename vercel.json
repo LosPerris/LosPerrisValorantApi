@@ -29,41 +29,9 @@
     ],
     "rewrites": [
         {
-            "source": "/api/valorant/css/(.*)",
-            "destination": "/css/$1"
-        },
-        {
-            "source": "/api/valorant/js/(.*)",
-            "destination": "/js/$1"
-        },
-        {
-            "source": "/api/valorant/imgs/(.*)",
-            "destination": "/imgs/$1"
-        },
-        {
-            "source": "/api/valorant/overlay",
-            "destination": "/overlay.html"
-        },
-        {
-            "source": "/api/valorant/overlay.html",
-            "destination": "/overlay.html"
-        },
-        {
-            "source": "/api/valorant/docs",
-            "destination": "/docs.html"
-        },
-        {
-            "source": "/api/valorant/docs.html",
-            "destination": "/docs.html"
-        },
-        {
-            "source": "/api/valorant",
-            "destination": "/dist/api/index.js"
-        },
-        {
-            "source": "/api/valorant/(.*)",
+            "source": "/(.*)",
             "destination": "/dist/api/index.js"
         }
     ],
-    "cleanUrls": true
+    "cleanUrls": false
 }
