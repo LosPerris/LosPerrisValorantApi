@@ -115,8 +115,8 @@ function updateLanguageUI(lang) {
 
     safeSetQueryText('.commands-card h3', t.botCmds);
 
-    const botLang = document.getElementById('bot-lang').value;
-    updateBotCommandLabels(botLang);
+    const botLangEl = document.getElementById('bot-lang');
+    if (botLangEl) updateBotCommandLabels(botLangEl.value);
 
     safeSetText('docs-title', t.docsTitle);
     safeSetText('docs-desc-rank', t.docsDescRank);
@@ -126,10 +126,12 @@ function updateLanguageUI(lang) {
     safeSetHtml('footer-info', t.footerInfo);
     safeSetText('footer-disclaimer', t.footerDisclaimer);
 
-    safeSetText('overlay-title', t.overlayTitle);
-    safeSetQueryText('label[for="overlay-lang"]', t.overlayLang);
-    safeSetText('lbl-overlay-url', t.overlayUrl);
-    safeSetText('lbl-overlay-preview', t.overlayPreview);
+    if (document.getElementById('overlay-section')) {
+        safeSetText('overlay-title', t.overlayTitle);
+        safeSetQueryText('label[for="overlay-lang"]', t.overlayLang);
+        safeSetText('lbl-overlay-url', t.overlayUrl);
+        safeSetText('lbl-overlay-preview', t.overlayPreview);
+    }
 
     document.querySelectorAll('.example-label').forEach(el => {
         el.textContent = t.exampleLabel;
