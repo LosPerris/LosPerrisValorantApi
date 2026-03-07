@@ -8,60 +8,63 @@ const safeAddEventListener = (id, event, handler) => {
     if (el) el.addEventListener(event, handler);
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+function init() {
     renderRecentSearchesMain();
     updateLanguageUI(currentLang);
     updateCommandsUI(null);
     if (typeof setUIState === 'function') setUIState('INITIAL');
-});
 
-document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentLang = btn.dataset.lang;
-        updateLanguageUI(currentLang);
-        if (fullSummaryData) {
-            renderRankCard(fullSummaryData.data.rank, currentLang);
-            renderMatchCard(fullSummaryData.data.match, fullSummaryData.data.rank.puuid, currentLang);
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentLang = btn.dataset.lang;
+            updateLanguageUI(currentLang);
+            if (fullSummaryData) {
+                renderRankCard(fullSummaryData.data.rank, currentLang);
+                renderMatchCard(fullSummaryData.data.match, fullSummaryData.data.rank.puuid, currentLang);
+                updateCommandsUI(fullSummaryData);
+            }
+        });
+    });
+
+    safeAddEventListener('btn-config-rank', 'click', () => {
+        currentConfigMode = 'rank';
+        toggleConfigMode('rank');
+        updateCommandsUI(fullSummaryData);
+    });
+
+    safeAddEventListener('btn-config-match', 'click', () => {
+        currentConfigMode = 'match';
+        toggleConfigMode('match');
+        updateCommandsUI(fullSummaryData);
+    });
+
+    const configInputs = ['bot-platform', 'bot-lang', 'bot-type', 'bot-match-type', 'overlay-lang', 'overlay-color', 'overlay-bg-color', 'overlay-text-color', 'overlay-twitch', 'overlay-align', 'overlay-scale', 'overlay-hide-rr', 'overlay-hide-mmr', 'overlay-layout', 'overlay-autohide', 'overlay-progress', 'overlay-kda'];
+
+    configInputs.forEach(id => {
+        safeAddEventListener(id, 'change', () => {
             updateCommandsUI(fullSummaryData);
+            updateOverlayUI(fullSummaryData);
+        });
+
+        if (id.startsWith('overlay-')) {
+            safeAddEventListener(id, 'input', () => {
+                updateOverlayUrlOnly();
+                clearTimeout(colorDebounceTimer);
+                colorDebounceTimer = setTimeout(() => {
+                    updateOverlayIframeOnly();
+                }, 800);
+            });
         }
     });
-});
-
-safeAddEventListener('btn-config-rank', 'click', () => {
-    currentConfigMode = 'rank';
-    toggleConfigMode('rank');
-    updateCommandsUI(fullSummaryData);
-});
-
-safeAddEventListener('btn-config-match', 'click', () => {
-    currentConfigMode = 'match';
-    toggleConfigMode('match');
-    updateCommandsUI(fullSummaryData);
-});
-
-const configInputs = ['bot-platform', 'bot-lang', 'bot-type', 'bot-match-type', 'overlay-lang', 'overlay-color', 'overlay-bg-color', 'overlay-text-color', 'overlay-twitch', 'overlay-align', 'overlay-scale', 'overlay-hide-rr', 'overlay-hide-mmr', 'overlay-layout', 'overlay-autohide', 'overlay-progress', 'overlay-kda'];
+}
 
 let colorDebounceTimer;
 
-configInputs.forEach(id => {
-    safeAddEventListener(id, 'change', () => {
-        updateCommandsUI(fullSummaryData);
-        updateOverlayUI(fullSummaryData);
-    });
-
-    if (id.startsWith('overlay-')) {
-        safeAddEventListener(id, 'input', () => {
-            updateOverlayUrlOnly();
-
-            clearTimeout(colorDebounceTimer);
-            colorDebounceTimer = setTimeout(() => {
-                updateOverlayIframeOnly();
-            }, 800);
-        });
-    }
-});
+// Se llama directamente porque este script se carga después de que
+// componentsLoaded haya inyectado todos los elementos en el DOM
+init();
 
 function getOverlayUrlStr() {
     const regionEl = document.getElementById('region');

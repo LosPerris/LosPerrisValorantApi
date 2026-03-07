@@ -1,8 +1,4 @@
-/**
- * loader.js — Carga e inyecta componentes HTML de forma lazy (CSR estático)
- * Cada componente se carga en paralelo y se inyecta en su slot correspondiente.
- * Al terminar, dispara el evento 'componentsLoaded' para inicializar la lógica JS.
- */
+
 (function () {
     const BASE = (typeof CONFIG !== 'undefined' ? CONFIG.apiBaseUrl : '') + '/components/';
 

@@ -33,18 +33,14 @@
 </head>
 
 <body>
-    <!-- Slot para lang-selector -->
     <div id="lang-slot"></div>
 
     <div class="main-container">
-        <!-- Slot para header -->
         <div id="header-slot"></div>
 
         <div class="grid-layout">
-            <!-- Slot para formulario de búsqueda -->
             <div id="search-slot"></div>
 
-            <!-- Sección de resultados (no es un componente lazy, está aquí fijo) -->
             <div id="results-section" class="hidden section-transition">
                 <section class="card rank-card" id="player-card-bg">
                     <div class="overlay"></div>
@@ -111,7 +107,6 @@
                     </div>
                 </section>
 
-                <!-- Slot para bot-config (cargado lazy) -->
                 <div id="bot-slot"></div>
 
                 <section class="card commands-card">
@@ -140,7 +135,6 @@
                     </div>
                 </section>
 
-                <!-- Slot para overlay-config (cargado lazy) -->
                 <div id="overlay-slot"></div>
             </div>
 
@@ -162,14 +156,12 @@
             </section>
         </div>
 
-        <!-- Slot para footer -->
         <div id="footer-slot"></div>
     </div>
 
     <script src="./js/config.js"></script>
     <script src="./js/loader.js"></script>
     <script>
-        // Esperar a que los componentes estén inyectados antes de inicializar la lógica
         document.addEventListener('componentsLoaded', function () {
             const scripts = [
                 './js/translations.js',
