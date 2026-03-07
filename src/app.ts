@@ -51,7 +51,9 @@ app.use(express.json());
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     if (req.url.startsWith('/api/valorant')) {
-        req.url = req.url.replace('/api/valorant', '') || '/';
+        const newUrl = req.url.replace('/api/valorant', '');
+        req.url = newUrl.startsWith('/') ? newUrl : '/' + newUrl;
+        if (req.url === '') req.url = '/';
     }
     next();
 });
@@ -61,7 +63,11 @@ app.get('/product.html/riot.txt', (req: Request, res: Response) => {
     res.sendFile(path.join(process.cwd(), 'public/riot.txt'));
 });
 
-app.use(express.static(path.join(process.cwd(), 'public')));
+// Servir archivos estáticos con soporte para extensiones .html opcionales (Clean URLs)
+app.use(express.static(path.join(process.cwd(), 'public'), {
+    extensions: ['html'],
+    index: false // Evitamos que index.html sea servido estáticamente si queremos renderizar index.ejs
+}));
 
 app.get('/', (req: Request, res: Response) => {
     res.render('index');

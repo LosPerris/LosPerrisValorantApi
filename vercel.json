@@ -41,6 +41,22 @@
             "destination": "/imgs/$1"
         },
         {
+            "source": "/api/valorant/overlay",
+            "destination": "/overlay.html"
+        },
+        {
+            "source": "/api/valorant/overlay.html",
+            "destination": "/overlay.html"
+        },
+        {
+            "source": "/api/valorant/docs",
+            "destination": "/docs.html"
+        },
+        {
+            "source": "/api/valorant/docs.html",
+            "destination": "/docs.html"
+        },
+        {
             "source": "/api/valorant",
             "destination": "/dist/api/index.js"
         },
