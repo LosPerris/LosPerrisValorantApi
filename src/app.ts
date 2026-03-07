@@ -1,4 +1,4 @@
-import express, { Application, Request, Response, NextFunction } from 'express';
+import express, { Application, Request, Response } from 'express';
 import path from 'path';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -55,12 +55,6 @@ const publicPath = path.join(process.cwd(), 'public');
 const distPublicPath = path.join(process.cwd(), 'dist/public');
 const staticOptions = { extensions: ['html'] };
 
-// Middleware de prefijo para la API
-app.use((req: Request, res: Response, next: NextFunction) => {
-    // Si la ruta no empieza con /api/valorant y no es un archivo estático, 
-    // podríamos redirigir o manejarlo, pero por ahora dejamos que pase
-    next();
-});
 
 // Configuración de estáticos con prefijo (Producción Vercel)
 app.use('/api/valorant', express.static(publicPath, staticOptions));
@@ -93,7 +87,7 @@ const registerRoutes = (prefix: string) => {
 };
 
 registerRoutes('/api/valorant');
-registerRoutes(''); // Fallback para compatibilidad local o directa
+registerRoutes(''); // Fallback para desarrollo local (dev server sin prefijo)
 
 
 
