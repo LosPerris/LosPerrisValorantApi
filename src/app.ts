@@ -12,10 +12,7 @@ import summaryRoutes from './routes/summary';
 
 const app: Application = express();
 
-app.set('view engine', 'ejs');
-const viewsPath = path.join(process.cwd(), 'views');
-const distViewsPath = path.join(process.cwd(), 'dist/views');
-app.set('views', [viewsPath, distViewsPath]);
+
 
 app.set('trust proxy', 1);
 
@@ -69,9 +66,7 @@ app.get('/product.html/riot.txt', (req: Request, res: Response) => {
     res.sendFile(path.join(publicPath, 'riot.txt'));
 });
 
-app.get(['/', '/api/valorant', '/api/valorant/'], (req: Request, res: Response) => {
-    res.render('index');
-});
+
 
 // Limitador de peticiones solo para las rutas de la API, no para los archivos estáticos
 app.use(limiter);
