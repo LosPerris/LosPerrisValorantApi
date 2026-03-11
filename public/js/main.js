@@ -40,30 +40,35 @@ function init() {
         updateCommandsUI(fullSummaryData);
     });
 
-    const configInputs = ['bot-platform', 'bot-lang', 'bot-type', 'bot-match-type', 'overlay-lang', 'overlay-color', 'overlay-bg-color', 'overlay-text-color', 'overlay-twitch', 'overlay-align', 'overlay-scale', 'overlay-hide-rr', 'overlay-hide-mmr', 'overlay-layout', 'overlay-autohide', 'overlay-progress', 'overlay-kda'];
+    const botConfigInputs = ['bot-platform', 'bot-lang', 'bot-type', 'bot-match-type'];
 
-    configInputs.forEach(id => {
+    botConfigInputs.forEach(id => {
         safeAddEventListener(id, 'change', () => {
             updateCommandsUI(fullSummaryData);
+        });
+    });
+}
+
+function initOverlayListeners() {
+    const overlayInputIds = ['overlay-lang', 'overlay-color', 'overlay-bg-color', 'overlay-text-color', 'overlay-twitch', 'overlay-align', 'overlay-scale', 'overlay-hide-rr', 'overlay-hide-mmr', 'overlay-layout', 'overlay-autohide', 'overlay-progress', 'overlay-kda'];
+
+    overlayInputIds.forEach(id => {
+        safeAddEventListener(id, 'change', () => {
             updateOverlayUI(fullSummaryData);
         });
 
-        if (id.startsWith('overlay-')) {
-            safeAddEventListener(id, 'input', () => {
-                updateOverlayUrlOnly();
-                clearTimeout(colorDebounceTimer);
-                colorDebounceTimer = setTimeout(() => {
-                    updateOverlayIframeOnly();
-                }, 800);
-            });
-        }
+        safeAddEventListener(id, 'input', () => {
+            updateOverlayUrlOnly();
+            clearTimeout(colorDebounceTimer);
+            colorDebounceTimer = setTimeout(() => {
+                updateOverlayIframeOnly();
+            }, 600);
+        });
     });
 }
 
 let colorDebounceTimer;
 
-// Se llama directamente porque este script se carga después de que
-// componentsLoaded haya inyectado todos los elementos en el DOM
 init();
 
 function getOverlayUrlStr() {
@@ -153,8 +158,11 @@ function updateOverlayIframeOnly() {
     if (!urlStr) return;
 
     const iframe = document.getElementById('overlay-iframe');
-    if (iframe && iframe.src !== urlStr) {
-        iframe.src = urlStr;
+    if (iframe) {
+        iframe.src = '';
+        requestAnimationFrame(() => {
+            iframe.src = urlStr;
+        });
     }
 }
 
@@ -195,7 +203,10 @@ safeAddEventListener('rank-form', 'submit', async (e) => {
         }
 
         if (typeof window.loadResultComponents === 'function') {
-            await window.loadResultComponents();
+            const wasFirstLoad = await window.loadResultComponents();
+            if (wasFirstLoad) {
+                initOverlayListeners();
+            }
         }
 
         updateCommandsUI(fullSummaryData);

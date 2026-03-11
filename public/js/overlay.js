@@ -114,7 +114,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const change = r.mmr_change;
 
-        // On Fire Logic (>20 points or winning streak)
         if (change > 20) {
             glowContainer.classList.add("on-fire");
         } else {
@@ -132,7 +131,6 @@ document.addEventListener("DOMContentLoaded", () => {
             mmrChange.className = "mmr-change even";
         }
 
-        // RR Progress Bar Logica
         if (progressParam === "true" || progressParam === "1") {
             progressContainer.style.display = "block";
             setTimeout(() => {
@@ -161,10 +159,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (mmrSection) mmrSection.style.display = 'none';
         }
 
-        // KDA Logic: overlay currently fetches /rank which lacks KDA, 
-        // We will fetch KDA in fetchStats if needed and call renderKda
-        // We ensure mmrChange has 'with-kda' class if KDA is displayed
-
         statusMsg.classList.add("hidden");
         container.classList.remove("hidden");
         container.classList.remove("autohide-out");
@@ -172,7 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (autohideParam === "true" || autohideParam === "1") {
             setTimeout(() => {
                 container.classList.add("autohide-out");
-            }, 10000); // Esconde después de 10 segundos
+            }, 10000);
         }
     }
 

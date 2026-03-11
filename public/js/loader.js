@@ -31,9 +31,9 @@
     let deferredLoaded = false;
 
     window.loadResultComponents = function () {
-        if (deferredLoaded) return Promise.resolve();
+        if (deferredLoaded) return Promise.resolve(false);
         deferredLoaded = true;
-        return loadSlots(deferredSlots);
+        return loadSlots(deferredSlots).then(() => true);
     };
 
     loadSlots(eagerSlots).then(() => {
