@@ -159,10 +159,7 @@ function updateOverlayIframeOnly() {
 
     const iframe = document.getElementById('overlay-iframe');
     if (iframe) {
-        iframe.src = '';
-        requestAnimationFrame(() => {
-            iframe.src = urlStr;
-        });
+        iframe.src = urlStr;
     }
 }
 
