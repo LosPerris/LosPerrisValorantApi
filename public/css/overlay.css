@@ -25,6 +25,13 @@ body {
     padding: 30px;
 }
 
+body.preview-mode {
+    background-color: #0d1117 !important;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
 .hidden {
     display: none !important;
 }

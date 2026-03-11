@@ -16,6 +16,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const progressParam = params.get("progress");
     const autohideParam = params.get("autohide");
     const kdaParam = params.get("kda");
+    const previewParam = params.get("preview");
+
+    if (previewParam === "true" || previewParam === "1") {
+        document.body.classList.add("preview-mode");
+    }
 
     if (layoutParam === "compact") {
         document.body.classList.add("layout-compact");

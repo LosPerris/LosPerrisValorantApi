@@ -145,6 +145,12 @@ function getOverlayUrlStr() {
     return `${window.location.origin}${CONFIG.apiBaseUrl}/overlay?${urlParams.toString()}`;
 }
 
+function getOverlayPreviewUrlStr() {
+    const base = getOverlayUrlStr();
+    if (!base) return null;
+    return `${base}&preview=true`;
+}
+
 function updateOverlayUrlOnly() {
     const urlStr = getOverlayUrlStr();
     if (!urlStr) return;
@@ -154,7 +160,7 @@ function updateOverlayUrlOnly() {
 }
 
 function updateOverlayIframeOnly() {
-    const urlStr = getOverlayUrlStr();
+    const urlStr = getOverlayPreviewUrlStr();
     if (!urlStr) return;
 
     const iframe = document.getElementById('overlay-iframe');
