@@ -26,10 +26,11 @@ body {
 }
 
 body.preview-mode {
-    background-color: #0d1117 !important;
     padding: 20px;
     align-items: center;
     justify-content: center;
+    min-height: 100vh;
+    margin: 0;
 }
 
 .hidden {
@@ -40,6 +41,7 @@ body.preview-mode {
     position: relative;
     display: flex;
     align-items: center;
+    width: max-content;
     min-width: 340px;
     height: 80px;
     opacity: 0;
@@ -348,8 +350,8 @@ body.preview-mode {
 }
 
 .glow-container.on-fire {
-    background: linear-gradient(90deg, var(--val-red) 0%, #ff8c00 100%);
-    box-shadow: 0 0 20px var(--val-red-glow), inset 0 0 10px var(--val-red);
+    background: linear-gradient(90deg, var(--glow-color, var(--val-red)) 0%, var(--glow-color-bright, #ff8c00) 100%);
+    box-shadow: 0 0 20px var(--glow-alpha, var(--val-red-glow)), inset 0 0 10px var(--glow-color, var(--val-red));
     animation: onFireGlow 2s infinite alternate ease-in-out;
     opacity: 1;
 }
@@ -363,7 +365,7 @@ body.preview-mode {
     to {
         opacity: 1;
         filter: blur(6px);
-        box-shadow: 0 0 30px var(--val-red-glow);
+        box-shadow: 0 0 30px var(--glow-alpha, var(--val-red-glow));
     }
 }
 

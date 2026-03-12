@@ -121,8 +121,55 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (change > 20) {
             glowContainer.classList.add("on-fire");
+
+            const getRankColors = (rankStr, rr) => {
+                const colors = {
+                    'Iron': [81, 81, 81],
+                    'Bronze': [141, 92, 63],
+                    'Silver': [209, 209, 209],
+                    'Gold': [227, 176, 54],
+                    'Platinum': [44, 201, 193],
+                    'Diamond': [176, 138, 221],
+                    'Ascendant': [36, 181, 104],
+                    'Immortal': [161, 43, 75],
+                    'Radiant': [255, 241, 160]
+                };
+                const order = ['Iron', 'Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Ascendant', 'Immortal', 'Radiant'];
+
+                const parts = rankStr.split(' ');
+                const tier = parts[0];
+                const div = parts.length > 1 ? parseInt(parts[1]) : 1;
+
+                let tierIdx = order.indexOf(tier);
+                if (tierIdx === -1) return null;
+
+                let color1 = colors[tier];
+                let color2 = colors[order[Math.min(tierIdx + 1, order.length - 1)]];
+
+                const progress = ((div - 1) * 100 + rr) / 300; 
+
+                const rVal = Math.round(color1[0] + (color2[0] - color1[0]) * progress);
+                const gVal = Math.round(color1[1] + (color2[1] - color1[1]) * progress);
+                const bVal = Math.round(color1[2] + (color2[2] - color1[2]) * progress);
+
+                return {
+                    color: `rgb(${rVal}, ${gVal}, ${bVal})`,
+                    alpha: `rgba(${rVal}, ${gVal}, ${bVal}, 0.5)`,
+                    bright: `rgb(${Math.min(255, rVal+40)}, ${Math.min(255, gVal+40)}, ${Math.min(255, bVal+40)})`
+                };
+            };
+
+            const dynColors = getRankColors(r.rank, r.ranking_in_tier);
+            if (dynColors) {
+                glowContainer.style.setProperty('--glow-color', dynColors.color);
+                glowContainer.style.setProperty('--glow-alpha', dynColors.alpha);
+                glowContainer.style.setProperty('--glow-color-bright', dynColors.bright);
+            }
         } else {
             glowContainer.classList.remove("on-fire");
+            glowContainer.style.removeProperty('--glow-color');
+            glowContainer.style.removeProperty('--glow-alpha');
+            glowContainer.style.removeProperty('--glow-color-bright');
         }
 
         if (change > 0) {
