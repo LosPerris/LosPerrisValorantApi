@@ -6,7 +6,7 @@ const CONFIG = {
         return '/api/valorant';
     },
 
-    contactEmail: 'contacto@losperris.site',
+    contactEmail: 'contacto@losperris.dev',
     authorUrl: 'https://www.instagram.com/ponss_jean/'
 };
 
