@@ -115,24 +115,22 @@
 
                 <div class="code-block-container">
                     <div id="rank-curl" class="code-content active">
-                        <pre
-                            class="pre-code">curl -X GET "https://losperris.dev/api/valorant/rank/na/PonssLoveless/8882"</pre>
+                        <pre class="pre-code">curl -X GET "<span class="doc-base-url"></span>/api/valorant/rank/na/PonssLoveless/8882"</pre>
                     </div>
                     <div id="rank-js" class="code-content">
-                        <pre class="pre-code">fetch("https://losperris.dev/api/valorant/rank/na/PonssLoveless/8882")
+                        <pre class="pre-code">fetch("<span class="doc-base-url"></span>/api/valorant/rank/na/PonssLoveless/8882")
   .then(res => res.json())
   .then(data => console.log(data));</pre>
                     </div>
                     <div id="rank-py" class="code-content">
                         <pre class="pre-code">import requests
-res = requests.get("https://losperris.dev/api/valorant/rank/na/PonssLoveless/8882")
+res = requests.get("<span class="doc-base-url"></span>/api/valorant/rank/na/PonssLoveless/8882")
 print(res.json())</pre>
                     </div>
                     <div id="rank-bots" class="code-content">
                         <p style="color: #888; font-size: 0.9em; margin-bottom: 10px;">Copia esto en tu Nightbot o
                             StreamElements:</p>
-                        <pre
-                            class="pre-code">$(urlfetch https://losperris.dev/api/valorant/rank/na/PonssLoveless/8882?format=text)</pre>
+                        <pre class="pre-code">$(urlfetch <span class="doc-base-url"></span>/api/valorant/rank/na/PonssLoveless/8882?format=text)</pre>
                     </div>
                 </div>
 
@@ -190,12 +188,10 @@ print(res.json())</pre>
                 </div>
                 <div class="code-block-container">
                     <div id="match-curl" class="code-content active">
-                        <pre
-                            class="pre-code">curl -X GET "https://losperris.dev/api/valorant/match/last/na/PonssLoveless/8882"</pre>
+                        <pre class="pre-code">curl -X GET "<span class="doc-base-url"></span>/api/valorant/match/last/na/PonssLoveless/8882"</pre>
                     </div>
                     <div id="match-bots" class="code-content">
-                        <pre
-                            class="pre-code">$(urlfetch https://losperris.dev/api/valorant/match/last/na/PonssLoveless/8882?format=text)</pre>
+                        <pre class="pre-code">$(urlfetch <span class="doc-base-url"></span>/api/valorant/match/last/na/PonssLoveless/8882?format=text)</pre>
                     </div>
                 </div>
 
@@ -330,6 +326,11 @@ print(res.json())</pre>
     </script>
 
     <script src="./js/docs.js"></script>
+    <script>
+        document.querySelectorAll('.doc-base-url').forEach(function(el) {
+            el.textContent = CONFIG.siteUrl;
+        });
+    </script>
 </body>
 
 </html>
