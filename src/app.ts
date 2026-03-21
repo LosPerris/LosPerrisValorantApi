@@ -30,13 +30,33 @@ app.use(helmet({
         }
     }
 }));
-app.use(cors());
+app.use(
+    cors((req: Request, callback) => {
+        const origin = req.header('Origin');
+
+        if (!origin) return callback(null, { origin: true });
+
+        const allowedOrigins = [
+            'https://www.losperris.dev',
+            'https://losperris.dev',
+            'http://localhost:3000',
+            'http://localhost:5173'
+        ];
+
+        if (allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+            callback(null, { origin: true });
+        } else {
+            callback(new Error('Bloqueado por CORS'));
+        }
+    })
+);
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100,
     standardHeaders: true,
     legacyHeaders: false,
+    keyGenerator: (req) => req.ip ?? 'unknown',
     handler: (req, res) => {
         res.status(429).json({
             status: 429,
