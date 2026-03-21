@@ -59,7 +59,7 @@ export async function fetchWithCache<T>(
         }
         return data;
     } catch (error) {
-        handleApiError(error as ApiError);
+        return handleApiError(error as ApiError);
     }
 }
 

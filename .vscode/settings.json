@@ -1,0 +1,23 @@
+{
+    "github.copilot.editor.enableAutoCompletions": true,
+    "antigravity.agent.history.enabled": true,
+    "antigravity.agent.persistSessions": true,
+    "antigravity.agent.restorePreviousSession": true,
+    "antigravity.workspace.supportUntitled": true,
+    "antigravity.sync.chatHistory": true,
+    "security.workspace.trust.enabled": false,
+    "workbench.colorTheme": "One Dark Pro Night Flat",
+    "terminal.integrated.fontFamily": "3270 Nerd Font",
+    "terminal.integrated.fontSize": 20,
+    "editor.minimap.autohide": "mouseover",
+    "workbench.editorAssociations": {
+        "*.pyc": "default"
+    },
+    "git.confirmSync": false,
+    "redhat.telemetry.enabled": false,
+    "files.hotExit": "onExit",
+    "workbench.settings.applyToAllProfiles": [
+        "antigravity.agent.history.enabled",
+        "antigravity.agent.persistSessions"
+    ]
+}

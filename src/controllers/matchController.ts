@@ -8,16 +8,20 @@ export const getLastMatch = async (req: Request, res: Response) => {
     const { region } = req.params;
     const { puuid } = req;
 
+    if (!puuid) {
+        return handleRouteError(req, res, { status: 404, message: 'Account not found' });
+    }
+
     try {
         setEdgeCache(res, 60);
         const [matchesData, mmrData] = await Promise.all([
-            valorantService.getMatchesByPUUID(region, puuid as string, 'competitive', 1),
-            valorantService.getMMRByPUUID(region, puuid as string)
+            valorantService.getMatchesByPUUID(region, puuid, 'competitive', 1),
+            valorantService.getMMRByPUUID(region, puuid)
         ]);
 
         if (matchesData.status === 200 && matchesData.data.length > 0) {
             const lastMatch = matchesData.data[0];
-            const formattedData = formatService.formatMatchData(lastMatch, puuid as string);
+            const formattedData = formatService.formatMatchData(lastMatch, puuid);
 
             if (!formattedData) {
                 return res.status(404).json({
@@ -41,6 +45,7 @@ export const getLastMatch = async (req: Request, res: Response) => {
         }
 
     } catch (error: unknown) {
-        handleRouteError(req, res, error as { status?: number; message?: string; data?: unknown });
+        return handleRouteError(req, res, error as { status?: number; message?: string; data?: unknown });
     }
 };
+

@@ -402,19 +402,16 @@ async function updateExamplePreviews(data, botLang, botType, botMatchType) {
         console.error('Preview Error (Rank):', e);
     }
 
-    if (m) {
+    if (m && m.derived) {
         try {
-            const stats = m.players.all_players.find(p => p.puuid === r.puuid);
-            const isWin = m.teams.red.has_won ? (stats.team === 'Red') : (stats.team === 'Blue');
-
             const result = await fetchPreview({
                 type: 'match',
                 lang: botLang,
                 botMatchType: botMatchType,
                 data: {
                     map: m.metadata.map,
-                    isWin: isWin,
-                    kda: `${stats.stats.kills}/${stats.stats.deaths}/${stats.stats.assists}`,
+                    isWin: m.derived.is_win,
+                    kda: m.derived.kda,
                     hs: m.derived.hs_percent,
                     agent: m.derived.agent_name,
                     mmrChange: r.mmr_change

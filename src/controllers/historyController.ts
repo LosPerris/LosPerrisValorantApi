@@ -8,11 +8,14 @@ export const getHistory = async (req: Request, res: Response) => {
     const { region } = req.params;
     const { puuid } = req;
 
-    try {
-        // El historial no depende de MMR directamente pero podemos cachearlo agresivamente en el Edge
-        setEdgeCache(res, 300); // 5 minutos de caché en el borde para historial
+    if (!puuid) {
+        return handleRouteError(req, res, { status: 404, message: 'Account not found' });
+    }
 
-        const historyData: ValorantApiResponse<ValorantMMRHistoryItem[]> = await valorantService.getMMRHistoryByPUUID(region, puuid as string);
+    try {
+        setEdgeCache(res, 300);
+
+        const historyData: ValorantApiResponse<ValorantMMRHistoryItem[]> = await valorantService.getMMRHistoryByPUUID(region, puuid);
 
         if (historyData.status === 200) {
             const formattedHistory = formatService.formatHistoryData(historyData);
@@ -26,6 +29,7 @@ export const getHistory = async (req: Request, res: Response) => {
         }
 
     } catch (error: unknown) {
-        handleRouteError(req, res, error as { status?: number; message?: string; data?: unknown });
+        return handleRouteError(req, res, error as { status?: number; message?: string; data?: unknown });
     }
 };
+

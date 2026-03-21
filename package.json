@@ -9,7 +9,8 @@
     "dev": "ts-node --files -r dotenv/config api/index.ts",
     "lint": "eslint src/**/*.ts api/**/*.ts",
     "type-check": "tsc --noEmit",
-    "test": "echo 'No tests yet' && exit 0",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "prepare": "husky"
   },
   "repository": {
@@ -50,6 +51,7 @@
     "@types/express": "^5.0.6",
     "@types/helmet": "^0.0.48",
     "@types/node": "^25.0.3",
+    "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
     "eslint": "^10.0.1",
@@ -58,10 +60,32 @@
     "lint-staged": "^16.2.7",
     "shx": "^0.4.0",
     "supertest": "^7.1.4",
+    "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
   "lint-staged": {
     "*.{ts,js}": "eslint --fix"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/tests"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.json"
+        }
+      ]
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ]
   }
 }

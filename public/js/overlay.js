@@ -18,13 +18,67 @@ document.addEventListener("DOMContentLoaded", () => {
     const kdaParam = params.get("kda");
     const previewParam = params.get("preview");
 
-    if (previewParam === "true" || previewParam === "1") {
-        document.body.classList.add("preview-mode");
+    const RANK_COLORS = {
+        'Iron': [81, 81, 81],
+        'Bronze': [141, 92, 63],
+        'Silver': [209, 209, 209],
+        'Gold': [227, 176, 54],
+        'Platinum': [44, 201, 193],
+        'Diamond': [176, 138, 221],
+        'Ascendant': [36, 181, 104],
+        'Immortal': [161, 43, 75],
+        'Radiant': [255, 241, 160]
+    };
+    const RANK_ORDER = ['Iron', 'Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Ascendant', 'Immortal', 'Radiant'];
+
+    const RANK_TRANSLATIONS = new Map([
+        ['Iron',      { es: 'Hierro',     pt: 'Ferro'      }],
+        ['Bronze',    { es: 'Bronce',     pt: 'Bronze'     }],
+        ['Silver',    { es: 'Plata',      pt: 'Prata'      }],
+        ['Gold',      { es: 'Oro',        pt: 'Ouro'       }],
+        ['Platinum',  { es: 'Platino',    pt: 'Platina'    }],
+        ['Diamond',   { es: 'Diamante',   pt: 'Diamante'   }],
+        ['Ascendant', { es: 'Ascendente', pt: 'Ascendente' }],
+        ['Immortal',  { es: 'Inmortal',   pt: 'Imortal'    }],
+        ['Radiant',   { es: 'Radiante',   pt: 'Radiante'   }]
+    ]);
+
+    function translateRank(rankStr) {
+        if ((lang !== 'es' && lang !== 'pt') || !rankStr) return rankStr;
+        for (const [eng, t] of RANK_TRANSLATIONS) {
+            if (rankStr.includes(eng)) {
+                const word = t[lang];
+                return word ? rankStr.replace(eng, word) : rankStr;
+            }
+        }
+        return rankStr;
     }
 
-    if (layoutParam === "compact") {
-        document.body.classList.add("layout-compact");
+    function getRankColors(rankStr, rr) {
+        const parts = rankStr.split(' ');
+        const tier = parts[0];
+        const div = parts.length > 1 ? parseInt(parts[1]) : 1;
+        const tierIdx = RANK_ORDER.indexOf(tier);
+        if (tierIdx === -1) return null;
+
+        const c1 = RANK_COLORS[tier];
+        const c2 = RANK_COLORS[RANK_ORDER[Math.min(tierIdx + 1, RANK_ORDER.length - 1)]];
+
+        const progress = ((div - 1) * 100 + rr) / 300;
+        const lerp = (a, b) => Math.round(a + (b - a) * progress);
+        const r = lerp(c1[0], c2[0]);
+        const g = lerp(c1[1], c2[1]);
+        const b = lerp(c1[2], c2[2]);
+
+        return {
+            color: `rgb(${r}, ${g}, ${b})`,
+            alpha: `rgba(${r}, ${g}, ${b}, 0.5)`,
+            bright: `rgb(${Math.min(255, r + 40)}, ${Math.min(255, g + 40)}, ${Math.min(255, b + 40)})`
+        };
     }
+
+    if (previewParam === "true" || previewParam === "1") document.body.classList.add("preview-mode");
+    if (layoutParam === "compact") document.body.classList.add("layout-compact");
 
     if (alignParam === "center") document.body.style.justifyContent = "center";
     else if (alignParam === "right") document.body.style.justifyContent = "flex-end";
@@ -36,23 +90,21 @@ document.addEventListener("DOMContentLoaded", () => {
             const wrapper = document.querySelector('.overlay-wrapper');
             if (wrapper) {
                 wrapper.style.transform = `scale(${scaleVal})`;
-                wrapper.style.transformOrigin = alignParam === 'right' ? 'right center' : alignParam === 'center' ? 'center center' : 'left center';
+                wrapper.style.transformOrigin = alignParam === 'right' ? 'right center'
+                    : alignParam === 'center' ? 'center center'
+                        : 'left center';
             }
         }
     }
 
-    if (colorParam) {
-        const isValidHex = /^[0-9A-F]{6}$/i.test(colorParam);
-        if (isValidHex) {
-            const hex = `#${colorParam}`;
-            const r = parseInt(colorParam.slice(0, 2), 16);
-            const g = parseInt(colorParam.slice(2, 4), 16);
-            const b = parseInt(colorParam.slice(4, 6), 16);
-
-            document.documentElement.style.setProperty('--val-red', hex);
-            document.documentElement.style.setProperty('--val-red-glow', `rgba(${r}, ${g}, ${b}, 0.5)`);
-            document.documentElement.style.setProperty('--loss-red', hex);
-        }
+    if (colorParam && /^[0-9A-F]{6}$/i.test(colorParam)) {
+        const hex = `#${colorParam}`;
+        const r = parseInt(colorParam.slice(0, 2), 16);
+        const g = parseInt(colorParam.slice(2, 4), 16);
+        const b = parseInt(colorParam.slice(4, 6), 16);
+        document.documentElement.style.setProperty('--val-red', hex);
+        document.documentElement.style.setProperty('--val-red-glow', `rgba(${r}, ${g}, ${b}, 0.5)`);
+        document.documentElement.style.setProperty('--loss-red', hex);
     }
 
     if (bgParam && /^[0-9A-F]{6}$/i.test(bgParam)) {
@@ -71,7 +123,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const statusMsg = document.getElementById("status-message");
     const twitchChannel = document.getElementById("twitch-channel");
     const twitchName = document.getElementById("twitch-name");
-
     const rankIcon = document.getElementById("rank-icon");
     const playerName = document.getElementById("player-name");
     const playerTag = document.getElementById("player-tag");
@@ -82,27 +133,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const progressContainer = document.getElementById("progress-container");
     const glowContainer = document.getElementById("glow-container");
     const kdaText = document.getElementById("kda-text");
+    const statsDiv = document.querySelector('.stats');
+    const mmrSection = document.querySelector('.mmr-section');
 
-    const rankTranslationsMap = {
-        'Iron': 'Hierro',
-        'Bronze': 'Bronce',
-        'Silver': 'Plata',
-        'Gold': 'Oro',
-        'Platinum': 'Platino',
-        'Diamond': 'Diamante',
-        'Ascendant': 'Ascendente',
-        'Immortal': 'Inmortal',
-        'Radiant': 'Radiante'
-    };
+    if (hideRrParam === "true" || hideRrParam === "1") {
+        const divider = statsDiv ? statsDiv.querySelector('.divider') : null;
+        if (divider) divider.style.display = 'none';
+        if (rrText) rrText.style.display = 'none';
+    }
+    if (hideMmrParam === "true" || hideMmrParam === "1") {
+        if (mmrSection) mmrSection.style.display = 'none';
+    }
 
-    function translateRank(rankStr) {
-        if (lang !== 'es' || !rankStr) return rankStr;
-        for (const [eng, esp] of Object.entries(rankTranslationsMap)) {
-            if (rankStr.includes(eng)) {
-                return rankStr.replace(eng, esp);
-            }
-        }
-        return rankStr;
+    if (twitchParam) {
+        twitchName.innerText = twitchParam;
+        twitchChannel.classList.remove("hidden");
+    }
+
+    if (progressParam !== "true" && progressParam !== "1") {
+        progressContainer.style.display = "none";
     }
 
     if (!region || !name || !tag) {
@@ -121,44 +170,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (change > 20) {
             glowContainer.classList.add("on-fire");
-
-            const getRankColors = (rankStr, rr) => {
-                const colors = {
-                    'Iron': [81, 81, 81],
-                    'Bronze': [141, 92, 63],
-                    'Silver': [209, 209, 209],
-                    'Gold': [227, 176, 54],
-                    'Platinum': [44, 201, 193],
-                    'Diamond': [176, 138, 221],
-                    'Ascendant': [36, 181, 104],
-                    'Immortal': [161, 43, 75],
-                    'Radiant': [255, 241, 160]
-                };
-                const order = ['Iron', 'Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Ascendant', 'Immortal', 'Radiant'];
-
-                const parts = rankStr.split(' ');
-                const tier = parts[0];
-                const div = parts.length > 1 ? parseInt(parts[1]) : 1;
-
-                let tierIdx = order.indexOf(tier);
-                if (tierIdx === -1) return null;
-
-                let color1 = colors[tier];
-                let color2 = colors[order[Math.min(tierIdx + 1, order.length - 1)]];
-
-                const progress = ((div - 1) * 100 + rr) / 300; 
-
-                const rVal = Math.round(color1[0] + (color2[0] - color1[0]) * progress);
-                const gVal = Math.round(color1[1] + (color2[1] - color1[1]) * progress);
-                const bVal = Math.round(color1[2] + (color2[2] - color1[2]) * progress);
-
-                return {
-                    color: `rgb(${rVal}, ${gVal}, ${bVal})`,
-                    alpha: `rgba(${rVal}, ${gVal}, ${bVal}, 0.5)`,
-                    bright: `rgb(${Math.min(255, rVal+40)}, ${Math.min(255, gVal+40)}, ${Math.min(255, bVal+40)})`
-                };
-            };
-
             const dynColors = getRankColors(r.rank, r.ranking_in_tier);
             if (dynColors) {
                 glowContainer.style.setProperty('--glow-color', dynColors.color);
@@ -172,58 +183,38 @@ document.addEventListener("DOMContentLoaded", () => {
             glowContainer.style.removeProperty('--glow-color-bright');
         }
 
-        if (change > 0) {
-            mmrChange.innerText = `+${change}`;
-            mmrChange.className = "mmr-change up";
-        } else if (change < 0) {
-            mmrChange.innerText = `${change}`;
-            mmrChange.className = "mmr-change down";
-        } else {
-            mmrChange.innerText = `0`;
-            mmrChange.className = "mmr-change even";
-        }
+        if (change > 0) { mmrChange.innerText = `+${change}`; mmrChange.className = "mmr-change up"; }
+        else if (change < 0) { mmrChange.innerText = `${change}`; mmrChange.className = "mmr-change down"; }
+        else { mmrChange.innerText = `0`; mmrChange.className = "mmr-change even"; }
 
         if (progressParam === "true" || progressParam === "1") {
             progressContainer.style.display = "block";
-            setTimeout(() => {
+            requestAnimationFrame(() => {
                 progressBar.style.width = `${r.ranking_in_tier}%`;
-            }, 300);
-        } else {
-            progressContainer.style.display = "none";
-        }
-
-        if (twitchParam) {
-            twitchName.innerText = twitchParam;
-            twitchChannel.classList.remove("hidden");
-        }
-
-        if (hideRrParam === "true" || hideRrParam === "1") {
-            const statsDiv = document.querySelector('.stats');
-            if (statsDiv) {
-                const divider = statsDiv.querySelector('.divider');
-                if (divider) divider.style.display = 'none';
-                rrText.style.display = 'none';
-            }
-        }
-
-        if (hideMmrParam === "true" || hideMmrParam === "1") {
-            const mmrSection = document.querySelector('.mmr-section');
-            if (mmrSection) mmrSection.style.display = 'none';
+            });
         }
 
         statusMsg.classList.add("hidden");
-        container.classList.remove("hidden");
-        container.classList.remove("autohide-out");
+        container.classList.remove("hidden", "autohide-out");
 
         if (autohideParam === "true" || autohideParam === "1") {
-            setTimeout(() => {
-                container.classList.add("autohide-out");
-            }, 10000);
+            setTimeout(() => container.classList.add("autohide-out"), 10000);
         }
     }
 
-    function renderKda(matchData, puuid) {
-        if (!matchData || !kdaParam || kdaParam !== "true") return;
+    function renderKda(matchData) {
+        if (!kdaParam || (kdaParam !== "true" && kdaParam !== "1")) return;
+
+        const kda = matchData?.derived?.kda;
+        if (kda) {
+            kdaText.innerText = kda;
+            kdaText.classList.remove("hidden");
+            mmrChange.classList.add("with-kda");
+            return;
+        }
+
+        const puuid = matchData?._puuid;
+        if (!puuid || !matchData?.players?.all_players) return;
         const stats = matchData.players.all_players.find(p => p.puuid === puuid);
         if (stats) {
             kdaText.innerText = `${stats.stats.kills}/${stats.stats.deaths}/${stats.stats.assists}`;
@@ -232,33 +223,33 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    const CACHE_KEY = `val_overlay_v3_${region}_${name}_${tag}`;
+    const CACHE_MS = 300_000;
+
     const fetchStats = async () => {
         try {
-            const cacheKey = `val_rank_v2_${region}_${name}_${tag}`;
-            const cachedData = sessionStorage.getItem(cacheKey);
-            const cachedMatch = sessionStorage.getItem(`${cacheKey}_match`);
-            const cacheTime = sessionStorage.getItem(`${cacheKey}_time`);
+            const cachedRank = sessionStorage.getItem(CACHE_KEY);
+            const cachedMatch = sessionStorage.getItem(`${CACHE_KEY}_match`);
+            const cacheTime = sessionStorage.getItem(`${CACHE_KEY}_time`);
+            const wantsKda = kdaParam === "true" || kdaParam === "1";
 
-            if (cachedData && cacheTime && (Date.now() - parseInt(cacheTime) < 300000)) {
-                const wantsKda = kdaParam === "true" || kdaParam === "1";
-                if (wantsKda && !cachedMatch) {
-                } else {
-                    renderData(JSON.parse(cachedData));
-                    if (cachedMatch) renderKda(JSON.parse(cachedMatch), JSON.parse(cachedData).puuid);
-                    return;
-                }
+            const isFresh = cachedRank && cacheTime && (Date.now() - parseInt(cacheTime) < CACHE_MS);
+
+            if (isFresh && (!wantsKda || cachedMatch)) {
+                renderData(JSON.parse(cachedRank));
+                if (cachedMatch) renderKda(JSON.parse(cachedMatch));
+                return;
             }
 
-            let endpoint = `/api/valorant/rank/${region}/${name}/${tag}`;
-            if (kdaParam === "true" || kdaParam === "1") {
-                endpoint = `/api/valorant/summary/${region}/${name}/${tag}`;
-            }
+            const endpoint = wantsKda
+                ? `/api/valorant/summary/${region}/${name}/${tag}`
+                : `/api/valorant/rank/${region}/${name}/${tag}`;
 
             const response = await fetch(endpoint);
             const data = await response.json();
 
             if (data.status === 200) {
-                const isSummary = data.data.hasOwnProperty('account');
+                const isSummary = Object.prototype.hasOwnProperty.call(data.data, 'account');
                 const rankData = isSummary ? data.data.rank : data.data;
 
                 if (!rankData) {
@@ -268,18 +259,17 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
 
-                sessionStorage.setItem(cacheKey, JSON.stringify(rankData));
+                sessionStorage.setItem(CACHE_KEY, JSON.stringify(rankData));
+                sessionStorage.setItem(`${CACHE_KEY}_time`, Date.now().toString());
 
+                let matchForRender = null;
                 if (data.data.match) {
-                    sessionStorage.setItem(`${cacheKey}_match`, JSON.stringify(data.data.match));
+                    sessionStorage.setItem(`${CACHE_KEY}_match`, JSON.stringify(data.data.match));
+                    matchForRender = data.data.match;
                 }
-
-                sessionStorage.setItem(`${cacheKey}_time`, Date.now().toString());
 
                 renderData(rankData);
-                if (data.data.match) {
-                    renderKda(data.data.match, rankData.puuid);
-                }
+                if (matchForRender) renderKda(matchForRender);
             } else {
                 statusMsg.innerText = `Error: ${data.message || 'Unknown error'}`;
                 statusMsg.classList.remove("hidden");
@@ -293,7 +283,25 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    fetchStats();
+    let intervalId = null;
 
-    setInterval(fetchStats, 300000);
+    function startPolling() {
+        if (intervalId) return;
+        intervalId = setInterval(fetchStats, CACHE_MS);
+    }
+
+    function stopPolling() {
+        if (intervalId) { clearInterval(intervalId); intervalId = null; }
+    }
+
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+            stopPolling();
+        } else {
+            fetchStats();
+            startPolling();
+        }
+    });
+    fetchStats();
+    startPolling();
 });

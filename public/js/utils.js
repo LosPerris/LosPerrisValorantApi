@@ -15,13 +15,22 @@ function getCommandSyntax(platform, url) {
     }
 }
 
+const RANK_NAMES_MAP = new Map([
+    ['Iron', 'Hierro'],
+    ['Bronze', 'Bronce'],
+    ['Silver', 'Plata'],
+    ['Gold', 'Oro'],
+    ['Platinum', 'Platino'],
+    ['Diamond', 'Diamante'],
+    ['Ascendant', 'Ascendente'],
+    ['Immortal', 'Inmortal'],
+    ['Radiant', 'Radiante']
+]);
+
 function formatRankName(rankName, lang) {
-    if (lang === 'es') {
-        for (const [eng, esp] of Object.entries(translations.rankNames)) {
-            if (rankName.includes(eng)) {
-                return rankName.replace(eng, esp);
-            }
-        }
+    if (lang !== 'es' || !rankName) return rankName;
+    for (const [eng, esp] of RANK_NAMES_MAP) {
+        if (rankName.includes(eng)) return rankName.replace(eng, esp);
     }
     return rankName;
 }

@@ -228,14 +228,19 @@ document.querySelectorAll('.btn-copy').forEach(btn => {
     btn.addEventListener('click', () => {
         const targetId = btn.dataset.target;
         const input = document.getElementById(targetId);
-        if (input) {
+        if (!input) return;
+
+        navigator.clipboard.writeText(input.value).then(() => {
+            const originalText = btn.textContent;
+            btn.textContent = 'COPIED!';
+            setTimeout(() => btn.textContent = originalText, 2000);
+        }).catch(() => {
             input.select();
             document.execCommand('copy');
-        }
-
-        const originalText = btn.textContent;
-        btn.textContent = 'COPIED!';
-        setTimeout(() => btn.textContent = originalText, 2000);
+            const originalText = btn.textContent;
+            btn.textContent = 'COPIED!';
+            setTimeout(() => btn.textContent = originalText, 2000);
+        });
     });
 });
 

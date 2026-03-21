@@ -11,12 +11,12 @@ export const getRank = async (req: Request, res: Response) => {
     // Cacheamos la respuesta en el borde por 1 minuto
     setEdgeCache(res, 60);
 
-    if (!accountData) {
+    if (!accountData || !puuid) {
         return handleRouteError(req, res, { status: 404, message: 'Account not found' });
     }
 
     try {
-        const mmrData: ValorantApiResponse<ValorantMMR> = await valorantService.getMMRByPUUID(region, puuid as string);
+        const mmrData: ValorantApiResponse<ValorantMMR> = await valorantService.getMMRByPUUID(region, puuid);
 
         if (mmrData.status === 200) {
             const formattedData = formatService.formatRankData(accountData, mmrData);
@@ -29,6 +29,7 @@ export const getRank = async (req: Request, res: Response) => {
         }
 
     } catch (error: unknown) {
-        handleRouteError(req, res, error as { status?: number; message?: string; data?: unknown });
+        return handleRouteError(req, res, error as { status?: number; message?: string; data?: unknown });
     }
 };
+
