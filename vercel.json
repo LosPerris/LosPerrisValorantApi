@@ -61,7 +61,31 @@
     ],
     "rewrites": [
         {
-            "source": "/(.*)",
+            "source": "/product.html/riot.txt",
+            "destination": "/riot.txt"
+        },
+        {
+            "source": "/api/(.*)",
+            "destination": "/dist/api/index.js"
+        },
+        {
+            "source": "/rank/(.*)",
+            "destination": "/dist/api/index.js"
+        },
+        {
+            "source": "/match/(.*)",
+            "destination": "/dist/api/index.js"
+        },
+        {
+            "source": "/history/(.*)",
+            "destination": "/dist/api/index.js"
+        },
+        {
+            "source": "/summary/(.*)",
+            "destination": "/dist/api/index.js"
+        },
+        {
+            "source": "/preview/(.*)",
             "destination": "/dist/api/index.js"
         }
     ],
