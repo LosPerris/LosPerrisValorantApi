@@ -175,4 +175,4 @@ Los tests se ubican en `tests/` y usan **Jest** + **Supertest** con mocks de axi
 
 ## 📄 Licencia
 
-ISC © [Ponss17](https://github.com/Ponss17)
+ISC © [Ponss17](https://github.com/Ponss17) 
