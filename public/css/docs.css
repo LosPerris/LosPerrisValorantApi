@@ -120,8 +120,8 @@ body {
 .content {
     margin-left: 280px;
     padding: 60px 80px;
-    max-width: 1200px;
-    width: 100%;
+    max-width: 1000px;
+    width: calc(100% - 280px);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -269,8 +269,6 @@ code {
     font-size: 0.9rem;
     color: var(--text-dim);
     width: 100%;
-    margin-left: 280px;
-    width: auto;
 }
 
 .json-key {
