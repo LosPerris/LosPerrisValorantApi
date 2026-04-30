@@ -35,8 +35,6 @@
                     <span class="group-title">Endpoints</span>
                     <a href="#rank" class="nav-item"><i class="fa-solid fa-medal"></i> Rank</a>
                     <a href="#match" class="nav-item"><i class="fa-solid fa-gamepad"></i> Última Partida</a>
-
-                    <a href="#summary" class="nav-item"><i class="fa-solid fa-user-astronaut"></i> Resumen Perfil</a>
                 </div>
 
                 <div class="nav-group">
@@ -48,91 +46,90 @@
             </nav>
         </aside>
 
-        <main class="content">
-            <section id="intro" class="doc-section">
-                <h1 class="main-title">Documentación <span class="accent">Valorant API</span></h1>
-                <p class="lead-text">Bienvenido a la documentación oficial de <strong>LosPerris Valorant API</strong>.
-                    Integra datos de rangos, historial de partidas y estadísticas detalladas en tus aplicaciones o bots
-                    de chat (Nightbot, StreamElements).</p>
+        <div class="main-wrapper">
+            <main class="content">
+                <section id="intro" class="doc-section">
+                    <h1 class="main-title">Documentación <span class="accent">Valorant API</span></h1>
+                    <p class="lead-text">Bienvenido a la documentación oficial de <strong>LosPerris Valorant API</strong>.
+                        Integra datos de rangos, historial de partidas y estadísticas detalladas en tus aplicaciones o bots
+                        de chat (Nightbot, StreamElements).</p>
+                </section>
 
+                <section id="rank" class="doc-section">
+                    <h2><i class="fa-solid fa-medal"></i> Obtener Rango (MMR)</h2>
+                    <p>Devuelve el rango actual, ELO y puntuación de un jugador. Ideal para comandos <code>!rank</code>.</p>
 
-            </section>
-
-            <section id="rank" class="doc-section">
-                <h2><i class="fa-solid fa-medal"></i> Obtener Rango (MMR)</h2>
-                <p>Devuelve el rango actual, ELO y puntuación de un jugador. Ideal para comandos <code>!rank</code>.</p>
-
-                <div class="endpoint-block">
-                    <span class="method get">GET</span>
-                    <span class="url" id="url-rank">/api/valorant/rank/:region/:name/:tag</span>
-                </div>
-
-                <h3>Parámetros</h3>
-                <table class="doc-table">
-                    <thead>
-                        <tr>
-                            <th>Parámetro</th>
-                            <th>Tipo</th>
-                            <th>Descripción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><code>region</code></td>
-                            <td>String</td>
-                            <td>na, eu, ap, kr, latam, br</td>
-                        </tr>
-                        <tr>
-                            <td><code>name</code></td>
-                            <td>String</td>
-                            <td>Riot ID del jugador</td>
-                        </tr>
-                        <tr>
-                            <td><code>tag</code></td>
-                            <td>String</td>
-                            <td>Tagline del jugador</td>
-                        </tr>
-                        <tr>
-                            <td><code>type</code></td>
-                            <td>Number</td>
-                            <td>(Opcional) 1: Solo Rango, 2: +Puntos, 3: +ELO</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <h3>Ejemplos de Uso</h3>
-                <div class="code-tabs">
-                    <button class="code-tab active" onclick="selectTab('rank', 'curl')">cURL</button>
-                    <button class="code-tab" onclick="selectTab('rank', 'js')">JavaScript</button>
-                    <button class="code-tab" onclick="selectTab('rank', 'py')">Python</button>
-                    <button class="code-tab" onclick="selectTab('rank', 'bots')">Comandos Bots</button>
-                </div>
-
-                <div class="code-block-container">
-                    <div id="rank-curl" class="code-content active">
-                        <pre class="pre-code">curl -X GET "<span class="doc-base-url"></span>/api/valorant/rank/na/PonssLoveless/8882"</pre>
+                    <div class="endpoint-block">
+                        <span class="method get">GET</span>
+                        <span class="url" id="url-rank">/api/valorant/rank/:region/:name/:tag</span>
                     </div>
-                    <div id="rank-js" class="code-content">
-                        <pre class="pre-code">fetch("<span class="doc-base-url"></span>/api/valorant/rank/na/PonssLoveless/8882")
+
+                    <h3>Parámetros</h3>
+                    <table class="doc-table">
+                        <thead>
+                            <tr>
+                                <th>Parámetro</th>
+                                <th>Tipo</th>
+                                <th>Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>region</code></td>
+                                <td>String</td>
+                                <td>na, eu, ap, kr, latam, br</td>
+                            </tr>
+                            <tr>
+                                <td><code>name</code></td>
+                                <td>String</td>
+                                <td>Riot ID del jugador</td>
+                            </tr>
+                            <tr>
+                                <td><code>tag</code></td>
+                                <td>String</td>
+                                <td>Tagline del jugador</td>
+                            </tr>
+                            <tr>
+                                <td><code>type</code></td>
+                                <td>Number</td>
+                                <td>(Opcional) 1: Solo Rango, 2: +Puntos, 3: +ELO</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Ejemplos de Uso</h3>
+                    <div class="code-tabs">
+                        <button class="code-tab active" onclick="selectTab('rank', 'curl')">cURL</button>
+                        <button class="code-tab" onclick="selectTab('rank', 'js')">JavaScript</button>
+                        <button class="code-tab" onclick="selectTab('rank', 'py')">Python</button>
+                        <button class="code-tab" onclick="selectTab('rank', 'bots')">Comandos Bots</button>
+                    </div>
+
+                    <div class="code-block-container">
+                        <div id="rank-curl" class="code-content active">
+                            <pre class="pre-code">curl -X GET "<span class="doc-base-url"></span>/api/valorant/rank/na/PonssLoveless/8882"</pre>
+                        </div>
+                        <div id="rank-js" class="code-content">
+                            <pre class="pre-code">fetch("<span class="doc-base-url"></span>/api/valorant/rank/na/PonssLoveless/8882")
   .then(res => res.json())
   .then(data => console.log(data));</pre>
-                    </div>
-                    <div id="rank-py" class="code-content">
-                        <pre class="pre-code">import requests
+                        </div>
+                        <div id="rank-py" class="code-content">
+                            <pre class="pre-code">import requests
 res = requests.get("<span class="doc-base-url"></span>/api/valorant/rank/na/PonssLoveless/8882")
 print(res.json())</pre>
+                        </div>
+                        <div id="rank-bots" class="code-content">
+                            <p style="color: #888; font-size: 0.9em; margin-bottom: 10px;">Copia esto en tu Nightbot o
+                                StreamElements:</p>
+                            <pre class="pre-code">$(urlfetch <span class="doc-base-url"></span>/api/valorant/rank/na/PonssLoveless/8882?format=text)</pre>
+                        </div>
                     </div>
-                    <div id="rank-bots" class="code-content">
-                        <p style="color: #888; font-size: 0.9em; margin-bottom: 10px;">Copia esto en tu Nightbot o
-                            StreamElements:</p>
-                        <pre class="pre-code">$(urlfetch <span class="doc-base-url"></span>/api/valorant/rank/na/PonssLoveless/8882?format=text)</pre>
-                    </div>
-                </div>
 
-                <h3>Respuesta</h3>
-                <div class="code-block-container">
-                    <div id="rank-res-json" class="code-content active" style="padding: 0;">
-                        <div class="json-block" style="border: none;">{
+                    <h3>Respuesta</h3>
+                    <div class="code-block-container">
+                        <div id="rank-res-json" class="code-content active" style="padding: 0;">
+                            <div class="json-block" style="border: none;">{
   <span class="json-key">"status"</span>: <span class="json-number">200</span>,
   <span class="json-key">"data"</span>: {
     <span class="json-key">"puuid"</span>: <span class="json-string">"a1b2c3d4-..."</span>,
@@ -153,39 +150,39 @@ print(res.json())</pre>
     <span class="json-key">"rank_image"</span>: <span class="json-string">"https://media.valorant-api.com/competitivetiers/.../largeicon.png"</span>
   }
 }</div>
+                        </div>
+                        <div id="rank-res-text" class="code-content">
+                            <pre class="pre-code">Ascendant 2 - 50RR</pre>
+                        </div>
                     </div>
-                    <div id="rank-res-text" class="code-content">
-                        <pre class="pre-code">Ascendant 2 - 50RR</pre>
+                </section>
+
+                <section id="match" class="doc-section">
+                    <h2><i class="fa-solid fa-gamepad"></i> Última Partida</h2>
+                    <p>Obtiene estadísticas detalladas de la última partida competitiva jugada.</p>
+
+                    <div class="endpoint-block">
+                        <span class="method get">GET</span>
+                        <span class="url" id="url-match">/api/valorant/match/last/:region/:name/:tag</span>
                     </div>
-                </div>
-            </section>
 
-            <section id="match" class="doc-section">
-                <h2><i class="fa-solid fa-gamepad"></i> Última Partida</h2>
-                <p>Obtiene estadísticas detalladas de la última partida competitiva jugada.</p>
-
-                <div class="endpoint-block">
-                    <span class="method get">GET</span>
-                    <span class="url" id="url-match">/api/valorant/match/last/:region/:name/:tag</span>
-                </div>
-
-                <div class="code-tabs">
-                    <button class="code-tab active" onclick="selectTab('match', 'curl')">cURL</button>
-                    <button class="code-tab" onclick="selectTab('match', 'bots')">Bots</button>
-                </div>
-                <div class="code-block-container">
-                    <div id="match-curl" class="code-content active">
-                        <pre class="pre-code">curl -X GET "<span class="doc-base-url"></span>/api/valorant/match/last/na/PonssLoveless/8882"</pre>
+                    <div class="code-tabs">
+                        <button class="code-tab active" onclick="selectTab('match', 'curl')">cURL</button>
+                        <button class="code-tab" onclick="selectTab('match', 'bots')">Bots</button>
                     </div>
-                    <div id="match-bots" class="code-content">
-                        <pre class="pre-code">$(urlfetch <span class="doc-base-url"></span>/api/valorant/match/last/na/PonssLoveless/8882?format=text)</pre>
+                    <div class="code-block-container">
+                        <div id="match-curl" class="code-content active">
+                            <pre class="pre-code">curl -X GET "<span class="doc-base-url"></span>/api/valorant/match/last/na/PonssLoveless/8882"</pre>
+                        </div>
+                        <div id="match-bots" class="code-content">
+                            <pre class="pre-code">$(urlfetch <span class="doc-base-url"></span>/api/valorant/match/last/na/PonssLoveless/8882?format=text)</pre>
+                        </div>
                     </div>
-                </div>
 
-                <h3>Respuesta</h3>
-                <div class="code-block-container">
-                    <div id="match-res-json" class="code-content active" style="padding: 0;">
-                        <div class="json-block" style="border: none;">{
+                    <h3>Respuesta</h3>
+                    <div class="code-block-container">
+                        <div id="match-res-json" class="code-content active" style="padding: 0;">
+                            <div class="json-block" style="border: none;">{
   <span class="json-key">"status"</span>: <span class="json-number">200</span>,
   <span class="json-key">"data"</span>: {
     <span class="json-key">"metadata"</span>: {
@@ -215,90 +212,50 @@ print(res.json())</pre>
     }
   }
 }</div>
+                        </div>
+                        <div id="match-res-text" class="code-content">
+                            <pre class="pre-code">Ascent - VICTORY - 24/12/5</pre>
+                        </div>
                     </div>
-                    <div id="match-res-text" class="code-content">
-                        <pre class="pre-code">Ascent - VICTORY - 24/12/5</pre>
-                    </div>
-                </div>
-            </section>
+                </section>
 
 
+                <section id="errors" class="doc-section">
+                    <h2><i class="fa-solid fa-triangle-exclamation"></i> Códigos de Error</h2>
+                    <table class="doc-table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Significado</th>
+                                <th>Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span style="color:var(--warning-color)">400</span></td>
+                                <td>Bad Request</td>
+                                <td>Faltan parámetros o la región es inválida.</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color:#64748b">404</span></td>
+                                <td>Not Found</td>
+                                <td>El jugador no existe o perfil privado.</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color:#ef4444">500</span></td>
+                                <td>Server Error</td>
+                                <td>Error del servidor o de Riot API.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
 
-            <section id="summary" class="doc-section">
-                <h2><i class="fa-solid fa-user-astronaut"></i> Resumen de Perfil</h2>
-                <p>Endpoint "Todo en Uno". Devuelve cuenta, rango, última partida e historial en una sola llamada.</p>
-
-                <div class="endpoint-block">
-                    <span class="method get">GET</span>
-                    <span class="url" id="url-summary">/api/valorant/summary/:region/:name/:tag</span>
-                </div>
-
-                <div class="json-block">{
-  <span class="json-key">"status"</span>: <span class="json-number">200</span>,
-  <span class="json-key">"data"</span>: {
-    <span class="json-key">"rank"</span>: {
-      <span class="json-key">/* Datos completos del endpoint /rank */</span>
-      <span class="json-key">"current_tier_patched"</span>: <span class="json-string">"Ascendant 2"</span>,
-      <span class="json-key">"elo"</span>: <span class="json-number">1650</span>,
-      ...
-    },
-    <span class="json-key">"match"</span>: {
-      <span class="json-key">/* Datos completos del endpoint /match/last */</span>
-      <span class="json-key">"metadata"</span>: { ... },
-      <span class="json-key">"players"</span>: { ... },
-      ...
-    },
-    <span class="json-key">"history"</span>: [
-      {
-        <span class="json-key">"match_id"</span>: <span class="json-string">"..."</span>,
-        <span class="json-key">"tier"</span>: <span class="json-string">"Gold 1"</span>,
-        <span class="json-key">"map"</span>: <span class="json-string">"Haven"</span>,
-        <span class="json-key">"elo"</span>: <span class="json-number">1235</span>,
-        <span class="json-key">"date"</span>: <span class="json-string">"..."</span>
-      },
-      ...
-    ]
-  }
-}</div>
-            </section>
-
-
-
-            <section id="errors" class="doc-section">
-                <h2><i class="fa-solid fa-triangle-exclamation"></i> Códigos de Error</h2>
-                <table class="doc-table">
-                    <thead>
-                        <tr>
-                            <th>Código</th>
-                            <th>Significado</th>
-                            <th>Descripción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span style="color:var(--warning-color)">400</span></td>
-                            <td>Bad Request</td>
-                            <td>Faltan parámetros o la región es inválida.</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color:#64748b">404</span></td>
-                            <td>Not Found</td>
-                            <td>El jugador no existe o perfil privado.</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color:#ef4444">500</span></td>
-                            <td>Server Error</td>
-                            <td>Error del servidor o de Riot API.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
-
-            <footer class="docs-footer">
-                <p>&copy; <span id="year"></span> LosPerris Valorant API. <span id="footer-info">Todos los derechos reservados.</span></p>
-                <p class="disclaimer" id="footer-disclaimer" style="margin: 10px auto; opacity: 0.6; font-size: 11px;"></p>
-            </footer>
-        </main>
+                <footer class="docs-footer">
+                    <p>&copy; <span id="year"></span> LosPerris Valorant API. <span id="footer-info">Todos los derechos reservados.</span></p>
+                    <p class="disclaimer" id="footer-disclaimer" style="margin: 10px auto; opacity: 0.6; font-size: 11px;"></p>
+                </footer>
+            </main>
+        </div>
     </div>
 
     <script>
