@@ -63,7 +63,7 @@ export const getSummary = async (req: Request, res: Response) => {
         };
 
         if (mmrData.status === 200) {
-            responseData.rank = formatService.formatRankData(accountData, mmrData);
+            responseData.rank = formatService.formatRankData(accountData, mmrData, name, tag);
         }
 
         if (matchesData.status === 200 && matchesData.data.length > 0) {

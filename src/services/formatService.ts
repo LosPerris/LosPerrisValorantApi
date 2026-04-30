@@ -14,12 +14,13 @@ import {
     MatchTextData
 } from '../types/valorant';
 
-export function formatRankData(accountData: ValorantApiResponse<ValorantAccount>, mmrData: ValorantApiResponse<ValorantMMR>): FormattedRankData {
+export function formatRankData(accountData: ValorantApiResponse<ValorantAccount>, mmrData: ValorantApiResponse<ValorantMMR>, fallbackName?: string, fallbackTag?: string): FormattedRankData {
     const currentData = mmrData.data.current_data;
+    const mmrAny = mmrData.data as any;
 
     return {
-        name: accountData.data.name,
-        tag: accountData.data.tag,
+        name: accountData.data.name || mmrAny.name || fallbackName || 'Unknown',
+        tag: accountData.data.tag || mmrAny.tag || fallbackTag || 'Unknown',
         puuid: accountData.data.puuid,
         region: accountData.data.region,
         rank: currentData.currenttierpatched,
