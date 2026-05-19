@@ -5,7 +5,7 @@ import { handleRouteError, sendResponse, setEdgeCache } from '../utils/helpers';
 import { FormattedMatchData } from '../types/valorant';
 
 export const getLastMatch = async (req: Request, res: Response) => {
-    const { region } = req.params;
+    const region = req.params.region as string;
     const { puuid } = req;
 
     if (!puuid) {
@@ -13,7 +13,7 @@ export const getLastMatch = async (req: Request, res: Response) => {
     }
 
     try {
-        setEdgeCache(res, 60);
+        setEdgeCache(res, 300);
         const [matchesData, mmrData] = await Promise.all([
             valorantService.getMatchesByPUUID(region, puuid, 'competitive', 1),
             valorantService.getMMRByPUUID(region, puuid)
@@ -32,7 +32,7 @@ export const getLastMatch = async (req: Request, res: Response) => {
 
             const mmrChange = (mmrData.status === 200) ? mmrData.data.current_data.mmr_change_to_last_game : 0;
 
-            sendResponse<FormattedMatchData, number>(req, res, formattedData, formatService.formatMatchText, mmrChange);
+            sendResponse<FormattedMatchData, number>(req, res, formattedData, formatService.formatMatchText, mmrChange, 300);
         } else {
             if (req.query.format === 'text') {
                 return res.send('No matches found');

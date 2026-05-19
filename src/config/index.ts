@@ -6,9 +6,9 @@ export const config = {
     henrikApiKey: process.env.HENRIK_API_KEY,
     cacheTtl: {
         account: 24 * 60 * 60 * 1000,
-        mmr: 60 * 1000,
-        matches: 120 * 1000,
-        history: 300 * 1000,
+        mmr: 5 * 60 * 1000,          // 5 minutos
+        matches: 5 * 60 * 1000,      // 5 minutos
+        history: 10 * 60 * 1000,     // 10 minutos
     },
     henrikBaseUrl: 'https://api.henrikdev.xyz/valorant',
 };

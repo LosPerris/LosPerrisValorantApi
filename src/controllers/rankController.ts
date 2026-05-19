@@ -5,11 +5,11 @@ import { handleRouteError, sendResponse, setEdgeCache } from '../utils/helpers';
 import { ValorantApiResponse, ValorantMMR } from '../types/valorant';
 
 export const getRank = async (req: Request, res: Response) => {
-    const { region } = req.params;
+    const region = req.params.region as string;
     const { accountData, puuid } = req;
 
-    // Cacheamos la respuesta en el borde por 1 minuto
-    setEdgeCache(res, 60);
+    // Cacheamos la respuesta en el borde por 5 minutos
+    setEdgeCache(res, 300);
 
     if (!accountData || !puuid) {
         return handleRouteError(req, res, { status: 404, message: 'Account not found' });
@@ -20,7 +20,7 @@ export const getRank = async (req: Request, res: Response) => {
 
         if (mmrData.status === 200) {
             const formattedData = formatService.formatRankData(accountData, mmrData);
-            sendResponse(req, res, formattedData, formatService.formatRankText);
+            sendResponse(req, res, formattedData, formatService.formatRankText, undefined, 300);
         } else {
             if (req.query.format === 'text') {
                 return res.send(`Error: ${mmrData.message || 'Could not fetch rank'}`);

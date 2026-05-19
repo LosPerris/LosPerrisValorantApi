@@ -14,11 +14,11 @@
     },
     "include": [
         "src/**/*",
-        "api/**/*",
-        "tests/**/*"
+        "api/**/*"
     ],
     "exclude": [
         "node_modules",
-        "public"
+        "public",
+        "tests/**/*"
     ]
 }

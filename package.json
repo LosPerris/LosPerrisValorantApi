@@ -46,10 +46,12 @@
     "lru-cache": "^10.4.3"
   },
   "devDependencies": {
+    "@jest/globals": "^30.4.1",
     "@types/compression": "^1.8.1",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/helmet": "^0.0.48",
+    "@types/jest": "^30.0.0",
     "@types/node": "^25.0.3",
     "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^8.56.1",

@@ -5,7 +5,7 @@ import { handleRouteError, setEdgeCache } from '../utils/helpers';
 import { ValorantApiResponse, ValorantMMRHistoryItem } from '../types/valorant';
 
 export const getHistory = async (req: Request, res: Response) => {
-    const { region } = req.params;
+    const region = req.params.region as string;
     const { puuid } = req;
 
     if (!puuid) {
@@ -13,7 +13,7 @@ export const getHistory = async (req: Request, res: Response) => {
     }
 
     try {
-        setEdgeCache(res, 300);
+        setEdgeCache(res, 600);
 
         const historyData: ValorantApiResponse<ValorantMMRHistoryItem[]> = await valorantService.getMMRHistoryByPUUID(region, puuid);
 

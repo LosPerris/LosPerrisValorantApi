@@ -14,10 +14,12 @@ import {
 } from '../types/valorant';
 
 export const getSummary = async (req: Request, res: Response) => {
-    const { region, name, tag } = req.params;
+    const region = req.params.region as string;
+    const name = req.params.name as string;
+    const tag = req.params.tag as string;
 
     try {
-        setEdgeCache(res, 60);
+        setEdgeCache(res, 300);
         const cachedPuuid = valorantService.getCachedPUUID(name, tag);
 
         let accountData: ValorantApiResponse<ValorantAccount>;

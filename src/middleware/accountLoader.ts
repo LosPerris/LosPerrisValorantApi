@@ -3,7 +3,8 @@ import * as valorantService from '../services/valorantService';
 import { handleRouteError, getErrorMsg } from '../utils/helpers';
 
 export async function withAccountData(req: Request, res: Response, next: NextFunction) {
-    const { name, tag } = req.params;
+    const name = req.params.name as string;
+    const tag = req.params.tag as string;
 
     try {
         const accountData = await valorantService.getPUUID(name, tag);

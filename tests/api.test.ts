@@ -36,6 +36,11 @@ jest.mock('../public/js/translations', () => ({
 
 import app from '../api/index';
 import axiosInstance from '../src/services/henrikClient';
+import cache from '../src/utils/cache';
+
+beforeEach(() => {
+    cache.clear();
+});
 
 const mockedAxios = axiosInstance as jest.Mocked<typeof axiosInstance>;
 
@@ -162,14 +167,14 @@ describe('GET /api/valorant/match/:region/:name/:tag', () => {
             .mockResolvedValueOnce({ data: makeAccount() })    // account
             .mockResolvedValueOnce({ data: makeMatch() })      // matches
             .mockResolvedValueOnce({ data: makeMmr() });       // mmr
-        const res = await request(app).get('/api/valorant/match/eu/TestPlayer/EUW');
+        const res = await request(app).get('/api/valorant/match/last/eu/TestPlayer/EUW');
         expect(res.status).toBe(200);
         expect(res.body.data.derived.map_name).toBe('Ascent');
         expect(res.body.data.derived.agent_name).toBe('Jett');
     });
 
     it('returns 400 for invalid region', async () => {
-        const res = await request(app).get('/api/valorant/match/invalid/TestPlayer/EUW');
+        const res = await request(app).get('/api/valorant/match/last/invalid/TestPlayer/EUW');
         expect(res.status).toBe(400);
     });
 
@@ -178,7 +183,7 @@ describe('GET /api/valorant/match/:region/:name/:tag', () => {
             .mockResolvedValueOnce({ data: makeAccount() })
             .mockResolvedValueOnce({ data: makeMatch() })
             .mockResolvedValueOnce({ data: makeMmr() });
-        const res = await request(app).get('/api/valorant/match/eu/TestPlayer/EUW?format=text&type=1');
+        const res = await request(app).get('/api/valorant/match/last/eu/TestPlayer/EUW?format=text&type=1');
         expect(res.status).toBe(200);
         expect(res.text).toContain('Ascent');
         expect(res.text).toContain('Jett');

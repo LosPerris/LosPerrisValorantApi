@@ -36,6 +36,9 @@ export function handleRouteError(req: Request, res: Response, error: RouteError)
     const status = error.status || 500;
     const lang = (req.query.lang as string) || 'en';
 
+    // Evitamos que Vercel guarde en caché respuestas de error
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+
     if (req.query.format === 'text') {
         return res.send(`Error: ${getErrorMsg(status, lang)}`);
     }
@@ -69,7 +72,7 @@ export function translateRank(rankName: string, lang: string): string {
 
 
 export function setEdgeCache(res: Response, seconds: number = 60): void {
-    res.setHeader('Cache-Control', `s-maxage=${seconds}, stale-while-revalidate=${Math.floor(seconds / 2)}`);
+    res.setHeader('Cache-Control', `s-maxage=${seconds}, stale-while-revalidate=${seconds}`);
 }
 
 export function sendResponse<T, TExtra = unknown>(
@@ -77,9 +80,10 @@ export function sendResponse<T, TExtra = unknown>(
     res: Response,
     data: T,
     textFormatter: ((data: T, lang: string, type: string, extraData?: TExtra) => string) | null,
-    extraData?: TExtra
+    extraData?: TExtra,
+    cacheSeconds: number = 300
 ): Response {
-    setEdgeCache(res, 60);
+    setEdgeCache(res, cacheSeconds);
 
     if (req.query.format === 'text') {
         const lang = (req.query.lang as string) || 'en';
