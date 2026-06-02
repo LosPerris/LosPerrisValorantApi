@@ -122,7 +122,14 @@ export default function App() {
       setSiteUrl(window.location.origin);
       const saved = localStorage.getItem('recentSearches');
       if (saved) {
-        try { setRecentSearches(JSON.parse(saved)); } catch (e) {}
+        try { 
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed) && parsed.every((s: any) => s && s.riotId && s.tag)) {
+                setRecentSearches(parsed);
+            } else {
+                localStorage.removeItem('recentSearches');
+            }
+        } catch (e) {}
       }
     }
   }, []);
@@ -148,7 +155,7 @@ export default function App() {
 
       const newSearch = { region: searchRegion, riotId: searchRiotId, tag: searchTag };
       setRecentSearches(prev => {
-        const filtered = prev.filter(s => s.riotId.toLowerCase() !== searchRiotId.toLowerCase() || s.tag.toLowerCase() !== searchTag.toLowerCase());
+        const filtered = prev.filter(s => s.riotId?.toLowerCase() !== searchRiotId.toLowerCase() || s.tag?.toLowerCase() !== searchTag.toLowerCase());
         const updated = [newSearch, ...filtered].slice(0, 5);
         localStorage.setItem('recentSearches', JSON.stringify(updated));
         return updated;
