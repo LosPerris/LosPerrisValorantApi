@@ -246,7 +246,6 @@ export default function App() {
     <div className="flex flex-col items-center p-[20px] md:p-[40px] min-h-screen w-full">
       <div className="w-full max-w-[800px] flex flex-col gap-[20px] relative z-10">
       
-      {/* Global Language Selector */}
       <div className="fixed top-[20px] right-[20px] md:right-[40px] flex bg-card-bg border border-card-border p-[4px] rounded-[8px] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] z-50">
         <button onClick={() => setLang('es')} className={`px-[12px] py-[6px] rounded-[6px] font-bold text-[0.8rem] transition-colors ${lang === 'es' ? 'bg-accent-color text-white' : 'text-text-muted hover:text-white'}`}>ES</button>
         <button onClick={() => setLang('en')} className={`px-[12px] py-[6px] rounded-[6px] font-bold text-[0.8rem] transition-colors ${lang === 'en' ? 'bg-accent-color text-white' : 'text-text-muted hover:text-white'}`}>EN</button>
@@ -266,7 +265,6 @@ export default function App() {
         <p className="text-[1.2rem] text-text-muted font-main">{t('subtitle')}</p>
       </header>
 
-      {/* Search Section */}
       <section className="bg-card-bg border border-card-border p-[30px] rounded-[12px] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)] backdrop-blur-[10px] transition-all duration-300 hover:-translate-y-[2px] hover:border-accent-color hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-2px_rgba(0,0,0,0.05),0_0_20px_-5px_rgba(255,70,85,0.4)]">
         <h3 className="font-header font-semibold text-[1.25rem] mb-[20px] pb-[15px] border-b border-card-border text-text-color tracking-[-0.5px] flex items-center gap-[10px]">
           {t('searchTitle')}
@@ -334,10 +332,8 @@ export default function App() {
         </form>
       </section>
 
-      {/* Results Section */}
       {hasSearched && playerData && (
         <div className="flex flex-col gap-5 animate-[fadeIn_0.5s_ease-out]">
-          {/* Rank Card */}
           {playerData.rank && (
           <section 
             className="bg-card-bg border border-card-border p-0 min-h-[200px] rounded-[12px] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] backdrop-blur-[10px] transition-all duration-300 relative overflow-hidden group hover:-translate-y-[2px] hover:border-accent-color hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_0_20px_-5px_rgba(255,70,85,0.4)]"
@@ -369,7 +365,6 @@ export default function App() {
           </section>
           )}
 
-          {/* Match Card */}
           {playerData.match && (
             <section 
                 className="bg-card-bg border border-card-border p-0 min-h-[120px] rounded-[12px] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] backdrop-blur-[10px] transition-all duration-300 relative overflow-hidden group hover:-translate-y-[2px] hover:border-accent-color hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_0_20px_-5px_rgba(255,70,85,0.4)]"
@@ -392,7 +387,6 @@ export default function App() {
             </section>
           )}
 
-          {/* Bot Config */}
           <section className="bg-card-bg border border-card-border p-[30px] rounded-[12px] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] backdrop-blur-[10px] transition-all duration-300 hover:-translate-y-[2px] hover:border-accent-color hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_0_20px_-5px_rgba(255,70,85,0.4)]">
             <h3 className="font-header font-semibold text-[1.25rem] mb-[20px] pb-[15px] border-b border-card-border text-text-color tracking-[-0.5px]">{t('botConfig')}</h3>
             <div className="flex gap-[10px] mb-[20px]">
@@ -476,7 +470,6 @@ export default function App() {
             </div>
           </section>
           
-          {/* Bot Commands */}
           <section className="bg-card-bg border border-card-border p-[30px] rounded-[12px] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] backdrop-blur-[10px] transition-all duration-300 hover:-translate-y-[2px] hover:border-accent-color hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_0_20px_-5px_rgba(255,70,85,0.4)]">
             <h3 className="font-header font-semibold text-[1.25rem] mb-[20px] pb-[15px] border-b border-card-border text-text-color tracking-[-0.5px]">{t('botCmds')}</h3>
             
@@ -555,7 +548,6 @@ export default function App() {
         </div>
       )}
 
-      {/* Docs Section */}
       <section className="bg-card-bg border border-card-border p-[30px] rounded-[12px] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] backdrop-blur-[10px] transition-all duration-300 hover:-translate-y-[2px] hover:border-accent-color animate-[fadeIn_0.5s_ease-out] mt-[10px]">
           <h3 className="font-header font-semibold text-[1.25rem] mb-[20px] pb-[15px] border-b border-card-border text-text-color tracking-[-0.5px]">{t('docsTitle')}</h3>
           <div className="bg-[rgba(0,0,0,0.3)] p-[20px] mb-[15px] border-l-[3px] border-accent-color flex flex-col gap-[8px]">
@@ -568,7 +560,6 @@ export default function App() {
           </div>
       </section>
 
-      {/* Footer */}
       <footer className="text-center mt-auto pt-[30px] w-full flex flex-col items-center gap-[15px] pb-[20px]">
         <div className="text-text-muted text-[0.9rem]">
           &copy; {new Date().getFullYear()} LosPerris • {t('footerBy')} <a href="https://github.com/Ponss17" target="_blank" className="text-accent-color no-underline font-semibold hover:text-white transition-colors">Ponss17</a> • {t('footerExt')} <a href="https://docs.henrikdev.xyz/" target="_blank" className="text-accent-color no-underline font-semibold hover:text-white transition-colors">HenrikDev API</a>

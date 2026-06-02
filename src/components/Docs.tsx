@@ -16,7 +16,6 @@ export default function Docs() {
 
   return (
     <div className="flex min-h-screen bg-bg-color text-text-color font-main bg-[radial-gradient(circle_at_50%_0%,rgba(255,70,85,0.05)_0%,transparent_50%)] bg-fixed">
-      {/* Mobile Menu Toggle */}
       <button 
         className="lg:hidden fixed top-5 right-5 z-[1000] bg-accent-color text-white border-none w-[45px] h-[45px] rounded-full cursor-pointer shadow-[0_4px_15px_rgba(255,70,85,0.4)] flex items-center justify-center text-[1.2rem]"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -24,7 +23,6 @@ export default function Docs() {
         <i className="fa-solid fa-bars"></i>
       </button>
 
-      {/* Sidebar */}
       <aside className={`fixed top-0 left-0 h-screen w-[280px] bg-[#0e0e11]/80 backdrop-blur-[12px] border-r border-card-border p-[30px_20px] flex flex-col z-[100] transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isSidebarOpen ? 'translate-x-0 shadow-[20px_0_50px_rgba(0,0,0,0.5)]' : '-translate-x-full lg:translate-x-0'}`}>
         <div className="flex items-center gap-[12px] mb-[40px]">
           <img src="/imgs/LosPerris-minimal.svg" alt="Logo" className="w-[32px] h-[32px]" />
@@ -64,7 +62,6 @@ export default function Docs() {
         </nav>
       </aside>
 
-      {/* Main Content */}
       <div className="lg:ml-[280px] w-full lg:w-[calc(100%-280px)] flex justify-center relative">
         <main className="w-full max-w-[1100px] p-[60px_20px] lg:p-[60px_40px] flex flex-col gap-[40px]">
           
