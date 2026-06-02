@@ -59,63 +59,6 @@
             ]
         }
     ],
-    "rewrites": [
-        {
-            "source": "/api/valorant/js/:path*",
-            "destination": "/js/:path*"
-        },
-        {
-            "source": "/api/valorant/css/:path*",
-            "destination": "/css/:path*"
-        },
-        {
-            "source": "/api/valorant/imgs/:path*",
-            "destination": "/imgs/:path*"
-        },
-        {
-            "source": "/api/valorant/components/:path*",
-            "destination": "/components/:path*"
-        },
-        {
-            "source": "/api/valorant/docs.html",
-            "destination": "/docs.html"
-        },
-        {
-            "source": "/api/valorant/overlay.html",
-            "destination": "/overlay.html"
-        },
-        {
-            "source": "/api/valorant/index.html",
-            "destination": "/index.html"
-        },
-        {
-            "source": "/product.html/riot.txt",
-            "destination": "/riot.txt"
-        },
-        {
-            "source": "/api/(.*)",
-            "destination": "/dist/api/index.js"
-        },
-        {
-            "source": "/rank/(.*)",
-            "destination": "/dist/api/index.js"
-        },
-        {
-            "source": "/match/(.*)",
-            "destination": "/dist/api/index.js"
-        },
-        {
-            "source": "/history/(.*)",
-            "destination": "/dist/api/index.js"
-        },
-        {
-            "source": "/summary/(.*)",
-            "destination": "/dist/api/index.js"
-        },
-        {
-            "source": "/preview/(.*)",
-            "destination": "/dist/api/index.js"
-        }
-    ],
+
     "cleanUrls": false
 }

@@ -1,9 +1,6 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
 export const config = {
     port: process.env.PORT || 3000,
-    henrikApiKey: process.env.HENRIK_API_KEY,
+    henrikApiKey: process.env.HENRIK_API_KEY || import.meta.env?.HENRIK_API_KEY,
     cacheTtl: {
         account: 24 * 60 * 60 * 1000,
         mmr: 5 * 60 * 1000,          // 5 minutos

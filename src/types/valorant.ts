@@ -22,6 +22,9 @@ export interface ValorantAccount {
 }
 
 export interface ValorantMMR {
+    // These top-level fields exist in the HenrikDev v2 MMR response
+    name?: string;
+    tag?: string;
     current_data: {
         currenttier: number;
         currenttierpatched: string;
@@ -143,6 +146,11 @@ export interface ValorantMatchMetadata {
     cluster: string;
 }
 
+export interface ValorantRound {
+    round_num: number;
+    player_stats: ValorantMatchPlayer[];
+}
+
 export interface ValorantMatch {
     metadata: ValorantMatchMetadata;
     players: {
@@ -179,20 +187,21 @@ export interface ValorantMMRHistoryItem {
     date_raw: number;
 }
 
-export interface RankTextData {
-    name: string;
-    tag: string;
-    rank: string;
-    ranking_in_tier: number;
-    elo: number;
-}
+// Formatted / derived types
 
-export interface FormattedRankData extends RankTextData {
+export interface FormattedRankData {
     puuid: string;
     region: string;
-    rank_image: string;
-    mmr_change: number;
+    account_level: number;
+    name: string;
+    tag: string;
     card: ValorantAccount['card'];
+    last_update: string;
+    current_tier_patched: string;
+    ranking_in_tier: number;
+    mmr_change_to_last_game: number;
+    elo: number;
+    rank_image: string;
 }
 
 export interface DerivedMatchData {
@@ -210,12 +219,7 @@ export interface MatchTextData {
     derived: DerivedMatchData;
 }
 
-export interface ValorantRound {
-    round_num: number;
-    player_stats: ValorantMatchPlayer[];
-}
-
-export interface FormattedMatchData extends ValorantMatch, MatchTextData { }
+export interface FormattedMatchData extends ValorantMatch, MatchTextData {}
 
 export interface FormattedHistoryMatch {
     date: string;
@@ -229,4 +233,19 @@ export interface SummaryResponse {
     rank: FormattedRankData | null;
     match: FormattedMatchData | null;
     history: FormattedHistoryMatch[] | null;
+}
+
+export interface TodaySummaryData {
+    matches_played: number;
+    wins: number;
+    losses: number;
+    draws: number;
+    rr_change: number;
+}
+
+export interface GeneralStatsData {
+    matches_analyzed: number;
+    winrate: number;
+    favorite_agent: string;
+    hs_percent: string;
 }

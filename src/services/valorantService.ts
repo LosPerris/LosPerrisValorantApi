@@ -6,7 +6,9 @@ import {
     ValorantApiResponse,
     ValorantMMR,
     ValorantMatch,
-    ValorantMMRHistoryItem
+    ValorantMMRHistoryItem,
+    TodaySummaryData,
+    GeneralStatsData
 } from '../types/valorant';
 
 export async function getAccount(name: string, tag: string): Promise<ValorantApiResponse<ValorantAccount>> {
@@ -50,3 +52,78 @@ export function getCachedPUUID(name: string, tag: string): string | null {
     return cache.get(cacheKey) as string | null;
 }
 
+export async function getTodaySummary(region: string, puuid: string): Promise<TodaySummaryData | null> {
+    const historyRes = await getMMRHistoryByPUUID(region, puuid);
+    if (historyRes.status !== 200 || !historyRes.data) return null;
+
+    const nowSecs = Math.floor(Date.now() / 1000);
+    const ONE_DAY = 86400; // 24 hours
+
+    const todayMatches = historyRes.data.filter(m => (nowSecs - m.date_raw) <= ONE_DAY);
+
+    let wins = 0;
+    let losses = 0;
+    let draws = 0;
+    let rr_change = 0;
+
+    for (const match of todayMatches) {
+        if (match.mmr_change_to_last_game > 0) wins++;
+        else if (match.mmr_change_to_last_game < 0) losses++;
+        else draws++;
+        
+        rr_change += match.mmr_change_to_last_game;
+    }
+
+    return {
+        matches_played: todayMatches.length,
+        wins,
+        losses,
+        draws,
+        rr_change
+    };
+}
+
+export async function getGeneralStats(region: string, puuid: string): Promise<GeneralStatsData | null> {
+    const matchesRes = await getMatchesByPUUID(region, puuid, 'competitive', 10);
+    if (matchesRes.status !== 200 || !matchesRes.data || matchesRes.data.length === 0) return null;
+
+    let totalWins = 0;
+    let totalHeadshots = 0;
+    let totalShots = 0;
+    const agentCounts: Record<string, number> = {};
+
+    for (const match of matchesRes.data) {
+        const stats = match.players.all_players.find((p) => p.puuid === puuid);
+        if (!stats) continue;
+
+        const isWin = match.teams.red.has_won ? (stats.team === 'Red') : (stats.team === 'Blue');
+        if (isWin) totalWins++;
+
+        const matchShots = (stats.stats.headshots || 0) + (stats.stats.bodyshots || 0) + (stats.stats.legshots || 0);
+        totalHeadshots += (stats.stats.headshots || 0);
+        totalShots += matchShots;
+
+        const agentName = stats.character;
+        agentCounts[agentName] = (agentCounts[agentName] || 0) + 1;
+    }
+
+    const matchesAnalyzed = matchesRes.data.length;
+    const winrate = matchesAnalyzed > 0 ? (totalWins / matchesAnalyzed) * 100 : 0;
+    const hsPercent = totalShots > 0 ? ((totalHeadshots / totalShots) * 100).toFixed(1) : "0.0";
+
+    let favoriteAgent = "Unknown";
+    let maxCount = 0;
+    for (const [agent, count] of Object.entries(agentCounts)) {
+        if (count > maxCount) {
+            maxCount = count;
+            favoriteAgent = agent;
+        }
+    }
+
+    return {
+        matches_analyzed: matchesAnalyzed,
+        winrate: Math.round(winrate),
+        favorite_agent: favoriteAgent,
+        hs_percent: hsPercent
+    };
+}
