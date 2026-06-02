@@ -248,7 +248,7 @@ export default function App() {
       <header className="text-center mb-[30px] flex flex-col items-center gap-[10px] mt-[20px]">
         <div className="flex items-center justify-center gap-[15px] mb-[5px]">
           <img 
-            src="/imgs/LosPerris-minimal.svg" 
+            src="/api/valorant/imgs/LosPerris-minimal.svg" 
             alt="LosPerris Logo" 
             className="w-[75px] h-[75px] rounded-[60px] object-contain drop-shadow-[0_0_15px_rgba(255,70,85,0.4)] transition-all duration-300 hover:scale-105 hover:drop-shadow-[0_0_15px_#ff4655] cursor-pointer" 
           />
@@ -292,7 +292,7 @@ export default function App() {
           
           <button disabled={isLoading} type="submit" className={`w-full bg-accent-color text-white border-none font-main text-[1rem] cursor-pointer transition-all duration-200 mt-[10px] rounded-[8px] font-semibold shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)] flex items-center justify-center hover:bg-[#e03e4b] hover:-translate-y-[1px] hover:shadow-[0_10px_15px_-3px_rgba(255,70,85,0.2),0_4px_6px_-2px_rgba(0,0,0,0.05)] disabled:cursor-not-allowed ${isLoading ? 'p-[9px] opacity-90' : 'p-[14px]'}`}>
             {isLoading ? (
-              <img src="/imgs/buscando_jugador.svg" alt="Buscando..." className="h-[30px] w-auto brightness-0 invert" />
+              <img src="/api/valorant/imgs/buscando_jugador.svg" alt="Buscando..." className="h-[30px] w-auto brightness-0 invert" />
             ) : (
               t('searchBtn')
             )}
