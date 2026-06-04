@@ -8,6 +8,9 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
+  build: {
+    assetsPrefix: 'https://los-perris-valorant-api.vercel.app'
+  },
   output: 'server',
   adapter: vercel()
 });
