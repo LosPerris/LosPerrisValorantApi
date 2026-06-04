@@ -8,9 +8,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
-  build: {
-    assetsPrefix: '/api/valorant'
-  },
   output: 'server',
   adapter: vercel()
 });
