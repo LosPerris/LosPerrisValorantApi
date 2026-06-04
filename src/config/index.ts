@@ -1,11 +1,11 @@
 export const config = {
-    port: process.env.PORT || 3000,
-    henrikApiKey: process.env.HENRIK_API_KEY || import.meta.env?.HENRIK_API_KEY,
+    henrikApiKey: process.env.HENRIK_API_KEY,
+    // TTLs en segundos (compatible directo con Redis/Vercel KV)
     cacheTtl: {
-        account: 24 * 60 * 60 * 1000,
-        mmr: 5 * 60 * 1000,          // 5 minutos
-        matches: 5 * 60 * 1000,      // 5 minutos
-        history: 10 * 60 * 1000,     // 10 minutos
+        account:  24 * 60 * 60, // 24 horas
+        mmr:       5 * 60,      // 5 minutos
+        matches:   5 * 60,      // 5 minutos
+        history:  10 * 60,      // 10 minutos
     },
     henrikBaseUrl: 'https://api.henrikdev.xyz/valorant',
 };

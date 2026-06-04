@@ -7,3 +7,4 @@ coverage/
 visible
 dist/
 dist/*
+package-lock.json

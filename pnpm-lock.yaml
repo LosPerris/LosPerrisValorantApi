@@ -13,10 +13,10 @@ importers:
         version: 5.0.6(@types/node@25.8.0)(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(jiti@2.7.0)(lightningcss@1.32.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(yaml@2.9.0)
       '@astrojs/tailwind':
         specifier: ^6.0.2
-        version: 6.0.2(astro@6.4.2(@types/node@25.8.0)(@vercel/functions@3.6.1)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.60.4)(yaml@2.9.0))(tailwindcss@4.3.0)
+        version: 6.0.2(astro@6.4.2(@types/node@25.8.0)(@upstash/redis@1.38.0)(@vercel/functions@3.6.1)(@vercel/kv@3.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.60.4)(yaml@2.9.0))(tailwindcss@4.3.0)
       '@astrojs/vercel':
         specifier: ^10.0.8
-        version: 10.0.8(astro@6.4.2(@types/node@25.8.0)(@vercel/functions@3.6.1)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.60.4)(yaml@2.9.0))(react@19.2.6)(rollup@4.60.4)
+        version: 10.0.8(astro@6.4.2(@types/node@25.8.0)(@upstash/redis@1.38.0)(@vercel/functions@3.6.1)(@vercel/kv@3.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.60.4)(yaml@2.9.0))(react@19.2.6)(rollup@4.60.4)
       '@tailwindcss/vite':
         specifier: ^4.3.0
         version: 4.3.0(vite@7.3.3(@types/node@25.8.0)(jiti@2.7.0)(lightningcss@1.32.0)(yaml@2.9.0))
@@ -26,18 +26,18 @@ importers:
       '@types/react-dom':
         specifier: ^19.2.3
         version: 19.2.3(@types/react@19.2.15)
+      '@vercel/kv':
+        specifier: ^3.0.0
+        version: 3.0.0
       astro:
         specifier: ^6.4.2
-        version: 6.4.2(@types/node@25.8.0)(@vercel/functions@3.6.1)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.60.4)(yaml@2.9.0)
+        version: 6.4.2(@types/node@25.8.0)(@upstash/redis@1.38.0)(@vercel/functions@3.6.1)(@vercel/kv@3.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.60.4)(yaml@2.9.0)
       axios:
         specifier: ^1.13.2
         version: 1.16.1
       dotenv:
         specifier: ^17.2.3
         version: 17.4.2
-      lru-cache:
-        specifier: ^10.4.3
-        version: 10.4.3
       react:
         specifier: ^19.2.6
         version: 19.2.6
@@ -1411,6 +1411,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@upstash/redis@1.38.0':
+    resolution: {integrity: sha512-wu+dZBptlLy0+MCUEoHmzrY/TnmgDey3+c7EbIGwrLqAvkP8yi5MWZHYGIFtAygmL4Bkz2TdFu+eU0vFPncIcg==}
+
   '@vercel/analytics@1.6.1':
     resolution: {integrity: sha512-oH9He/bEM+6oKlv3chWuOOcp8Y6fo6/PSro8hEkgCW3pu9/OiCXiUpRUogDh3Fs3LH2sosDrx8CxeOLBEE+afg==}
     peerDependencies:
@@ -1445,6 +1448,11 @@ packages:
     peerDependenciesMeta:
       '@aws-sdk/credential-provider-web-identity':
         optional: true
+
+  '@vercel/kv@3.0.0':
+    resolution: {integrity: sha512-pKT8fRnfyYk2MgvyB6fn6ipJPCdfZwiKDdw7vB+HL50rjboEBHDVBEcnwfkEpVSp2AjNtoaOUH7zG+bVC/rvSg==}
+    engines: {node: '>=14.6'}
+    deprecated: 'Vercel KV is deprecated. If you had an existing KV store, it should have moved to Upstash Redis which you will see under Vercel Integrations. For new projects, install a Redis integration from Vercel Marketplace: https://vercel.com/marketplace?category=storage&search=redis'
 
   '@vercel/nft@1.10.2':
     resolution: {integrity: sha512-w+WyX5Ulmj4dtTZrxaulqrjaLZHSbnPzx75SJsTNYmotKsqn1JlLnDJa+lz5hn90HJofhl/2MAtw0mCrgM3qYw==}
@@ -4010,9 +4018,9 @@ snapshots:
       - tsx
       - yaml
 
-  '@astrojs/tailwind@6.0.2(astro@6.4.2(@types/node@25.8.0)(@vercel/functions@3.6.1)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.60.4)(yaml@2.9.0))(tailwindcss@4.3.0)':
+  '@astrojs/tailwind@6.0.2(astro@6.4.2(@types/node@25.8.0)(@upstash/redis@1.38.0)(@vercel/functions@3.6.1)(@vercel/kv@3.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.60.4)(yaml@2.9.0))(tailwindcss@4.3.0)':
     dependencies:
-      astro: 6.4.2(@types/node@25.8.0)(@vercel/functions@3.6.1)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.60.4)(yaml@2.9.0)
+      astro: 6.4.2(@types/node@25.8.0)(@upstash/redis@1.38.0)(@vercel/functions@3.6.1)(@vercel/kv@3.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.60.4)(yaml@2.9.0)
       autoprefixer: 10.5.0(postcss@8.5.15)
       postcss: 8.5.15
       postcss-load-config: 4.0.2(postcss@8.5.15)
@@ -4028,14 +4036,14 @@ snapshots:
       is-wsl: 3.1.1
       which-pm-runs: 1.1.0
 
-  '@astrojs/vercel@10.0.8(astro@6.4.2(@types/node@25.8.0)(@vercel/functions@3.6.1)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.60.4)(yaml@2.9.0))(react@19.2.6)(rollup@4.60.4)':
+  '@astrojs/vercel@10.0.8(astro@6.4.2(@types/node@25.8.0)(@upstash/redis@1.38.0)(@vercel/functions@3.6.1)(@vercel/kv@3.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.60.4)(yaml@2.9.0))(react@19.2.6)(rollup@4.60.4)':
     dependencies:
       '@astrojs/internal-helpers': 0.10.0
       '@vercel/analytics': 1.6.1(react@19.2.6)
       '@vercel/functions': 3.6.1
       '@vercel/nft': 1.10.2(rollup@4.60.4)
       '@vercel/routing-utils': 5.3.3
-      astro: 6.4.2(@types/node@25.8.0)(@vercel/functions@3.6.1)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.60.4)(yaml@2.9.0)
+      astro: 6.4.2(@types/node@25.8.0)(@upstash/redis@1.38.0)(@vercel/functions@3.6.1)(@vercel/kv@3.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.60.4)(yaml@2.9.0)
       esbuild: 0.27.7
       tinyglobby: 0.2.16
     transitivePeerDependencies:
@@ -5245,6 +5253,10 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.11.1':
     optional: true
 
+  '@upstash/redis@1.38.0':
+    dependencies:
+      uncrypto: 0.1.3
+
   '@vercel/analytics@1.6.1(react@19.2.6)':
     optionalDependencies:
       react: 19.2.6
@@ -5252,6 +5264,10 @@ snapshots:
   '@vercel/functions@3.6.1':
     dependencies:
       '@vercel/oidc': 3.5.0
+
+  '@vercel/kv@3.0.0':
+    dependencies:
+      '@upstash/redis': 1.38.0
 
   '@vercel/nft@1.10.2(rollup@4.60.4)':
     dependencies:
@@ -5418,7 +5434,7 @@ snapshots:
 
   asap@2.0.6: {}
 
-  astro@6.4.2(@types/node@25.8.0)(@vercel/functions@3.6.1)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.60.4)(yaml@2.9.0):
+  astro@6.4.2(@types/node@25.8.0)(@upstash/redis@1.38.0)(@vercel/functions@3.6.1)(@vercel/kv@3.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.60.4)(yaml@2.9.0):
     dependencies:
       '@astrojs/compiler': 4.0.0
       '@astrojs/internal-helpers': 0.10.0
@@ -5468,7 +5484,7 @@ snapshots:
       ultrahtml: 1.6.0
       unifont: 0.7.4
       unist-util-visit: 5.1.0
-      unstorage: 1.17.5(@vercel/functions@3.6.1)
+      unstorage: 1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.1)(@vercel/kv@3.0.0)
       vfile: 6.0.3
       vite: 7.3.3(@types/node@25.8.0)(jiti@2.7.0)(lightningcss@1.32.0)(yaml@2.9.0)
       vitefu: 1.1.3(vite@7.3.3(@types/node@25.8.0)(jiti@2.7.0)(lightningcss@1.32.0)(yaml@2.9.0))
@@ -7982,7 +7998,7 @@ snapshots:
       '@unrs/resolver-binding-win32-ia32-msvc': 1.11.1
       '@unrs/resolver-binding-win32-x64-msvc': 1.11.1
 
-  unstorage@1.17.5(@vercel/functions@3.6.1):
+  unstorage@1.17.5(@upstash/redis@1.38.0)(@vercel/functions@3.6.1)(@vercel/kv@3.0.0):
     dependencies:
       anymatch: 3.1.3
       chokidar: 5.0.0
@@ -7993,7 +8009,9 @@ snapshots:
       ofetch: 1.5.1
       ufo: 1.6.4
     optionalDependencies:
+      '@upstash/redis': 1.38.0
       '@vercel/functions': 3.6.1
+      '@vercel/kv': 3.0.0
 
   update-browserslist-db@1.2.3(browserslist@4.28.2):
     dependencies:

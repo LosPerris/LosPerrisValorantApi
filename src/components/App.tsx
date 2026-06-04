@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { translateRank } from '../utils/helpers';
+import type { SummaryResponse } from '../types/valorant';
 
 const translations: Record<string, Record<string, string>> = {
   es: {
@@ -101,7 +102,7 @@ export default function App() {
   const [configMode, setConfigMode] = useState('rank');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [playerData, setPlayerData] = useState<any>(null);
+  const [playerData, setPlayerData] = useState<SummaryResponse | null>(null);
   
   const [region, setRegion] = useState('na');
   const [riotId, setRiotId] = useState('');
@@ -129,7 +130,10 @@ export default function App() {
             } else {
                 localStorage.removeItem('recentSearches');
             }
-        } catch (e) {}
+        } catch (e) {
+            // JSON corrupto en localStorage — limpiar para evitar problemas persistentes
+            localStorage.removeItem('recentSearches');
+        }
       }
     }
   }, []);

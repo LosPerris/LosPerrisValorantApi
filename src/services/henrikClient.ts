@@ -10,9 +10,9 @@ function handleApiError(status: number, data: unknown): never {
 export async function fetchWithCache<T>(
     key: string,
     endpoint: string,
-    ttl: number = 60000
+    ttl: number = 300 // 5 minutos por defecto (en segundos)
 ): Promise<ValorantApiResponse<T>> {
-    const cachedData = cache.get(key) as ValorantApiResponse<T> | undefined;
+    const cachedData = await cache.get<ValorantApiResponse<T>>(key);
     if (cachedData) return cachedData;
 
     try {
@@ -30,7 +30,7 @@ export async function fetchWithCache<T>(
         }
 
         if (data && data.status === 200) {
-            cache.set(key, data, { ttl });
+            await cache.set(key, data, { ttl });
         }
         return data;
     } catch (error: any) {

@@ -29,7 +29,7 @@ export async function getMMRHistoryByPUUID(region: string, puuid: string): Promi
 
 export async function getPUUID(name: string, tag: string): Promise<ValorantApiResponse<ValorantAccount>> {
     const cacheKey = `account_obj:${name.toLowerCase()}:${tag.toLowerCase()}`;
-    const cachedAccount = cache.get(cacheKey) as ValorantApiResponse<ValorantAccount> | undefined;
+    const cachedAccount = await cache.get<ValorantApiResponse<ValorantAccount>>(cacheKey);
 
     if (cachedAccount) {
         return cachedAccount;
@@ -38,18 +38,18 @@ export async function getPUUID(name: string, tag: string): Promise<ValorantApiRe
     const accountData = await getAccount(name, tag);
     if (accountData.status === 200) {
         // Guardamos el perfil completo por 1 hora para evitar re-consultas de perfil
-        cache.set(cacheKey, accountData, { ttl: 60 * 60 * 1000 });
+        await cache.set(cacheKey, accountData, { ttl: 60 * 60 });
 
         // También guardamos el PUUID por separado (opcional por compatibilidad)
         const puuidKey = `puuid:${name.toLowerCase()}:${tag.toLowerCase()}`;
-        cache.set(puuidKey, accountData.data.puuid, { ttl: 24 * 60 * 60 * 1000 });
+        await cache.set(puuidKey, accountData.data.puuid, { ttl: 24 * 60 * 60 });
     }
     return accountData;
 }
 
-export function getCachedPUUID(name: string, tag: string): string | null {
+export async function getCachedPUUID(name: string, tag: string): Promise<string | null> {
     const cacheKey = `puuid:${name.toLowerCase()}:${tag.toLowerCase()}`;
-    return cache.get(cacheKey) as string | null;
+    return await cache.get<string>(cacheKey);
 }
 
 export async function getTodaySummary(region: string, puuid: string): Promise<TodaySummaryData | null> {

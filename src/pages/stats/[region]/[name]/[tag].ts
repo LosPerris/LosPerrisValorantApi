@@ -1,21 +1,15 @@
 import type { APIRoute } from 'astro';
 import * as valorantService from '../../../../services/valorantService';
 import * as formatService from '../../../../services/formatService';
-
-const JSON_HEADERS = { 'Content-Type': 'application/json' };
-const CACHE_HEADERS = { 'Content-Type': 'application/json', 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600' };
-const TEXT_HEADERS = { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600' };
-
-function errorResponse(status: number, message: string): Response {
-    return new Response(JSON.stringify({ status, error: message }), { status, headers: JSON_HEADERS });
-}
+import { errorResponse, validateRouteParams, resolvePUUID, CACHE_HEADERS, TEXT_HEADERS } from '../../../../utils/apiHelpers';
 
 export const GET: APIRoute = async ({ params, request }) => {
     const region = params.region as string;
     const name = params.name as string;
     const tag = params.tag as string;
 
-    if (!region || !name || !tag) return errorResponse(400, 'Missing parameters');
+    const paramError = validateRouteParams(region, name, tag);
+    if (paramError) return paramError;
 
     const url = new URL(request.url);
     const format = url.searchParams.get('format');
@@ -23,14 +17,8 @@ export const GET: APIRoute = async ({ params, request }) => {
     const type = url.searchParams.get('type') || '1';
 
     try {
-        // Resolve PUUID through the service (handles caching internally)
-        let puuid = valorantService.getCachedPUUID(name, tag);
-        if (!puuid) {
-            const accountRes = await valorantService.getPUUID(name, tag);
-            if (accountRes.status !== 200) return errorResponse(accountRes.status, accountRes.message || 'Player not found');
-            puuid = accountRes.data?.puuid;
-        }
-        if (!puuid) return errorResponse(404, 'Player not found');
+        const { puuid, error } = await resolvePUUID(name, tag);
+        if (error) return error;
 
         const statsData = await valorantService.getGeneralStats(region, puuid);
         if (!statsData) return errorResponse(404, 'No match data available');
