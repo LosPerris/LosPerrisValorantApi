@@ -56,7 +56,7 @@ export default function Docs() {
             </a>
           </div>
 
-          <a href="/" className="mt-auto border border-card-border bg-card-bg justify-center flex items-center gap-[12px] p-[10px_15px] no-underline text-text-muted rounded-[8px] text-[0.95rem] font-medium transition-all hover:bg-white/5 hover:text-text-color group">
+          <a href="./" className="mt-auto border border-card-border bg-card-bg justify-center flex items-center gap-[12px] p-[10px_15px] no-underline text-text-muted rounded-[8px] text-[0.95rem] font-medium transition-all hover:bg-white/5 hover:text-text-color group">
             <i className="fa-solid fa-arrow-left text-[1.1rem] w-[20px] text-center opacity-70 group-hover:opacity-100 group-hover:text-accent-color transition-opacity"></i> Volver al Panel
           </a>
         </nav>
