@@ -558,7 +558,7 @@ export default function App() {
               <p className="text-text-muted text-[0.9rem]">{t('docsDesc')}</p>
           </div>
           <div className="text-center text-text-muted italic mt-[20px]">
-              <a href="/docs" className="bg-accent-color text-white no-underline py-[10px] px-[20px] inline-block rounded-[8px] font-semibold transition-all hover:bg-[#e03e4b] hover:-translate-y-[1px] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] not-italic">
+              <a href="/api/valorant/docs" className="bg-accent-color text-white no-underline py-[10px] px-[20px] inline-block rounded-[8px] font-semibold transition-all hover:bg-[#e03e4b] hover:-translate-y-[1px] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] not-italic">
                   {t('docsBtn')}
               </a>
           </div>

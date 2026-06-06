@@ -1,8 +1,8 @@
 import type { APIRoute } from 'astro';
-import * as valorantService from '../../../../services/valorantService';
-import * as formatService from '../../../../services/formatService';
-import { errorResponse, validateRouteParams, resolvePUUID, CACHE_HEADERS } from '../../../../utils/apiHelpers';
-import { SummaryResponse } from '../../../../types/valorant';
+import * as valorantService from '../../../../../../services/valorantService';
+import * as formatService from '../../../../../../services/formatService';
+import { errorResponse, validateRouteParams, resolvePUUID, CACHE_HEADERS } from '../../../../../../utils/apiHelpers';
+import { SummaryResponse } from '../../../../../../types/valorant';
 
 export const GET: APIRoute = async ({ params }) => {
     const region = params.region as string;

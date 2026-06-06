@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
-import * as valorantService from '../../../../services/valorantService';
-import * as formatService from '../../../../services/formatService';
-import { errorResponse, validateRouteParams, resolvePUUID, CACHE_HEADERS, TEXT_HEADERS } from '../../../../utils/apiHelpers';
+import * as valorantService from '../../../../../../services/valorantService';
+import * as formatService from '../../../../../../services/formatService';
+import { errorResponse, validateRouteParams, resolvePUUID, CACHE_HEADERS, TEXT_HEADERS } from '../../../../../../utils/apiHelpers';
 
 export const GET: APIRoute = async ({ params, request }) => {
     const region = params.region as string;
@@ -20,14 +20,14 @@ export const GET: APIRoute = async ({ params, request }) => {
         const { puuid, error } = await resolvePUUID(name, tag);
         if (error) return error;
 
-        const todayData = await valorantService.getTodaySummary(region, puuid);
-        if (!todayData) return errorResponse(404, 'No match history available');
+        const statsData = await valorantService.getGeneralStats(region, puuid);
+        if (!statsData) return errorResponse(404, 'No match data available');
 
         if (format === 'text') {
-            return new Response(formatService.formatTodayText(todayData, lang, name, type), { status: 200, headers: TEXT_HEADERS });
+            return new Response(formatService.formatStatsText(statsData, lang, name, type), { status: 200, headers: TEXT_HEADERS });
         }
 
-        return new Response(JSON.stringify({ status: 200, data: todayData }), { status: 200, headers: CACHE_HEADERS });
+        return new Response(JSON.stringify({ status: 200, data: statsData }), { status: 200, headers: CACHE_HEADERS });
 
     } catch (error: unknown) {
         const e = error as { status?: number; message?: string };
