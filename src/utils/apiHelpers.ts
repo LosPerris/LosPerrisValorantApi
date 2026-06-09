@@ -4,7 +4,7 @@ import * as valorantService from '../services/valorantService';
 export const JSON_HEADERS = { 'Content-Type': 'application/json' };
 export const CACHE_HEADERS = {
     'Content-Type': 'application/json',
-    'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600'
+    'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400'
 };
 export const TEXT_HEADERS = {
     'Content-Type': 'text/plain; charset=utf-8',
@@ -13,6 +13,16 @@ export const TEXT_HEADERS = {
 
 // Regiones válidas de Valorant
 const VALID_REGIONS = new Set(['eu', 'na', 'ap', 'kr', 'latam', 'br']);
+
+// Rate Limiter simple (en memoria)
+const rateLimit = new Map<string, number>();
+export function checkRateLimit(key: string): boolean {
+    const now = Date.now();
+    const last = rateLimit.get(key) || 0;
+    if (now - last < 1000) return false;
+    rateLimit.set(key, now);
+    return true;
+}
 
 // ─── Respuesta de error estandarizada ───────────────────────────────────────
 export function errorResponse(status: number, message: string): Response {
@@ -40,17 +50,17 @@ export function validateRouteParams(
 export async function resolvePUUID(
     name: string,
     tag: string
-): Promise<{ puuid: string; error?: never } | { puuid?: never; error: Response }> {
-    let puuid = await valorantService.getCachedPUUID(name, tag);
+): Promise<{ puuid: string; accountData: any; error?: never } | { puuid?: never; accountData?: never; error: Response }> {
+    let accountData = await valorantService.getCachedAccount(name, tag);
 
-    if (!puuid) {
+    if (!accountData) {
         const accountRes = await valorantService.getPUUID(name, tag);
         if (accountRes.status !== 200) {
             return { error: errorResponse(accountRes.status, accountRes.message || 'Player not found') };
         }
-        puuid = accountRes.data?.puuid;
+        accountData = accountRes.data;
     }
 
-    if (!puuid) return { error: errorResponse(404, 'Player not found') };
-    return { puuid };
+    if (!accountData || !accountData.puuid) return { error: errorResponse(404, 'Player not found') };
+    return { puuid: accountData.puuid, accountData };
 }

@@ -17,8 +17,9 @@ export const GET: APIRoute = async ({ params, request }) => {
     const type = url.searchParams.get('type') || '1';
 
     try {
-        const { puuid, error } = await resolvePUUID(name, tag);
-        if (error) return error;
+        const resolved = await resolvePUUID(name, tag);
+        if (resolved.error) return resolved.error;
+        const { puuid } = resolved;
 
         const statsData = await valorantService.getGeneralStats(region, puuid);
         if (!statsData) return errorResponse(404, 'No match data available');

@@ -28,21 +28,20 @@ export async function getMMRHistoryByPUUID(region: string, puuid: string): Promi
 }
 
 export async function getPUUID(name: string, tag: string): Promise<ValorantApiResponse<ValorantAccount>> {
-    const cacheKey = `account_obj:${name.toLowerCase()}:${tag.toLowerCase()}`;
-    const cachedAccount = await cache.get<ValorantApiResponse<ValorantAccount>>(cacheKey);
-
-    if (cachedAccount) {
-        return cachedAccount;
+    // Intentar obtener desde caché antes de llamar a la API externa
+    const accountDataKey = `account_data:${name.toLowerCase()}:${tag.toLowerCase()}`;
+    const cachedData = await cache.get<ValorantAccount>(accountDataKey);
+    if (cachedData) {
+        return { status: 200, data: cachedData } as ValorantApiResponse<ValorantAccount>;
     }
 
+    // fetchWithCache ya cachea bajo 'account:name:tag' (24h) — aquí solo hacemos fetch
     const accountData = await getAccount(name, tag);
     if (accountData.status === 200) {
-        // Guardamos el perfil completo por 1 hora para evitar re-consultas de perfil
-        await cache.set(cacheKey, accountData, { ttl: 60 * 60 });
-
-        // También guardamos el PUUID por separado (opcional por compatibilidad)
-        const puuidKey = `puuid:${name.toLowerCase()}:${tag.toLowerCase()}`;
-        await cache.set(puuidKey, accountData.data.puuid, { ttl: 24 * 60 * 60 });
+        // account_data: usado por getCachedAccount → resolvePUUID (1h)
+        await cache.set(accountDataKey, accountData.data, { ttl: 60 * 60 });
+        // puuid: caché ligero solo del ID (24h, para compatibilidad con getCachedPUUID)
+        await cache.set(`puuid:${name.toLowerCase()}:${tag.toLowerCase()}`, accountData.data.puuid, { ttl: 24 * 60 * 60 });
     }
     return accountData;
 }
@@ -50,6 +49,13 @@ export async function getPUUID(name: string, tag: string): Promise<ValorantApiRe
 export async function getCachedPUUID(name: string, tag: string): Promise<string | null> {
     const cacheKey = `puuid:${name.toLowerCase()}:${tag.toLowerCase()}`;
     return await cache.get<string>(cacheKey);
+}
+
+// Retorna el objeto ValorantAccount completo desde caché (sin hacer fetch).
+// Usado por resolvePUUID para evitar double-fetch en los endpoints.
+export async function getCachedAccount(name: string, tag: string): Promise<ValorantAccount | null> {
+    const cacheKey = `account_data:${name.toLowerCase()}:${tag.toLowerCase()}`;
+    return await cache.get<ValorantAccount>(cacheKey);
 }
 
 export async function getTodaySummary(region: string, puuid: string): Promise<TodaySummaryData | null> {

@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import * as valorantService from '../../../../../../services/valorantService';
 import * as formatService from '../../../../../../services/formatService';
 import { errorResponse, validateRouteParams, resolvePUUID, CACHE_HEADERS, TEXT_HEADERS } from '../../../../../../utils/apiHelpers';
+import type { ValorantApiResponse, ValorantAccount } from '../../../../../../types/valorant';
 
 export const GET: APIRoute = async ({ params, request }) => {
     const region = params.region as string;
@@ -17,18 +18,20 @@ export const GET: APIRoute = async ({ params, request }) => {
     const type = url.searchParams.get('type') || '1';
 
     try {
-        const { puuid, error } = await resolvePUUID(name, tag);
-        if (error) return error;
+        const resolved = await resolvePUUID(name, tag);
+        if (resolved.error) return resolved.error;
 
-        const [accountData, mmrData] = await Promise.all([
-            valorantService.getAccount(name, tag),
-            valorantService.getMMRByPUUID(region, puuid)
-        ]);
+        const { puuid, accountData } = resolved;
 
-        if (accountData.status !== 200) return errorResponse(accountData.status, accountData.message || 'Account error');
+        // accountData viene siempre de resolvePUUID cuando no hay error
+        const accountRes = { status: 200, data: accountData } as ValorantApiResponse<ValorantAccount>;
+
+        // Solo fetch de MMR — account ya resuelto sin doble-fetch
+        const mmrData = await valorantService.getMMRByPUUID(region, puuid);
+
         if (mmrData.status !== 200) return errorResponse(mmrData.status, mmrData.message || 'MMR data unavailable');
 
-        const rankData = formatService.formatRankData(accountData, mmrData, name, tag);
+        const rankData = formatService.formatRankData(accountRes, mmrData, name, tag);
 
         if (format === 'text') {
             return new Response(formatService.formatRankText(rankData, lang, type), { status: 200, headers: TEXT_HEADERS });
