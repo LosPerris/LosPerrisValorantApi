@@ -1,11 +1,6 @@
 {
     "version": 2,
     "framework": "astro",
-    "functions": {
-        "src/pages/api/**/*.ts": {
-            "maxDuration": 10
-        }
-    },
     "headers": [
         {
             "source": "/js/:path*",
