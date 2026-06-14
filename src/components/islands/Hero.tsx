@@ -7,7 +7,7 @@ export default function Hero() {
   return (
     <section className="relative z-10 max-w-6xl mx-auto px-6 pt-16 pb-10 grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
       <div className="text-center lg:text-left" data-mask-wrap="true">
-        <div data-mask="true" style={{background:'#15151a',border:'1px solid #2a2a30', transitionDelay: '100ms'}} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium text-neutral-400 mb-7">
+        <div data-mask="true" style={{background:'#15151a',border:'1px solid #2a2a30', transitionDelay: '100ms'}} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium text-neutral-400 mb-7 hover:border-[#ff4655]/40 hover:text-white hover:bg-[#ff4655]/10 transition-all cursor-default">
           <span style={{background:'#ff4655',boxShadow:'0 0 8px #ff4655'}} className="w-1.5 h-1.5 rounded-full animate-pulse"></span>
           {t('heroBadge')}
         </div>
@@ -30,10 +30,10 @@ export default function Hero() {
           </div>
         </div>
         <div data-mask="true" style={{transitionDelay: '600ms'}} className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-3">
-          <a href="#busqueda" style={{background:'linear-gradient(135deg,#ff4655,#e0303f)',boxShadow:'0 12px 32px -10px rgba(255,70,85,0.75)'}} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white font-semibold text-sm hover:brightness-110 active:scale-[0.99] transition">
+          <a href="#busqueda" style={{background:'linear-gradient(135deg,#ff4655,#e0303f)',boxShadow:'0 12px 32px -10px rgba(255,70,85,0.75)'}} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white font-semibold text-sm hover:brightness-110 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#ff4655]/30 active:scale-[0.99] transition-all duration-300">
             <iconify-icon icon="solar:magnifer-linear" width="16"></iconify-icon> {t('heroBtn')}
           </a>
-          <a href="/docs" style={{background:'#15151a',border:'1px solid #2a2a30'}} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-neutral-300 font-semibold text-sm hover:text-white hover:border-neutral-600 transition">
+          <a href="./docs" style={{background:'#15151a',border:'1px solid #2a2a30'}} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-neutral-300 font-semibold text-sm hover:text-white hover:border-neutral-600 hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300">
             <iconify-icon icon="solar:document-text-linear" width="16"></iconify-icon> {t('docsBtn')}
           </a>
         </div>

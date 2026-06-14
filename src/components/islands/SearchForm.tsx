@@ -180,7 +180,7 @@ export default function SearchForm() {
             type="submit" 
             disabled={loading}
             style={{background:'linear-gradient(135deg,#ff4655,#e0303f)',boxShadow:'0 12px 32px -10px rgba(255,70,85,0.75)'}} 
-            className="w-full mt-5 py-3 rounded-lg text-white font-semibold text-sm flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.99] transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full mt-5 py-3 rounded-lg text-white font-semibold text-sm flex items-center justify-center gap-2 hover:brightness-110 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#ff4655]/30 active:scale-[0.99] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
           >
             {loading ? (
               <iconify-icon icon="svg-spinners:ring-resize" width="18"></iconify-icon>

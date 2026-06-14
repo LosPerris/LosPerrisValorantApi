@@ -29,9 +29,8 @@ export default function DocsLinkCard() {
               </p>
             </div>
           </div>
-          <a href="/docs" className="btn-gradient-red md:w-auto w-full py-3 px-6 rounded-lg text-white font-semibold text-sm flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.99] transition shrink-0">
-            {t('docsBtn')}
-            <iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon>
+          <a href="./docs" className="btn-gradient-red md:w-auto w-full py-3 px-6 rounded-lg text-white font-semibold text-sm flex items-center justify-center gap-2 hover:brightness-110 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#ff4655]/30 active:scale-[0.99] transition-all duration-300 shrink-0">
+            <iconify-icon icon="solar:document-text-linear" width="18"></iconify-icon> {t('docsBtn')}
           </a>
         </div>
       </div>

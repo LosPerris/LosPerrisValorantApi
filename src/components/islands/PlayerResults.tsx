@@ -33,7 +33,7 @@ export default function PlayerResults() {
               <img src={data.rank.rank_image} width="64" className="shrink-0 drop-shadow-[0_8px_16px_rgba(0,0,0,0.6)]" />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="text-2xl font-semibold tracking-tight text-white truncate">{data.account?.name || 'Player'}<span className="text-neutral-400">#{data.account?.tag || '000'}</span></h3>
+                  <h3 className="text-2xl font-semibold tracking-tight text-white truncate">{data.account?.name || 'Player'}<span className="text-[#a970ff]">#{data.account?.tag || '000'}</span></h3>
                   <span style={{background:'#ff4655'}} className="text-[10px] font-bold px-2 py-0.5 rounded text-white">{translateRank(data.rank.current_tier_patched, currentLang)}</span>
                   {data.match && data.match.derived?.is_win && (
                     <span style={{background:'rgba(34,197,94,0.15)',border:'1px solid rgba(34,197,94,0.35)',color:'#4ade80'}} className="text-[10px] font-bold px-2 py-0.5 rounded-full inline-flex items-center gap-1">
@@ -48,9 +48,9 @@ export default function PlayerResults() {
                 <div style={{background:'#26262c'}} className="h-2 rounded-full mt-3 overflow-hidden max-w-md">
                   <div style={{background:'linear-gradient(90deg,#ff8a93,#ff4655)',width:`${data.rank.ranking_in_tier}%`}} className="h-full rounded-full"></div>
                 </div>
-                <div className="flex items-center justify-between mt-2 text-[10px] text-neutral-400 font-medium max-w-md">
-                  <span>{data.rank.ranking_in_tier} / 100 {t('points')}</span>
-                  <span>{t('toNext')} {data.rank.ranking_in_tier}%</span>
+                <div className="flex items-center justify-between mt-2 text-[10px] font-medium max-w-md">
+                  <span className="text-neutral-400">{data.rank.ranking_in_tier} / 100 {t('points')}</span>
+                  <span className="text-[#a970ff] font-bold">{t('toNext')} {data.rank.ranking_in_tier}%</span>
                 </div>
               </div>
             </div>
@@ -117,8 +117,8 @@ export default function PlayerResults() {
                   {data.match.derived?.is_win ? 'VICTORIA' : 'DERROTA'}
                 </p>
               </div>
-              <div className="flex flex-col items-end gap-1">
-                <span className="text-[10px] text-white/60 font-semibold tracking-wider uppercase">KDA</span>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] text-white/60 font-semibold tracking-wider uppercase mt-0.5">KDA</span>
                 <p className="text-sm text-white font-bold bg-black/60 px-3 py-1.5 rounded-lg backdrop-blur-md border border-white/10 shadow-lg">{data.match.derived?.kda}</p>
               </div>
             </div>
