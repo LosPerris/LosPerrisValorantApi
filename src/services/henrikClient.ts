@@ -48,7 +48,7 @@ export async function fetchWithCache<T>(
             if (errObj?.status) throw error;
             
             // Evitar exponer grandes bloques de HTML o stack traces internos
-            const rawErrorMsg = errObj?.message || String(error);
+            const rawErrorMsg = typeof errObj?.message === 'string' ? errObj.message : String(error);
             const safeErrorMsg = rawErrorMsg.length > 200 ? 'Service Unavailable or parsing error' : rawErrorMsg;
 
             throw {
