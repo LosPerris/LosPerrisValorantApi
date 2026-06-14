@@ -76,6 +76,30 @@
     background: linear-gradient(135deg, #ff4655, #e0303f);
     box-shadow: 0 12px 32px -10px rgba(255,70,85,0.75);
   }
+  .gradient-border-gold {
+    border-radius: 22px;
+    padding: 1.5px;
+    background: linear-gradient(135deg, #fbbf24, #16161b 38%, #16161b 62%, #fcd34d);
+  }
+  .gradient-bg-dark-inner {
+    border-radius: 20.5px;
+    background: linear-gradient(180deg, #16161b, #0e0e11);
+  }
+  .gradient-border-blue {
+    border-radius: 22px;
+    padding: 1.5px;
+    background: linear-gradient(135deg, #3b82f6, #16161b 38%, #16161b 62%, #60a5fa);
+  }
+  .gradient-border-match-win {
+    border-radius: 22px;
+    padding: 1.5px;
+    background: linear-gradient(135deg, #22c55e, #16161b 38%, #16161b 62%, #4ade80);
+  }
+  .gradient-border-match-loss {
+    border-radius: 22px;
+    padding: 1.5px;
+    background: linear-gradient(135deg, #ef4444, #16161b 38%, #16161b 62%, #f87171);
+  }
 }
 
 /* Custom Scrollbar */
