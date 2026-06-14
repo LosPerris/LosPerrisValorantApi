@@ -22,7 +22,7 @@ export default function ApiDocumentation() {
 
       <aside className={`fixed top-0 left-0 h-screen w-[280px] bg-[#0a0a0d]/80 backdrop-blur-2xl border-r border-white/5 shadow-[4px_0_24px_rgba(0,0,0,0.5)] p-[30px_20px] flex flex-col z-[100] transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isSidebarOpen ? 'translate-x-0 shadow-[20px_0_50px_rgba(0,0,0,0.5)]' : '-translate-x-full lg:translate-x-0'}`}>
         <div className="flex items-center gap-[12px] mb-[40px]">
-          <img src="/imgs/LosPerris-minimal.svg" alt="Logo" className="w-[32px] h-[32px] drop-shadow-[0_0_8px_rgba(255,70,85,0.6)]" />
+          <img src="/api/valorant/imgs/LosPerris-minimal.svg" alt="Logo" className="w-[32px] h-[32px] drop-shadow-[0_0_8px_rgba(255,70,85,0.6)]" />
           <h2 className="text-[1.2rem] font-[800] tracking-[1px] m-0 text-white">Docs API</h2>
         </div>
         <nav className="flex flex-col gap-2 flex-1 overflow-y-auto pr-2">

@@ -7,8 +7,8 @@ export default function LiveStats() {
   const t = useTranslations();
 
   useEffect(() => {
-    const fetchStats = () => {
-      fetch('/api/system/stats')
+    const fetchStats = async () => {
+      fetch('/api/valorant/system/stats')
         .then(res => res.json())
         .then(data => {
           if (data.data) setStats(data.data);
