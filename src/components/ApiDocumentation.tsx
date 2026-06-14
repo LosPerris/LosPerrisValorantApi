@@ -53,7 +53,7 @@ export default function ApiDocumentation() {
             </a>
           </div>
 
-          <a href="/" className="mt-auto border border-white/5 bg-[#1a1a24]/50 justify-center flex items-center gap-3 px-4 py-2.5 text-neutral-400 rounded-xl text-[0.95rem] font-medium transition-all hover:bg-[#1a1a24] hover:text-white group">
+          <a href="./" className="mt-auto border border-white/5 bg-[#1a1a24]/50 justify-center flex items-center gap-3 px-4 py-2.5 text-neutral-400 rounded-xl text-[0.95rem] font-medium transition-all hover:bg-[#1a1a24] hover:text-white group">
             <iconify-icon icon="solar:alt-arrow-left-linear" width="20"></iconify-icon> Volver al Panel
           </a>
         </nav>
