@@ -1,8 +1,188 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import App from '../components/App';
+import LanguageToggle from '../components/islands/LanguageToggle';
+import Hero from '../components/islands/Hero';
+import LiveStats from '../components/islands/LiveStats';
+import SearchForm from '../components/islands/SearchForm';
+import PlayerResults from '../components/islands/PlayerResults';
+import BotConfig from '../components/islands/BotConfig';
+import CommandGenerator from '../components/islands/CommandGenerator';
+import DocsLinkCard from '../components/islands/DocsLinkCard';
+import Footer from '../components/islands/Footer';
+import AboutApiModal from '../components/islands/AboutApiModal';
 ---
 
+<style is:global>
+  [data-reveal="true"] {
+    opacity: 0;
+    transform: translateY(-30px);
+    filter: blur(8px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  [data-reveal="true"].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+  [data-mask="true"] {
+    clip-path: inset(0 0 110% 0);
+    transition: clip-path 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  [data-mask="true"].is-visible {
+    clip-path: inset(0 0 -10% 0);
+  }
+</style>
+
 <Layout title="LosPerris - Valorant API">
-	<App client:load />
+  <!-- LOGO FLOTANTE -->
+  <a href="/" class="fixed top-4 left-4 md:left-8 flex items-center gap-2.5 z-50 bg-[#0a0a0d]/60 backdrop-blur-xl border border-white/5 pl-2 pr-4 py-1.5 rounded-full shadow-[0_4px_24px_rgba(0,0,0,0.5)] transition hover:bg-white/5">
+    <img src="/imgs/LosPerris-minimal.svg" alt="LosPerris" class="w-6 h-6 md:w-7 md:h-7 drop-shadow-[0_0_8px_rgba(255,70,85,0.6)]" />
+    <span class="text-white font-extrabold tracking-tight text-xs md:text-sm hidden sm:inline">
+      LOS<span class="text-[#ff4655]">PERRIS</span> <span class="font-bold text-white opacity-90">API</span>
+    </span>
+  </a>
+
+  <LanguageToggle client:load />
+  
+  <main class="min-h-screen relative overflow-hidden">
+    <div style={{background:'radial-gradient(circle at 50% -20%, rgba(255, 70, 85, 0.15), rgba(8, 8, 10, 0) 60%)'}} class="absolute inset-0 pointer-events-none"></div>
+
+    <Hero client:load />
+    <LiveStats client:load />
+
+    <!-- FLUJO INTRO -->
+    <section data-reveal="true" style="transition-delay: 800ms;" class="opacity-0 relative z-10 max-w-6xl mx-auto px-6 pb-8 text-center">
+      <span style={{background:'rgba(255,70,85,0.1)',border:'1px solid rgba(255,70,85,0.3)',color:'#ff8a93'}} class="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-[0.2em]">
+        <iconify-icon icon="solar:map-arrow-square-linear" width="12"></iconify-icon> <span id="txt-flujo">Flujo guiado</span>
+      </span>
+      <h2 id="txt-como" class="text-2xl md:text-3xl font-semibold text-white tracking-tight mt-4">Cómo funciona en 5 pasos</h2>
+      <p id="txt-sigue" class="text-sm text-neutral-400 mt-2 max-w-lg mx-auto">Sigue el orden, de la búsqueda al overlay, sin saltarte nada.</p>
+    </section>
+
+    <div class="relative z-10 max-w-6xl mx-auto px-6 pb-24">
+      <div class="relative">
+        <div data-reveal="true" style="transition-delay: 900ms;" class="opacity-0 absolute inset-0 pointer-events-none z-0">
+          <!-- línea conectora vertical -->
+          <div id="vertical-line" style={{background:'linear-gradient(180deg,#ff4655,#ffd479 28%,#22c55e 52%,#a970ff 76%,#ff4655)', maskImage: 'linear-gradient(to bottom, black calc(100% - 150px), transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black calc(100% - 150px), transparent 100%)', height: '300px'}} class="hidden md:block absolute left-[18px] top-2 w-px opacity-40 transition-all duration-500 ease-out"></div>
+          
+          <!-- Punto final luminoso -->
+          <div id="vertical-line-end" class="hidden md:block absolute left-[15.5px] -bottom-1 w-[6px] h-[6px] rounded-full bg-[#ff4655] shadow-[0_0_12px_2px_rgba(255,70,85,0.8)] opacity-0 transition-opacity duration-1000"></div>
+        </div>
+
+        <div class="relative z-10">
+          {/* PASO 01 */}
+          <section id="busqueda" class="scroll-mt-24 md:pl-14 relative">
+            <div data-reveal="true" class="opacity-0 hidden md:flex absolute left-0 top-0 w-9 h-9 rounded-full items-center justify-center font-bold text-sm text-white" style="transition-delay: 1000ms; background:linear-gradient(135deg,#ff4655,#b81f2c); box-shadow:0 8px 22px -6px rgba(255,70,85,0.7)">1</div>
+            <div data-reveal="true" style="transition-delay: 1000ms;" class="opacity-0 flex items-center gap-4 mb-10">
+              <span style={{background:'linear-gradient(180deg,#ff8a93,#ff4655)'}} class="w-1.5 h-6 rounded-full md:hidden"></span>
+              <span id="txt-paso01" style={{background:'rgba(255,70,85,0.12)',border:'1px solid rgba(255,70,85,0.3)',color:'#ff8a93'}} class="text-[10px] font-bold px-2 py-0.5 rounded-full">PASO 01</span>
+              <div>
+                <h2 id="txt-empieza" class="text-lg font-semibold tracking-tight text-white mb-1.5">Empieza la búsqueda</h2>
+                <span id="txt-encuentra" class="hidden sm:block text-[11px] text-neutral-300">Encuentra tu rango por Riot ID</span>
+              </div>
+            </div>
+            <SearchForm client:load />
+          </section>
+
+          {/* PASO 02 */}
+          <PlayerResults client:load />
+
+          {/* PASO 03 */}
+          <BotConfig client:load />
+
+          {/* PASO 04 */}
+          <CommandGenerator client:load />
+
+          {/* PASO 05 */}
+          <DocsLinkCard client:load />
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <AboutApiModal client:load />
+  <Footer client:load />
+
+  <script>
+    import { hasSearched, lang } from '../store/appStore';
+
+    let maxLineHeight = 300;
+
+    const initObserver = () => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const target = entry.target as HTMLElement;
+            target.classList.add('is-visible');
+            
+            const delayStr = target.style.transitionDelay || '0ms';
+            const delayMs = parseInt(delayStr);
+            
+            setTimeout(() => {
+              // Si no hemos buscado, la línea se queda en 300px fijos.
+              if (!hasSearched.get()) return;
+
+              const line = document.getElementById('vertical-line');
+              const dot = document.getElementById('vertical-line-end');
+              
+              if (line) {
+                const rect = target.getBoundingClientRect();
+                const lineRect = line.getBoundingClientRect();
+                
+                // Calculamos la distancia exacta desde el inicio de la línea hasta el final del elemento
+                const requiredHeight = rect.bottom - lineRect.top + 40;
+                
+                if (requiredHeight > maxLineHeight) {
+                  maxLineHeight = requiredHeight;
+                  line.style.height = `${maxLineHeight}px`;
+                  
+                  if (dot) {
+                    dot.style.opacity = '1';
+                  }
+                }
+              }
+            }, delayMs);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('[data-reveal="true"]:not(.is-visible), [data-mask="true"]:not(.is-visible)').forEach(el => observer.observe(el));
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(initObserver, 400);
+    });
+
+    lang.subscribe((l: string) => {
+      const isEs = l === 'es';
+      const update = (id: string, es: string, en: string) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = isEs ? es : en;
+      };
+      
+      update('txt-flujo', 'Flujo guiado', 'Guided flow');
+      update('txt-como', 'Cómo funciona en 5 pasos', 'How it works in 5 steps');
+      update('txt-sigue', 'Sigue el orden, de la búsqueda al overlay, sin saltarte nada.', 'Follow the order, from search to overlay, without skipping anything.');
+      update('txt-paso01', 'PASO 01', 'STEP 01');
+      update('txt-empieza', 'Empieza la búsqueda', 'Start the search');
+      update('txt-encuentra', 'Encuentra tu rango por Riot ID', 'Find your rank by Riot ID');
+    });
+
+    hasSearched.subscribe((val: boolean) => {
+      const line = document.getElementById('vertical-line');
+      const dot = document.getElementById('vertical-line-end');
+      
+      if (line && dot) {
+        if (!val) {
+          maxLineHeight = 300;
+          line.style.height = '300px';
+          dot.style.opacity = '0';
+        }
+      }
+
+      if (val) {
+        setTimeout(initObserver, 150);
+      }
+    });
+  </script>
 </Layout>

@@ -14,15 +14,17 @@ const { title } = Astro.props;
 		<meta charset="UTF-8" />
 		<meta name="description" content="Valorant Rank, Match History and Streamer Bot Commands API. Check your stats and get commands for Nightbot, StreamElements and more." />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/webp" href="/api/valorant/imgs/LosPerris-minimal.svg" />
+		<link rel="icon" type="image/webp" href="/imgs/LosPerris-minimal.svg" />
 		<meta name="theme-color" content="#ff4655" />
 		<link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+		<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" is:inline defer></script>
 		<title>{title}</title>
 	</head>
-	<body>
+	<body style="font-family:'Inter',sans-serif;background:#08080a" class="text-neutral-200 antialiased min-h-screen relative overflow-x-hidden selection:bg-[#ff4655]/30">
+		<div style="position:fixed;inset:0;background:radial-gradient(circle at 50% -8%,rgba(255,70,85,0.22),transparent 52%),radial-gradient(circle at 90% 92%,rgba(169,112,255,0.14),transparent 48%),radial-gradient(circle at 6% 50%,rgba(255,70,85,0.07),transparent 42%);pointer-events:none" aria-hidden="true"></div>
+		<div style="position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.024) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.024) 1px,transparent 1px);background-size:58px 58px;mask-image:radial-gradient(circle at 50% 22%,black,transparent 72%);pointer-events:none" aria-hidden="true"></div>
 		<slot />
 	</body>
 </html>

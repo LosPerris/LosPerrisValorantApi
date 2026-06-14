@@ -11,7 +11,7 @@ export interface ValorantAccount {
     account_level: number;
     name: string;
     tag: string;
-    card: {
+    card: string | {
         small: string;
         large: string;
         wide: string;

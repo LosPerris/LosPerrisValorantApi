@@ -63,6 +63,19 @@
   .text-shadow-glow {
     text-shadow: 0 0 10px rgba(255, 70, 85, 0.5);
   }
+  .gradient-border-red {
+    border-radius: 22px;
+    padding: 1.5px;
+    background: linear-gradient(135deg, #ff4655, #16161b 38%, #16161b 62%, #ff8a93);
+  }
+  .gradient-bg-dark {
+    border-radius: 20.5px;
+    background: linear-gradient(180deg, #16161b, #0e0e11);
+  }
+  .btn-gradient-red {
+    background: linear-gradient(135deg, #ff4655, #e0303f);
+    box-shadow: 0 12px 32px -10px rgba(255,70,85,0.75);
+  }
 }
 
 /* Custom Scrollbar */

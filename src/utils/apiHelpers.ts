@@ -1,4 +1,5 @@
 import * as valorantService from '../services/valorantService';
+import type { ValorantAccount } from '../types/valorant';
 
 // ─── Constantes de Headers compartidas por todos los endpoints ──────────────
 export const JSON_HEADERS = { 'Content-Type': 'application/json' };
@@ -11,17 +12,47 @@ export const TEXT_HEADERS = {
     'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600'
 };
 
-// Regiones válidas de Valorant
-const VALID_REGIONS = new Set(['eu', 'na', 'ap', 'kr', 'latam', 'br']);
+import { z } from 'zod';
 
-// Rate Limiter simple (en memoria)
-const rateLimit = new Map<string, number>();
-export function checkRateLimit(key: string): boolean {
-    const now = Date.now();
-    const last = rateLimit.get(key) || 0;
-    if (now - last < 1000) return false;
-    rateLimit.set(key, now);
-    return true;
+const RouteParamsSchema = z.object({
+    region: z.enum(['eu', 'na', 'ap', 'kr', 'latam', 'br'], {
+        message: 'Invalid region. Valid values: eu, na, ap, kr, latam, br'
+    }),
+    name: z.string().min(1, 'Name is required'),
+    tag: z.string().min(1, 'Tag is required')
+});
+
+const QueryParamsSchema = z.object({
+    format: z.string().nullable().optional(),
+    lang: z.string().default('es'),
+    type: z.string().default('1')
+});
+
+import { kv } from './cache';
+
+// Rate Limiter distribuido (Redis)
+// Permite 1 petición por segundo por clave
+export async function checkRateLimit(key: string): Promise<boolean> {
+    const rateLimitKey = `rate_limit:${key}`;
+    try {
+        const count = await kv.incr(rateLimitKey);
+        if (count === 1) {
+            await kv.expire(rateLimitKey, 1); // ventana de 1 segundo
+        }
+        return count <= 1;
+    } catch(e) {
+        console.warn('Redis rate limit check failed, failing open:', e);
+        return true; // fail-open si redis falla
+    }
+}
+
+// ─── Estadísticas Globales ──────────────────────────────────────────────────
+export async function incrementRequestCount() {
+    try {
+        await kv.incr('vlr_requests_total');
+    } catch(e) {
+        console.warn('Failed to increment request count:', e);
+    }
 }
 
 // ─── Respuesta de error estandarizada ───────────────────────────────────────
@@ -38,11 +69,23 @@ export function validateRouteParams(
     name: string,
     tag: string
 ): Response | null {
-    if (!region || !name || !tag) return errorResponse(400, 'Missing parameters');
-    if (!VALID_REGIONS.has(region.toLowerCase())) {
-        return errorResponse(400, `Invalid region. Valid values: ${[...VALID_REGIONS].join(', ')}`);
+    const result = RouteParamsSchema.safeParse({ region: region?.toLowerCase(), name, tag });
+    if (!result.success) {
+        return errorResponse(400, result.error.issues[0].message);
     }
     return null;
+}
+
+export function validateQueryParams(
+    format: string | null,
+    lang: string | null,
+    type: string | null
+): { success: false, error: Response } | { success: true, data: { format?: string | null, lang: string, type: string } } {
+    const result = QueryParamsSchema.safeParse({ format, lang: lang || undefined, type: type || undefined });
+    if (!result.success) {
+        return { success: false, error: errorResponse(400, result.error.issues[0].message) };
+    }
+    return { success: true, data: result.data as { format?: string | null, lang: string, type: string } };
 }
 
 // ─── Resolución de PUUID con caché ──────────────────────────────────────────
@@ -50,7 +93,7 @@ export function validateRouteParams(
 export async function resolvePUUID(
     name: string,
     tag: string
-): Promise<{ puuid: string; accountData: any; error?: never } | { puuid?: never; accountData?: never; error: Response }> {
+): Promise<{ puuid: string; accountData: ValorantAccount; error?: never } | { puuid?: never; accountData?: never; error: Response }> {
     let accountData = await valorantService.getCachedAccount(name, tag);
 
     if (!accountData) {
@@ -64,3 +107,71 @@ export async function resolvePUUID(
     if (!accountData || !accountData.puuid) return { error: errorResponse(404, 'Player not found') };
     return { puuid: accountData.puuid, accountData };
 }
+
+// ─── Wrapper para Endpoints ─────────────────────────────────────────────────
+import type { APIRoute, APIContext } from 'astro';
+
+export type ValorantEndpointHandler = (params: {
+    region: string;
+    name: string;
+    tag: string;
+    puuid: string;
+    accountData: ValorantAccount;
+    format: string | null;
+    lang: string;
+    type: string;
+    url: URL;
+}, context: APIContext) => Promise<Response>;
+
+export function createValorantEndpoint(handler: ValorantEndpointHandler): APIRoute {
+    return async (context: APIContext) => {
+        const { params, request, clientAddress } = context;
+        const region = params.region as string;
+        const name = params.name as string;
+        const tag = params.tag as string;
+
+        const paramError = validateRouteParams(region, name, tag);
+        if (paramError) return paramError;
+
+        // Rate Limit usando Astro clientAddress (seguro frente a spoofing de X-Forwarded-For)
+        const ip = clientAddress || '127.0.0.1';
+        const isAllowed = await checkRateLimit(`ip:${ip}`);
+        if (!isAllowed) {
+            return errorResponse(429, 'Rate limit exceeded. Please try again later.');
+        }
+
+        incrementRequestCount().catch(() => {});
+
+        const url = new URL(request.url);
+        const formatParam = url.searchParams.get('format');
+        const langParam = url.searchParams.get('lang');
+        const typeParam = url.searchParams.get('type');
+
+        const queryValidation = validateQueryParams(formatParam, langParam, typeParam);
+        if (!queryValidation.success) return queryValidation.error;
+        
+        const { format, lang, type } = queryValidation.data;
+
+        try {
+            const resolved = await resolvePUUID(name, tag);
+            if (resolved.error) return resolved.error;
+
+            return await handler({
+                region, name, tag,
+                puuid: resolved.puuid,
+                accountData: resolved.accountData,
+                format: format || null, 
+                lang, 
+                type, 
+                url
+            }, context);
+        } catch (error: unknown) {
+            console.error(`[API Error] ${request.url}:`, error);
+            const errObj = error as Record<string, unknown>;
+            const status = typeof errObj?.status === 'number' ? errObj.status : 500;
+            const message = typeof errObj?.message === 'string' ? errObj.message : 'Internal Server Error';
+            return errorResponse(status, message);
+        }
+    };
+}
+

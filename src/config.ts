@@ -1,5 +1,5 @@
 export const config = {
-    henrikApiKey: process.env.HENRIK_API_KEY,
+    henrikApiKey: import.meta.env.HENRIK_API_KEY,
     // TTLs en segundos (compatible directo con Redis/Vercel KV)
     cacheTtl: {
         account:  24 * 60 * 60, // 24 horas — el PUUID/nombre rara vez cambia

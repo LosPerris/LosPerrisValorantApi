@@ -1,4 +1,9 @@
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
+
+export const kv = new Redis({
+  url: import.meta.env.REDIS_URL || import.meta.env.KV_REST_API_URL!,
+  token: import.meta.env.REDIS_TOKEN || import.meta.env.KV_REST_API_TOKEN!,
+});
 
 const PREFIX = 'vlr_cache:';
 
