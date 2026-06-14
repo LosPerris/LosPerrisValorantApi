@@ -1,15 +1,15 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import LanguageToggle from '../components/islands/LanguageToggle';
-import Hero from '../components/islands/Hero';
-import LiveStats from '../components/islands/LiveStats';
-import SearchForm from '../components/islands/SearchForm';
-import PlayerResults from '../components/islands/PlayerResults';
-import BotConfig from '../components/islands/BotConfig';
-import CommandGenerator from '../components/islands/CommandGenerator';
-import DocsLinkCard from '../components/islands/DocsLinkCard';
-import Footer from '../components/islands/Footer';
-import AboutApiModal from '../components/islands/AboutApiModal';
+import Layout from '../../../layouts/Layout.astro';
+import LanguageToggle from '../../../components/islands/LanguageToggle';
+import Hero from '../../../components/islands/Hero';
+import LiveStats from '../../../components/islands/LiveStats';
+import SearchForm from '../../../components/islands/SearchForm';
+import PlayerResults from '../../../components/islands/PlayerResults';
+import BotConfig from '../../../components/islands/BotConfig';
+import CommandGenerator from '../../../components/islands/CommandGenerator';
+import DocsLinkCard from '../../../components/islands/DocsLinkCard';
+import Footer from '../../../components/islands/Footer';
+import AboutApiModal from '../../../components/islands/AboutApiModal';
 ---
 
 <style is:global>
@@ -104,7 +104,7 @@ import AboutApiModal from '../components/islands/AboutApiModal';
   <Footer client:load />
 
   <script>
-    import { hasSearched, lang } from '../store/appStore';
+    import { hasSearched, lang } from '../../../store/appStore';
 
     let maxLineHeight = 300;
 
