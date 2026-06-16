@@ -26,7 +26,8 @@ export async function getMatchesByPUUID(region: string, puuid: string, mode: str
 }
 
 export async function getMMRHistoryByPUUID(region: string, puuid: string): Promise<ValorantApiResponse<ValorantMMRHistoryItem[]>> {
-    return fetchWithCache(`history:${region}:${puuid}`, `/v1/by-puuid/mmr-history/${region}/${puuid}`, config.cacheTtl.history);
+    const mappedRegion = ['latam', 'br'].includes(region.toLowerCase()) ? 'na' : region;
+    return fetchWithCache(`history:${mappedRegion}:${puuid}`, `/v1/by-puuid/mmr-history/${mappedRegion}/${puuid}`, config.cacheTtl.history);
 }
 
 export async function getPUUID(name: string, tag: string): Promise<ValorantApiResponse<ValorantAccount>> {
