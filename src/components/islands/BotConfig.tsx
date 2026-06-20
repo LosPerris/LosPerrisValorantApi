@@ -19,7 +19,7 @@ export default function BotConfig() {
   if (!searched) return null;
 
   return (
-    <section id="herramientas" className="mt-14 scroll-mt-24 md:pl-14 relative animate-[fadeIn_0.5s_ease-out]">
+    <section id="herramientas" className="mt-14 scroll-mt-24 md:pl-14 relative z-20 animate-[fadeIn_0.5s_ease-out]">
       <SectionHeader step={3} title={t('botConfig')} subtitle={t('botConfigSub')} delay="100ms" />
 
       <div data-reveal="true" className="opacity-0" style={{transitionDelay: '200ms', borderRadius:'22px',padding:'1.5px',background:'linear-gradient(135deg,#22c55e,#16161b 32%,#16161b 64%,#14b8a6)',boxShadow:'0 20px 50px -20px rgba(0,0,0,0.85)'}}>
