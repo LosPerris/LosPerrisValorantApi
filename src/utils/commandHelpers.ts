@@ -45,25 +45,25 @@ export const getCommandExample = (
   const isEs = lang === 'es';
 
   if (type === 'rank') {
-    if (config.rankF === '2') return isEs ? 'Actualmente estoy en Oro 3' : 'I am currently Gold 3';
-    if (config.rankF === '3') return isEs ? 'Actualmente estoy en Oro 3 con 47 puntos, mi mmr es de 1147' : 'I am currently Gold 3 with 47 points, my mmr is 1147';
-    if (config.rankF === '4') return 'Oro 3';
-    return isEs ? 'Actualmente estoy en Oro 3 con 47 puntos' : 'I am currently Gold 3 with 47 points';
+    if (config.rankF === '2') return isEs ? 'Actualmente estoy en Oro 3' : 'Currently I am in Gold 3';
+    if (config.rankF === '3') return isEs ? 'Actualmente estoy en Oro 3 con 47 puntos, mi mmr es de 1147' : 'Currently I am in Gold 3 with 47 RR, my mmr is 1147';
+    return isEs ? 'Actualmente estoy en Oro 3 con 47 puntos' : 'Currently I am in Gold 3 with 47 RR';
   }
 
   if (type === 'match') {
-    if (config.matchF === '2') return isEs ? 'PonssLoveless Jugó Pearl y Ganó la última partida.' : 'PonssLoveless played Pearl and Won the last match.';
-    if (config.matchF === '3') return '12/4/3';
-    return isEs ? 'En la última partida, Jugó Pearl y Ganó sacando 12/4/3' : 'In the last match, played Pearl and Won getting 12/4/3';
+    if (config.matchF === '2') return isEs ? 'Mi última partida fue en Pearl con Jett gané 25 puntos mi kda fue de 12/4/3' : 'My last match was on Pearl with Jett won 25 RR my kda was 12/4/3';
+    if (config.matchF === '3') return isEs ? 'Mi última partida fue en Pearl con Jett gané 25 puntos mi kda fue de 12/4/3, mi porcentaje de HS fue de 24% HS' : 'My last match was on Pearl with Jett won 25 RR my kda was 12/4/3, my HS percentage was 24%';
+    return isEs ? 'Mi última partida fue en Pearl con Jett gané 25 puntos' : 'My last match was on Pearl with Jett won 25 RR';
   }
 
   if (type === 'today') {
-    if (config.todayF === '2') return isEs ? 'Hoy he jugado 4 partidas, y he ganado 2.' : 'Today I played 4 matches, and won 2.';
-    if (config.todayF === '3') return isEs ? 'Partidas jugadas hoy: 4' : 'Matches played today: 4';
-    if (config.todayF === '4') return isEs ? 'He ganado 2 partidas hoy.' : 'I won 2 matches today.';
-    return isEs ? 'Hoy he jugado 4 partidas, he ganado 2 y mi mmr ha subido en +25 puntos.' : 'Today I played 4 matches, won 2 and my mmr changed by +25 points.';
+    if (config.todayF === '2') return isEs ? 'Hoy Ponss ha jugado 3 partidas: 2 Victorias, 1 Derrotas (Total: +15 RR).' : 'Today Ponss has played 3 matches: 2 Wins, 1 Losses (Total: +15 RR).';
+    if (config.todayF === '3') return isEs ? 'Hoy Ponss ha jugado 3 partidas (66% Winrate): 2 Victorias, 1 Derrotas (Total: +15 RR).' : 'Today Ponss has played 3 matches (66% Winrate): 2 Wins, 1 Losses (Total: +15 RR).';
+    return isEs ? 'Hoy Ponss lleva 2 Victorias, 1 Derrotas (Total: +15 RR).' : 'Today Ponss has 2 Wins, 1 Losses (Total: +15 RR).';
   }
 
   // stats
-  return 'K/D: 1.2 · Headshots: 24% · WR: 52%';
+  if (config.statsF === '2') return isEs ? 'En sus últimas 5 partidas, Ponss ha jugado principalmente con Jett, logrando un winrate del 50% y 24% de HS.' : 'In their last 5 matches, Ponss has primarily played Jett, achieving a 50% winrate and 24% HS.';
+  if (config.statsF === '3') return isEs ? 'Stats de Ponss (5 partidas): 50% WR | Agente: Jett | HS: 24%' : 'Ponss\'s Stats (5 matches): 50% WR | Agent: Jett | HS: 24%';
+  return isEs ? 'Ponss tiene un winrate del 50% en sus últimas 5 partidas. Su agente más jugado es Jett (24% HS).' : 'Ponss has a 50% winrate in their last 5 matches. Most played agent is Jett (24% HS).';
 };
