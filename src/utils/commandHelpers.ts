@@ -11,14 +11,20 @@ export const generateBotCommand = (
   const tag = encodeURIComponent(account.tag);
   const region = account.region || 'na';
   
-  let formatStr = '';
-  if (type === 'rank' && config.rankF !== '1') formatStr = `?format=${config.rankF}`;
-  if (type === 'match' && config.matchF !== '1') formatStr = `?format=${config.matchF}`;
-  if (type === 'today' && config.todayF !== '1') formatStr = `?format=${config.todayF}`;
-  if (type === 'stats' && config.statsF !== '1') formatStr = `?format=${config.statsF}`;
+  let formatStr = '?format=text';
+  
+  let typeVal = '1';
+  if (type === 'rank' && config.rankF !== '1') typeVal = config.rankF;
+  if (type === 'match' && config.matchF !== '1') typeVal = config.matchF;
+  if (type === 'today' && config.todayF !== '1') typeVal = config.todayF;
+  if (type === 'stats' && config.statsF !== '1') typeVal = config.statsF;
+
+  if (typeVal !== '1') {
+    formatStr += `&type=${typeVal}`;
+  }
 
   if (lang !== 'es') {
-    formatStr += formatStr ? `&lang=${lang}` : `?lang=${lang}`;
+    formatStr += `&lang=${lang}`;
   }
 
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://www.losperris.dev';
