@@ -8,9 +8,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
-  build: {
-    assetsPrefix: 'https://vlr.losperris.dev'
-  },
   output: 'server',
   adapter: vercel()
 });
