@@ -26,43 +26,92 @@ export default function PlayerResults() {
       <SectionHeader step={2} title={t('resultsTitle')} subtitle={t('resultsSub')} delay="100ms" />
 
       {data.rank && (
-          <div data-reveal="true" className="opacity-0 mb-6 gradient-border-gold" style={{transitionDelay: '200ms'}}>
-        <div className="gradient-bg-dark-inner overflow-hidden">
-          <div className="relative overflow-hidden">
-            <img
-              src={getCardImageUrl()}
-              alt=""
-              className="absolute inset-0 w-full h-full object-cover object-center"
-              decoding="async"
-            />
-            <div className="bg-overlay-dark p-6 md:p-8 flex flex-col md:flex-row md:items-center gap-5 relative z-10">
-              <img src={data.rank.rank_image} width="64" height="64" className="shrink-0 drop-shadow-[0_8px_16px_rgba(0,0,0,0.6)]" alt="" />
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="text-2xl font-semibold tracking-tight text-white truncate">{data.account?.name || 'Player'}<span className="text-white/70 ml-0.5">#{data.account?.tag || '000'}</span></h3>
-                  <span style={{background:'#ff4655'}} className="text-[10px] font-bold px-2 py-0.5 rounded text-white">{translateRank(data.rank.current_tier_patched, currentLang)}</span>
-                  {data.match && data.match.derived?.is_win && (
-                    <span style={{background:'rgba(34,197,94,0.15)',border:'1px solid rgba(34,197,94,0.35)',color:'#4ade80'}} className="text-[10px] font-bold px-2 py-0.5 rounded-full inline-flex items-center gap-1">
-                      <span style={{background:'#22c55e',boxShadow:'0 0 6px #22c55e'}} className="w-1.5 h-1.5 rounded-full"></span>En racha
+        <div
+          data-reveal="true"
+          className="opacity-0 mb-6 gradient-border-gold"
+          style={{ transitionDelay: '200ms' }}
+        >
+          <div className="gradient-bg-dark-inner overflow-hidden rounded-[20.5px]">
+            <div className="relative min-h-[140px] md:min-h-[160px] overflow-hidden">
+              <img
+                src={getCardImageUrl()}
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover object-[center_20%] scale-105"
+                decoding="async"
+                fetchPriority="high"
+              />
+              {/* Oscurece la zona del texto para legibilidad */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    'linear-gradient(90deg, rgba(8,8,10,0.92) 0%, rgba(8,8,10,0.78) 42%, rgba(8,8,10,0.35) 72%, rgba(8,8,10,0.2) 100%), linear-gradient(180deg, rgba(8,8,10,0.25) 0%, transparent 40%, rgba(8,8,10,0.55) 100%)',
+                }}
+              />
+              <div className="relative z-10 p-6 md:p-8 flex flex-col md:flex-row md:items-center gap-5">
+                <img
+                  src={data.rank.rank_image}
+                  width="64"
+                  height="64"
+                  className="shrink-0 drop-shadow-[0_8px_16px_rgba(0,0,0,0.8)]"
+                  alt=""
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="text-2xl font-semibold tracking-tight text-white truncate drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                      {data.account?.name || 'Player'}
+                      <span className="text-white/80 ml-0.5">
+                        #{data.account?.tag || '000'}
+                      </span>
+                    </h3>
+                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-md text-white bg-[#ff4655] shadow-[0_2px_8px_rgba(0,0,0,0.45)]">
+                      {translateRank(data.rank.current_tier_patched, currentLang)}
                     </span>
-                  )}
-                </div>
-                <div className="flex items-center gap-3 mt-2 text-sm">
-                  <span className="flex items-center gap-1.5 text-neutral-300"><span style={{background:'#22c55e'}} className="w-2 h-2 rounded-full"></span>{data.rank.elo} ELO</span>
-                  <span className={`font-semibold ${(data.rank.mmr_change_to_last_game || 0) > 0 ? 'text-green-400' : 'text-red-400'}`}>{(data.rank.mmr_change_to_last_game || 0) > 0 ? '+' : ''}{data.rank.mmr_change_to_last_game}</span>
-                </div>
-                <div style={{background:'#26262c'}} className="h-2 rounded-full mt-3 overflow-hidden max-w-md">
-                  <div style={{background:'linear-gradient(90deg,#ff8a93,#ff4655)',width:`${data.rank.ranking_in_tier}%`}} className="h-full rounded-full"></div>
-                </div>
-                <div className="flex items-center justify-between mt-2 text-[10px] font-medium max-w-md">
-                  <span className="text-white/70">{data.rank.ranking_in_tier} / 100 {t('points')}</span>
-                  <span className="text-white font-bold">{t('toNext')} {data.rank.ranking_in_tier}%</span>
+                    {data.match && data.match.derived?.is_win && (
+                      <span className="text-[10px] font-bold px-2.5 py-1 rounded-full inline-flex items-center gap-1.5 text-white bg-[#16a34a] border border-[#4ade80]/50 shadow-[0_2px_10px_rgba(22,163,74,0.55)]">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_6px_#fff]" />
+                        En racha
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-3 mt-2 text-sm drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+                    <span className="flex items-center gap-1.5 text-neutral-100">
+                      <span className="w-2 h-2 rounded-full bg-[#22c55e]" />
+                      {data.rank.elo} ELO
+                    </span>
+                    <span
+                      className={`font-semibold ${
+                        (data.rank.mmr_change_to_last_game || 0) > 0
+                          ? 'text-green-400'
+                          : 'text-red-400'
+                      }`}
+                    >
+                      {(data.rank.mmr_change_to_last_game || 0) > 0 ? '+' : ''}
+                      {data.rank.mmr_change_to_last_game}
+                    </span>
+                  </div>
+                  <div className="h-2 rounded-full mt-3 overflow-hidden max-w-md bg-black/50 border border-white/10">
+                    <div
+                      style={{
+                        background: 'linear-gradient(90deg,#ff8a93,#ff4655)',
+                        width: `${data.rank.ranking_in_tier}%`,
+                      }}
+                      className="h-full rounded-full"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between mt-2 text-[10px] font-medium max-w-md drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+                    <span className="text-white/80">
+                      {data.rank.ranking_in_tier} / 100 {t('points')}
+                    </span>
+                    <span className="text-white font-bold">
+                      {t('toNext')} {data.rank.ranking_in_tier}%
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
       )}
 
       {/* RESUMEN + ÚLTIMA PARTIDA */}
