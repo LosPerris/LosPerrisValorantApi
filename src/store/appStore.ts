@@ -30,8 +30,8 @@ export const botPlatform = atom<string>('nightbot');
 export const configMode = atom<string>('rank');
 
 // Formats
-export const formatRank = atom<string>('3');
-export const formatMatch = atom<string>('3');
+export const formatRank = atom<string>('1');
+export const formatMatch = atom<string>('1');
 export const formatToday = atom<string>('1');
 export const formatStats = atom<string>('1');
 
@@ -59,9 +59,9 @@ export const translations: Record<string, Record<string, string>> = {
     platform: "Plataforma",
     format: "Formato",
     formatRank: "Formato de Rango",
-    formatRank1: "Básico (Rango + Puntos)",
-    formatRank2: "Solo Rango",
-    formatRank3: "Completo (Rango + Puntos + MMR)",
+    formatRank1: "Solo rango",
+    formatRank2: "Rango + puntos",
+    formatRank3: "Rango + puntos + MMR",
     formatMatch: "Formato de Partida",
     formatMatch1: "Mapa + Resultado",
     formatMatch2: "Mapa + Resultado + KDA",
@@ -71,9 +71,9 @@ export const translations: Record<string, Record<string, string>> = {
     formatToday2: "Medio (Partidas jugadas)",
     formatToday3: "Detallado (Incluye Winrate)",
     formatStats: "Formato de Stats",
-    formatStats1: "Básico (Winrate + Agente + HS)",
-    formatStats2: "Descriptivo",
-    formatStats3: "Compacto",
+    formatStats1: "Compacto",
+    formatStats2: "Básico (Winrate + Agente + HS)",
+    formatStats3: "Descriptivo",
     botCmds: "Comandos del Bot",
     example: "EJEMPLO:",
     docsTitle: "Documentación de la API",
@@ -149,9 +149,9 @@ export const translations: Record<string, Record<string, string>> = {
     platform: "Platform",
     format: "Format",
     formatRank: "Rank Format",
-    formatRank1: "Basic (Rank + RR)",
-    formatRank2: "Rank Only",
-    formatRank3: "Full (Rank + RR + MMR)",
+    formatRank1: "Rank only",
+    formatRank2: "Rank + RR",
+    formatRank3: "Rank + RR + MMR",
     formatMatch: "Match Format",
     formatMatch1: "Map + Result",
     formatMatch2: "Map + Result + KDA",
@@ -161,9 +161,9 @@ export const translations: Record<string, Record<string, string>> = {
     formatToday2: "Medium (Matches played)",
     formatToday3: "Detailed (Includes Winrate)",
     formatStats: "Stats Format",
-    formatStats1: "Basic (Winrate + Agent + HS)",
-    formatStats2: "Descriptive",
-    formatStats3: "Compact",
+    formatStats1: "Compact",
+    formatStats2: "Basic (Winrate + Agent + HS)",
+    formatStats3: "Descriptive",
     botCmds: "Bot Commands",
     example: "EXAMPLE:",
     docsTitle: "API Documentation",

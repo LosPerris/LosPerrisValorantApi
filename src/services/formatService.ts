@@ -108,12 +108,12 @@ export function formatRankText(data: FormattedRankData, lang: string, type: stri
     const translatedRank = translateRank(rank, lang);
     const isEs = lang === 'es';
 
-    if (type === '1') return isEs ? `Actualmente estoy en ${translatedRank} con ${rr} puntos` : `Currently I am in ${translatedRank} with ${rr} RR`;
-    if (type === '2') return isEs ? `Actualmente estoy en ${translatedRank}` : `Currently I am in ${translatedRank}`;
+    // type 1 = menos detalle → type 3 = más detalle
+    if (type === '1') return isEs ? `Actualmente estoy en ${translatedRank}` : `Currently I am in ${translatedRank}`;
+    if (type === '2') return isEs ? `Actualmente estoy en ${translatedRank} con ${rr} puntos` : `Currently I am in ${translatedRank} with ${rr} RR`;
     if (type === '3') return isEs ? `Actualmente estoy en ${translatedRank} con ${rr} puntos, mi mmr es de ${elo}` : `Currently I am in ${translatedRank} with ${rr} RR, my mmr is ${elo}`;
 
-    // Default fallback
-    return isEs ? `Actualmente estoy en ${translatedRank} con ${rr} puntos` : `Currently I am in ${translatedRank} with ${rr} RR`;
+    return isEs ? `Actualmente estoy en ${translatedRank}` : `Currently I am in ${translatedRank}`;
 }
 
 export function formatMatchText(data: MatchTextData, lang: string, type: string, mmrChange = 0): string {
@@ -173,13 +173,16 @@ export function formatStatsText(data: GeneralStatsData, lang: string, name: stri
             : `${name} does not have enough recent matches to analyze.`;
     }
 
+    // type 1 = menos detalle → type 3 = más detalle
     if (isEs) {
-        if (type === '2') return `En sus últimas ${matches_analyzed} partidas, ${name} ha jugado principalmente con ${favorite_agent}, logrando un winrate del ${winrate}% y ${hs_percent}% de HS.`;
-        if (type === '3') return `Stats de ${name} (${matches_analyzed} partidas): ${winrate}% WR | Agente: ${favorite_agent} | HS: ${hs_percent}%`;
-        return `${name} tiene un winrate del ${winrate}% en sus últimas ${matches_analyzed} partidas. Su agente más jugado es ${favorite_agent} (${hs_percent}% HS).`;
+        if (type === '1') return `Stats de ${name} (${matches_analyzed} partidas): ${winrate}% WR | Agente: ${favorite_agent} | HS: ${hs_percent}%`;
+        if (type === '2') return `${name} tiene un winrate del ${winrate}% en sus últimas ${matches_analyzed} partidas. Su agente más jugado es ${favorite_agent} (${hs_percent}% HS).`;
+        if (type === '3') return `En sus últimas ${matches_analyzed} partidas, ${name} ha jugado principalmente con ${favorite_agent}, logrando un winrate del ${winrate}% y ${hs_percent}% de HS.`;
+        return `Stats de ${name} (${matches_analyzed} partidas): ${winrate}% WR | Agente: ${favorite_agent} | HS: ${hs_percent}%`;
     }
 
-    if (type === '2') return `In their last ${matches_analyzed} matches, ${name} has primarily played ${favorite_agent}, achieving a ${winrate}% winrate and ${hs_percent}% HS.`;
-    if (type === '3') return `${name}'s Stats (${matches_analyzed} matches): ${winrate}% WR | Agent: ${favorite_agent} | HS: ${hs_percent}%`;
-    return `${name} has a ${winrate}% winrate in their last ${matches_analyzed} matches. Most played agent is ${favorite_agent} (${hs_percent}% HS).`;
+    if (type === '1') return `${name}'s Stats (${matches_analyzed} matches): ${winrate}% WR | Agent: ${favorite_agent} | HS: ${hs_percent}%`;
+    if (type === '2') return `${name} has a ${winrate}% winrate in their last ${matches_analyzed} matches. Most played agent is ${favorite_agent} (${hs_percent}% HS).`;
+    if (type === '3') return `In their last ${matches_analyzed} matches, ${name} has primarily played ${favorite_agent}, achieving a ${winrate}% winrate and ${hs_percent}% HS.`;
+    return `${name}'s Stats (${matches_analyzed} matches): ${winrate}% WR | Agent: ${favorite_agent} | HS: ${hs_percent}%`;
 }

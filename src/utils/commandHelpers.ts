@@ -1,69 +1,140 @@
+import {
+    formatRankText,
+    formatMatchText,
+    formatTodayText,
+    formatStatsText
+} from '../services/formatService';
+import type {
+    SummaryResponse,
+    TodaySummaryData,
+    GeneralStatsData
+} from '../types/valorant';
+
 export const generateBotCommand = (
-  endpoint: string,
-  type: string,
-  platform: string,
-  config: { rankF: string; matchF: string; todayF: string; statsF: string },
-  lang: string,
-  account: { name: string; tag: string; region: string } | null
+    endpoint: string,
+    type: string,
+    platform: string,
+    config: { rankF: string; matchF: string; todayF: string; statsF: string },
+    lang: string,
+    account: { name: string; tag: string; region: string } | null
 ): string => {
-  if (!account) return '';
-  const name = encodeURIComponent(account.name);
-  const tag = encodeURIComponent(account.tag);
-  const region = account.region || 'na';
-  
-  let formatStr = '?format=text';
-  
-  let typeVal = '1';
-  if (type === 'rank' && config.rankF !== '1') typeVal = config.rankF;
-  if (type === 'match' && config.matchF !== '1') typeVal = config.matchF;
-  if (type === 'today' && config.todayF !== '1') typeVal = config.todayF;
-  if (type === 'stats' && config.statsF !== '1') typeVal = config.statsF;
+    if (!account) return '';
+    const name = encodeURIComponent(account.name);
+    const tag = encodeURIComponent(account.tag);
+    const region = account.region || 'na';
 
-  if (typeVal !== '1') {
-    formatStr += `&type=${typeVal}`;
-  }
+    let formatStr = '?format=text';
 
-  if (lang !== 'es') {
-    formatStr += `&lang=${lang}`;
-  }
+    let typeVal = '1';
+    if (type === 'rank') typeVal = config.rankF;
+    if (type === 'match') typeVal = config.matchF;
+    if (type === 'today') typeVal = config.todayF;
+    if (type === 'stats') typeVal = config.statsF;
 
-  const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://vlr.losperris.dev';
-  const url = `${baseUrl}/api/${endpoint}/${region}/${name}/${tag}${formatStr}`;
-  
-  if (platform === 'nightbot') {
-    return `!addcom !${type} $(urlfetch ${url})`;
-  } else {
+    if (typeVal !== '1') {
+        formatStr += `&type=${typeVal}`;
+    }
+
+    if (lang !== 'es') {
+        formatStr += `&lang=${lang}`;
+    }
+
+    const baseUrl =
+        typeof window !== 'undefined' ? window.location.origin : 'https://vlr.losperris.dev';
+    const url = `${baseUrl}/api/${endpoint}/${region}/${name}/${tag}${formatStr}`;
+
+    if (platform === 'nightbot') {
+        return `!addcom !${type} $(urlfetch ${url})`;
+    }
     return `!addcmd !${type} $(customapi ${url})`;
-  }
 };
 
+/** Ejemplo de respuesta usando los datos reales del jugador buscado. */
 export const getCommandExample = (
-  type: string,
-  config: { rankF: string; matchF: string; todayF: string; statsF: string },
-  lang: string
+    type: string,
+    config: { rankF: string; matchF: string; todayF: string; statsF: string },
+    lang: string,
+    data: SummaryResponse | null
 ): string => {
-  const isEs = lang === 'es';
+    if (!data?.account) return '';
 
-  if (type === 'rank') {
-    if (config.rankF === '2') return isEs ? 'Actualmente estoy en Oro 3' : 'Currently I am in Gold 3';
-    if (config.rankF === '3') return isEs ? 'Actualmente estoy en Oro 3 con 47 puntos, mi mmr es de 1147' : 'Currently I am in Gold 3 with 47 RR, my mmr is 1147';
-    return isEs ? 'Actualmente estoy en Oro 3 con 47 puntos' : 'Currently I am in Gold 3 with 47 RR';
-  }
+    const name = data.account.name || data.rank?.name || 'Player';
 
-  if (type === 'match') {
-    if (config.matchF === '2') return isEs ? 'Mi última partida fue en Pearl con Jett gané 25 puntos mi kda fue de 12/4/3' : 'My last match was on Pearl with Jett won 25 RR my kda was 12/4/3';
-    if (config.matchF === '3') return isEs ? 'Mi última partida fue en Pearl con Jett gané 25 puntos mi kda fue de 12/4/3, mi porcentaje de HS fue de 24% HS' : 'My last match was on Pearl with Jett won 25 RR my kda was 12/4/3, my HS percentage was 24%';
-    return isEs ? 'Mi última partida fue en Pearl con Jett gané 25 puntos' : 'My last match was on Pearl with Jett won 25 RR';
-  }
+    if (type === 'rank' && data.rank) {
+        return formatRankText(data.rank, lang, config.rankF);
+    }
 
-  if (type === 'today') {
-    if (config.todayF === '2') return isEs ? 'Hoy Ponss ha jugado 3 partidas: 2 Victorias, 1 Derrotas (Total: +15 RR).' : 'Today Ponss has played 3 matches: 2 Wins, 1 Losses (Total: +15 RR).';
-    if (config.todayF === '3') return isEs ? 'Hoy Ponss ha jugado 3 partidas (66% Winrate): 2 Victorias, 1 Derrotas (Total: +15 RR).' : 'Today Ponss has played 3 matches (66% Winrate): 2 Wins, 1 Losses (Total: +15 RR).';
-    return isEs ? 'Hoy Ponss lleva 2 Victorias, 1 Derrotas (Total: +15 RR).' : 'Today Ponss has 2 Wins, 1 Losses (Total: +15 RR).';
-  }
+    if (type === 'match' && data.match?.derived) {
+        return formatMatchText(
+            data.match,
+            lang,
+            config.matchF,
+            data.rank?.mmr_change_to_last_game ?? 0
+        );
+    }
 
-  // stats
-  if (config.statsF === '2') return isEs ? 'En sus últimas 5 partidas, Ponss ha jugado principalmente con Jett, logrando un winrate del 50% y 24% de HS.' : 'In their last 5 matches, Ponss has primarily played Jett, achieving a 50% winrate and 24% HS.';
-  if (config.statsF === '3') return isEs ? 'Stats de Ponss (5 partidas): 50% WR | Agente: Jett | HS: 24%' : 'Ponss\'s Stats (5 matches): 50% WR | Agent: Jett | HS: 24%';
-  return isEs ? 'Ponss tiene un winrate del 50% en sus últimas 5 partidas. Su agente más jugado es Jett (24% HS).' : 'Ponss has a 50% winrate in their last 5 matches. Most played agent is Jett (24% HS).';
+    if (type === 'today') {
+        const today = deriveTodayFromHistory(data);
+        return formatTodayText(today, lang, name, config.todayF);
+    }
+
+    if (type === 'stats') {
+        const stats = deriveStatsFromMatch(data, name);
+        return formatStatsText(stats, lang, name, config.statsF);
+    }
+
+    return '';
 };
+
+function deriveTodayFromHistory(data: SummaryResponse): TodaySummaryData {
+    const history = data.history ?? [];
+    if (history.length === 0) {
+        return { matches_played: 0, wins: 0, losses: 0, draws: 0, rr_change: 0 };
+    }
+
+    // Usa el historial reciente como preview (no es “hoy” real, pero refleja al jugador)
+    const sample = history.slice(-5);
+    let wins = 0;
+    let losses = 0;
+    let draws = 0;
+    let rr_change = 0;
+
+    for (const m of sample) {
+        rr_change += m.change;
+        if (m.change > 0) wins++;
+        else if (m.change < 0) losses++;
+        else draws++;
+    }
+
+    return {
+        matches_played: sample.length,
+        wins,
+        losses,
+        draws,
+        rr_change
+    };
+}
+
+function deriveStatsFromMatch(data: SummaryResponse, _name: string): GeneralStatsData {
+    const match = data.match;
+    if (!match?.derived) {
+        return {
+            matches_analyzed: 0,
+            winrate: 0,
+            favorite_agent: '—',
+            hs_percent: '0'
+        };
+    }
+
+    const history = data.history ?? [];
+    const wins = history.filter((m) => m.change > 0).length;
+    const total = history.length || 1;
+    const winrate = Math.round((wins / total) * 100);
+
+    return {
+        matches_analyzed: history.length || 1,
+        winrate,
+        favorite_agent: match.derived.agent_name,
+        hs_percent: String(match.derived.hs_percent)
+    };
+}

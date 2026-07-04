@@ -26,11 +26,17 @@ export default function PlayerResults() {
       <SectionHeader step={2} title={t('resultsTitle')} subtitle={t('resultsSub')} delay="100ms" />
 
       {data.rank && (
-      <div data-reveal="true" className="opacity-0 mb-6 gradient-border-gold" style={{transitionDelay: '200ms'}}>
+          <div data-reveal="true" className="opacity-0 mb-6 gradient-border-gold" style={{transitionDelay: '200ms'}}>
         <div className="gradient-bg-dark-inner overflow-hidden">
-          <div style={{background:`url('${getCardImageUrl()}') center/cover`}} className="relative">
-            <div className="bg-overlay-dark p-6 md:p-8 flex flex-col md:flex-row md:items-center gap-5">
-              <img src={data.rank.rank_image} width="64" className="shrink-0 drop-shadow-[0_8px_16px_rgba(0,0,0,0.6)]" />
+          <div className="relative overflow-hidden">
+            <img
+              src={getCardImageUrl()}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover object-center"
+              decoding="async"
+            />
+            <div className="bg-overlay-dark p-6 md:p-8 flex flex-col md:flex-row md:items-center gap-5 relative z-10">
+              <img src={data.rank.rank_image} width="64" height="64" className="shrink-0 drop-shadow-[0_8px_16px_rgba(0,0,0,0.6)]" alt="" />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <h3 className="text-2xl font-semibold tracking-tight text-white truncate">{data.account?.name || 'Player'}<span className="text-white/70 ml-0.5">#{data.account?.tag || '000'}</span></h3>
@@ -96,12 +102,18 @@ export default function PlayerResults() {
         {/* LAST MATCH */}
         {data.match ? (
         <div data-reveal="true" className={`opacity-0 flex flex-col h-full relative ${data.match.derived?.is_win ? 'gradient-border-match-win' : 'gradient-border-match-loss'}`} style={{transitionDelay: '300ms'}}>
-          <div style={{
-            background: data.match.derived?.map_image 
-              ? `linear-gradient(90deg, #111115 0%, rgba(17,17,21,0.85) 45%, rgba(17,17,21,0.2) 100%), url('${data.match.derived.map_image}') center/cover no-repeat` 
-              : 'linear-gradient(180deg,#16161b,#0e0e11)',
-            borderRadius:'20.5px'
-          }} className="p-5 md:p-6 h-full flex flex-col justify-between relative overflow-hidden group">
+          <div style={{borderRadius:'20.5px', background:'linear-gradient(180deg,#16161b,#0e0e11)'}} className="p-5 md:p-6 h-full flex flex-col justify-between relative overflow-hidden group">
+            {data.match.derived?.map_image && (
+              <>
+                <img
+                  src={data.match.derived.map_image}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover object-center"
+                  decoding="async"
+                />
+                <div className="absolute inset-0" style={{background:'linear-gradient(90deg, #111115 0%, rgba(17,17,21,0.85) 45%, rgba(17,17,21,0.2) 100%)'}} />
+              </>
+            )}
             
             <div className="flex items-center gap-3 mb-10 z-10 relative">
               <div style={{background:'rgba(255,70,85,0.15)', border:'1px solid rgba(255,70,85,0.3)'}} className="w-8 h-8 rounded-lg flex items-center justify-center">

@@ -48,10 +48,10 @@ export default function Hero() {
             <span className="w-2.5 h-2.5 rounded-full" style={{background:'#28c840'}}></span>
             <span className="ml-2 text-[10px] font-mono text-neutral-500">overlay · live</span>
           </div>
-          <div style={{background:"url('/imgs/hero_card.png') center / cover no-repeat",borderRadius:'14px'}} className="overflow-hidden">
+          <div style={{background:"url('/imgs/hero_card.webp') center / cover no-repeat",borderRadius:'14px'}} className="overflow-hidden">
             <div style={{background:'linear-gradient(90deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%)'}} className="p-5 flex items-center gap-4">
               <div className="w-14 h-14 flex items-center justify-center shrink-0">
-                <img src="/imgs/ascendant2.png" className="w-full h-full object-contain drop-shadow-xl" alt="Ascendente 2" />
+                <img src="/imgs/ascendant2.webp" className="w-full h-full object-contain drop-shadow-xl" alt="Ascendente 2" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-white text-sm truncate">PonssLoveless <span className="text-neutral-400">#8882</span></p>

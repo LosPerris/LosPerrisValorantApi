@@ -22,7 +22,7 @@ export default function CommandGenerator() {
 
   useEffect(() => {
     setCopied(false);
-  }, [currentPlatform, currentConfig, rankF, matchF, todayF, statsF]);
+  }, [currentPlatform, currentConfig, rankF, matchF, todayF, statsF, data]);
 
   if (!searched) return null;
 
@@ -42,9 +42,10 @@ export default function CommandGenerator() {
   };
 
   const currentExample = getCommandExample(
-    currentConfig, 
-    { rankF, matchF, todayF, statsF }, 
-    currentLang
+    currentConfig,
+    { rankF, matchF, todayF, statsF },
+    currentLang,
+    data
   );
 
   const finalEndpoint = currentConfig === 'match' ? 'match/last' : currentConfig;
