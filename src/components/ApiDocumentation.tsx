@@ -69,6 +69,10 @@ export default function ApiDocumentation() {
               Integra datos de rangos, historial de partidas y estadísticas detalladas en tus aplicaciones o bots
               de chat (Nightbot, StreamElements).
             </p>
+            <div className="bg-[#09090b]/60 border border-card-border rounded-[8px] p-[15px_20px] font-mono text-[0.95rem] text-white break-all">
+              <span className="text-neutral-500 text-xs uppercase tracking-wider block mb-1">Base URL</span>
+              {siteUrl}
+            </div>
           </section>
 
           <section id="rank" className="bg-gradient-to-b from-[#131316]/80 to-[#0e0e11]/90 border border-card-border rounded-[16px] p-[30px] lg:p-[50px] scroll-mt-[40px] shadow-[0_15px_35px_rgba(0,0,0,0.3)] backdrop-blur-[10px] animate-[fadeInUp_0.6s_ease-out_forwards] delay-100 opacity-0 fill-mode-forwards">
