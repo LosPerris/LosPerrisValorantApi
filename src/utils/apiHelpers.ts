@@ -47,19 +47,15 @@ export async function checkRateLimit(key: string): Promise<boolean> {
 }
 
 // ─── Estadísticas Globales (Redis) ──────────────────────────────────────────
+// Coste bajo: 1 pipeline (1 RTT) por petición de jugador — incr + set latencia.
 const REQUESTS_KEY = 'vlr_requests_total';
-const LATENCY_AVG_KEY = 'vlr_latency_avg';
 const LATENCY_LAST_KEY = 'vlr_latency_last';
 
-/** Cuenta la petición y actualiza latencia media (EMA) en ms. */
+/** Cuenta la petición y guarda la última latencia (un solo round-trip a Redis). */
 export async function recordRequestMetrics(durationMs: number) {
     try {
-        await kv.incr(REQUESTS_KEY);
         const safeMs = Math.max(0, Math.round(durationMs));
-        await kv.set(LATENCY_LAST_KEY, safeMs);
-        const prev = (await kv.get<number>(LATENCY_AVG_KEY)) ?? safeMs;
-        const avg = Math.round(prev * 0.8 + safeMs * 0.2);
-        await kv.set(LATENCY_AVG_KEY, avg);
+        await kv.pipeline().incr(REQUESTS_KEY).set(LATENCY_LAST_KEY, safeMs).exec();
     } catch (e) {
         console.warn('Failed to record request metrics:', e);
     }
@@ -67,14 +63,13 @@ export async function recordRequestMetrics(durationMs: number) {
 
 export async function getRequestMetrics(): Promise<{ requests: number; latency: number }> {
     try {
-        const [requests, latencyAvg, latencyLast] = await Promise.all([
+        const [requests, latency] = await Promise.all([
             kv.get<number>(REQUESTS_KEY),
-            kv.get<number>(LATENCY_AVG_KEY),
             kv.get<number>(LATENCY_LAST_KEY)
         ]);
         return {
             requests: requests ?? 0,
-            latency: latencyAvg ?? latencyLast ?? 0
+            latency: latency ?? 0
         };
     } catch (e) {
         console.warn('Failed to read request metrics:', e);
