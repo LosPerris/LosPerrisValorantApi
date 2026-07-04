@@ -46,12 +46,39 @@ export async function checkRateLimit(key: string): Promise<boolean> {
     }
 }
 
-// ─── Estadísticas Globales ──────────────────────────────────────────────────
-export async function incrementRequestCount() {
+// ─── Estadísticas Globales (Redis) ──────────────────────────────────────────
+const REQUESTS_KEY = 'vlr_requests_total';
+const LATENCY_AVG_KEY = 'vlr_latency_avg';
+const LATENCY_LAST_KEY = 'vlr_latency_last';
+
+/** Cuenta la petición y actualiza latencia media (EMA) en ms. */
+export async function recordRequestMetrics(durationMs: number) {
     try {
-        await kv.incr('vlr_requests_total');
-    } catch(e) {
-        console.warn('Failed to increment request count:', e);
+        await kv.incr(REQUESTS_KEY);
+        const safeMs = Math.max(0, Math.round(durationMs));
+        await kv.set(LATENCY_LAST_KEY, safeMs);
+        const prev = (await kv.get<number>(LATENCY_AVG_KEY)) ?? safeMs;
+        const avg = Math.round(prev * 0.8 + safeMs * 0.2);
+        await kv.set(LATENCY_AVG_KEY, avg);
+    } catch (e) {
+        console.warn('Failed to record request metrics:', e);
+    }
+}
+
+export async function getRequestMetrics(): Promise<{ requests: number; latency: number }> {
+    try {
+        const [requests, latencyAvg, latencyLast] = await Promise.all([
+            kv.get<number>(REQUESTS_KEY),
+            kv.get<number>(LATENCY_AVG_KEY),
+            kv.get<number>(LATENCY_LAST_KEY)
+        ]);
+        return {
+            requests: requests ?? 0,
+            latency: latencyAvg ?? latencyLast ?? 0
+        };
+    } catch (e) {
+        console.warn('Failed to read request metrics:', e);
+        return { requests: 0, latency: 0 };
     }
 }
 
@@ -125,6 +152,7 @@ export type ValorantEndpointHandler = (params: {
 
 export function createValorantEndpoint(handler: ValorantEndpointHandler): APIRoute {
     return async (context: APIContext) => {
+        const started = Date.now();
         const { params, request, clientAddress } = context;
         const region = params.region as string;
         const name = params.name as string;
@@ -140,8 +168,6 @@ export function createValorantEndpoint(handler: ValorantEndpointHandler): APIRou
             return errorResponse(429, 'Rate limit exceeded. Please try again later.');
         }
 
-        incrementRequestCount().catch(() => {});
-
         const url = new URL(request.url);
         const formatParam = url.searchParams.get('format');
         const langParam = url.searchParams.get('lang');
@@ -149,23 +175,34 @@ export function createValorantEndpoint(handler: ValorantEndpointHandler): APIRou
 
         const queryValidation = validateQueryParams(formatParam, langParam, typeParam);
         if (!queryValidation.success) return queryValidation.error;
-        
+
         const { format, lang, type } = queryValidation.data;
 
         try {
             const resolved = await resolvePUUID(name, tag);
-            if (resolved.error) return resolved.error;
+            if (resolved.error) {
+                void recordRequestMetrics(Date.now() - started);
+                return resolved.error;
+            }
 
-            return await handler({
-                region, name, tag,
-                puuid: resolved.puuid,
-                accountData: resolved.accountData,
-                format: format || null, 
-                lang, 
-                type, 
-                url
-            }, context);
+            const response = await handler(
+                {
+                    region,
+                    name,
+                    tag,
+                    puuid: resolved.puuid,
+                    accountData: resolved.accountData,
+                    format: format || null,
+                    lang,
+                    type,
+                    url
+                },
+                context
+            );
+            void recordRequestMetrics(Date.now() - started);
+            return response;
         } catch (error: unknown) {
+            void recordRequestMetrics(Date.now() - started);
             console.error(`[API Error] ${request.url}:`, error);
             const errObj = error as Record<string, unknown>;
             const status = typeof errObj?.status === 'number' ? errObj.status : 500;
