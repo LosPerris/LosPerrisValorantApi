@@ -68,8 +68,8 @@ export async function getRequestMetrics(): Promise<{ requests: number; latency: 
             kv.get<number>(LATENCY_LAST_KEY)
         ]);
         return {
-            requests: requests ?? 0,
-            latency: latency ?? 0
+            requests: Number(requests) || 0,
+            latency: Number(latency) || 0
         };
     } catch (e) {
         console.warn('Failed to read request metrics:', e);
@@ -176,7 +176,8 @@ export function createValorantEndpoint(handler: ValorantEndpointHandler): APIRou
         try {
             const resolved = await resolvePUUID(name, tag);
             if (resolved.error) {
-                void recordRequestMetrics(Date.now() - started);
+                // await: en Vercel el proceso se congela al responder y un void no llega a Redis
+                await recordRequestMetrics(Date.now() - started);
                 return resolved.error;
             }
 
@@ -194,10 +195,10 @@ export function createValorantEndpoint(handler: ValorantEndpointHandler): APIRou
                 },
                 context
             );
-            void recordRequestMetrics(Date.now() - started);
+            await recordRequestMetrics(Date.now() - started);
             return response;
         } catch (error: unknown) {
-            void recordRequestMetrics(Date.now() - started);
+            await recordRequestMetrics(Date.now() - started);
             console.error(`[API Error] ${request.url}:`, error);
             const errObj = error as Record<string, unknown>;
             const status = typeof errObj?.status === 'number' ? errObj.status : 500;
