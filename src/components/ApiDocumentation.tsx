@@ -54,83 +54,81 @@ export default function ApiDocumentation() {
             Docs <span className="text-[#ff4655]">API</span>
           </h2>
         </div>
-        <nav className="flex flex-col gap-2 flex-1 overflow-y-auto pr-2">
-          <a
-            href="#intro"
-            className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-[0.95rem] font-medium text-neutral-400 transition-all duration-300 hover:bg-[#1a1a24] hover:text-white border border-transparent hover:border-[#ff4655]/25 group"
-          >
-            <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#1a1a24] text-neutral-400 group-hover:bg-[#ff4655]/15 group-hover:text-[#ff4655] group-hover:border group-hover:border-[#ff4655]/30 transition-all duration-300">
-              <iconify-icon icon="solar:home-2-linear" width="20"></iconify-icon>
-            </span>
-            Introducción
-          </a>
-
-          <div className="mt-6 flex flex-col gap-2">
-            <span className="text-[10px] uppercase text-neutral-500 tracking-[0.2em] ml-4 mb-2 font-bold">
-              Endpoints
-            </span>
-            <a
-              href="#rank"
-              className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-[0.95rem] font-medium text-neutral-400 transition-all duration-300 hover:bg-[#1a1a24] hover:text-white border border-transparent hover:border-[#ffd479]/30 group"
-            >
-              <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#1a1a24] text-neutral-400 group-hover:bg-[#ffd479]/15 group-hover:text-[#ffd479] group-hover:border group-hover:border-[#ffd479]/30 transition-all duration-300">
-                <iconify-icon icon="solar:medal-ribbon-linear" width="20"></iconify-icon>
-              </span>
-              Rank
-            </a>
-            <a
-              href="#match"
-              className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-[0.95rem] font-medium text-neutral-400 transition-all duration-300 hover:bg-[#1a1a24] hover:text-white border border-transparent hover:border-[#a970ff]/30 group"
-            >
-              <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#1a1a24] text-neutral-400 group-hover:bg-[#a970ff]/15 group-hover:text-[#a970ff] group-hover:border group-hover:border-[#a970ff]/30 transition-all duration-300">
-                <iconify-icon icon="solar:gamepad-linear" width="20"></iconify-icon>
-              </span>
-              Última Partida
-            </a>
-            <a
-              href="#today"
-              className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-[0.95rem] font-medium text-neutral-400 transition-all duration-300 hover:bg-[#1a1a24] hover:text-white border border-transparent hover:border-[#22c55e]/30 group"
-            >
-              <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#1a1a24] text-neutral-400 group-hover:bg-[#22c55e]/15 group-hover:text-[#22c55e] group-hover:border group-hover:border-[#22c55e]/30 transition-all duration-300">
-                <iconify-icon icon="solar:calendar-mark-linear" width="20"></iconify-icon>
-              </span>
-              Sesión de Hoy
-            </a>
-            <a
-              href="#stats"
-              className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-[0.95rem] font-medium text-neutral-400 transition-all duration-300 hover:bg-[#1a1a24] hover:text-white border border-transparent hover:border-[#3b82f6]/30 group"
-            >
-              <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#1a1a24] text-neutral-400 group-hover:bg-[#3b82f6]/15 group-hover:text-[#3b82f6] group-hover:border group-hover:border-[#3b82f6]/30 transition-all duration-300">
-                <iconify-icon icon="solar:pie-chart-2-linear" width="20"></iconify-icon>
-              </span>
-              Estadísticas
-            </a>
-          </div>
-
-          <div className="mt-6 flex flex-col gap-2">
-            <span className="text-[10px] uppercase text-neutral-500 tracking-[0.2em] ml-4 mb-2 font-bold">
-              Soporte
-            </span>
-            <a
-              href="#errors"
-              className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-[0.95rem] font-medium text-neutral-400 transition-all duration-300 hover:bg-[#1a1a24] hover:text-white border border-transparent hover:border-amber-500/30 group"
-            >
-              <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#1a1a24] text-neutral-400 group-hover:bg-amber-500/10 group-hover:text-amber-500 group-hover:border group-hover:border-amber-500/30 transition-all duration-300">
-                <iconify-icon icon="solar:danger-triangle-linear" width="20"></iconify-icon>
-              </span>
-              Errores
-            </a>
-          </div>
+        <nav className="docs-nav flex flex-col gap-2 flex-1 overflow-y-auto pr-2">
+          {(
+            [
+              { href: '#intro', label: 'Introducción', icon: 'solar:home-2-linear', color: '#ff4655' },
+              {
+                href: '#rank',
+                label: 'Rank',
+                icon: 'solar:medal-ribbon-linear',
+                color: '#ffd479',
+                group: 'Endpoints',
+              },
+              {
+                href: '#match',
+                label: 'Última Partida',
+                icon: 'solar:gamepad-linear',
+                color: '#a970ff',
+                group: 'Endpoints',
+              },
+              {
+                href: '#today',
+                label: 'Sesión de Hoy',
+                icon: 'solar:calendar-mark-linear',
+                color: '#22c55e',
+                group: 'Endpoints',
+              },
+              {
+                href: '#stats',
+                label: 'Estadísticas',
+                icon: 'solar:pie-chart-2-linear',
+                color: '#3b82f6',
+                group: 'Endpoints',
+              },
+              {
+                href: '#errors',
+                label: 'Errores',
+                icon: 'solar:danger-triangle-linear',
+                color: '#f59e0b',
+                group: 'Soporte',
+              },
+            ] as const
+          ).map((item, i, arr) => {
+            const prev = arr[i - 1] as { group?: string } | undefined;
+            const group = 'group' in item ? item.group : undefined;
+            const showGroup = Boolean(group && group !== prev?.group);
+            return (
+              <div key={item.href}>
+                {showGroup && (
+                  <span className="mt-6 mb-2 ml-4 block text-[10px] uppercase text-neutral-500 tracking-[0.2em] font-bold">
+                    {group}
+                  </span>
+                )}
+                <a
+                  href={item.href}
+                  className="docs-nav-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-[0.95rem] font-medium border border-transparent hover:bg-[#1a1a24]"
+                  style={{ ['--nav-accent' as string]: item.color }}
+                >
+                  <span className="docs-nav-icon flex items-center justify-center w-8 h-8 rounded-lg bg-[#1a1a24] border border-transparent shrink-0">
+                    <iconify-icon icon={item.icon} width="20" height="20"></iconify-icon>
+                  </span>
+                  <span className="docs-nav-label">{item.label}</span>
+                </a>
+              </div>
+            );
+          })}
 
           <a
             href="/"
-            className="mt-auto justify-center flex items-center gap-3 px-4 py-2.5 text-neutral-300 rounded-xl text-[0.95rem] font-medium transition-all hover:text-white group"
+            className="mt-auto justify-center flex items-center gap-2 px-4 py-2.5 text-neutral-300 rounded-xl text-[0.95rem] font-medium hover:brightness-110"
             style={{
               background: 'linear-gradient(135deg, rgba(255,70,85,0.12), rgba(169,112,255,0.1))',
               border: '1px solid rgba(255,70,85,0.25)',
             }}
           >
-            <iconify-icon icon="solar:alt-arrow-left-linear" width="20"></iconify-icon> Volver al Panel
+            <iconify-icon icon="solar:alt-arrow-left-linear" width="20" height="20"></iconify-icon>
+            Volver al Panel
           </a>
         </nav>
       </aside>
@@ -577,6 +575,39 @@ export default function ApiDocumentation() {
       <style>{`
         @keyframes fadeInUp {
           to { opacity: 1; transform: translateY(0); }
+        }
+
+        .docs-nav-link {
+          color: inherit;
+        }
+
+        .docs-nav-label {
+          color: #a3a3a3;
+          transition: color 0.15s ease;
+        }
+
+        .docs-nav-icon {
+          color: #a3a3a3;
+          transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+        }
+
+        .docs-nav-icon iconify-icon {
+          color: inherit;
+          display: block;
+        }
+
+        .docs-nav-link:hover {
+          border-color: color-mix(in srgb, var(--nav-accent) 30%, transparent);
+        }
+
+        .docs-nav-link:hover .docs-nav-label {
+          color: #fff;
+        }
+
+        .docs-nav-link:hover .docs-nav-icon {
+          color: var(--nav-accent);
+          background-color: color-mix(in srgb, var(--nav-accent) 14%, #1a1a24);
+          border-color: color-mix(in srgb, var(--nav-accent) 30%, transparent);
         }
       `}</style>
     </div>
