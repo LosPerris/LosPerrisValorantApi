@@ -58,9 +58,17 @@ export default function LiveStats() {
             </div>
             <div>
               <p className="text-xl font-bold text-white tracking-tight leading-none">
-                {stats.latency > 0
-                  ? `~${stats.latency}ms ("${(stats.latency / 1000).toFixed(2)}s")`
-                  : '—'}
+                {stats.latency > 0 ? (
+                  <>
+                    ~{stats.latency}ms{' '}
+                    <span className="text-xs font-medium text-neutral-400">
+                      ({(stats.latency / 1000).toFixed(2)}
+                      <span className="text-[0.65em]">s</span>)
+                    </span>
+                  </>
+                ) : (
+                  '—'
+                )}
               </p>
               <p className="text-xs text-neutral-400 uppercase tracking-wide mt-1">{t('avgLatency')}</p>
             </div>
