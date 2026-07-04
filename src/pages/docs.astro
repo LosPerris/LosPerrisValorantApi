@@ -1,8 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ApiDocumentation from '../components/ApiDocumentation';
+import Footer from '../components/islands/Footer';
+import AboutApiModal from '../components/islands/AboutApiModal';
 ---
 
 <Layout title="Documentación | LosPerris Valorant API">
   <ApiDocumentation client:load />
+  <AboutApiModal client:load />
+  <Footer client:load withSidebar />
 </Layout>

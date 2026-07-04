@@ -561,14 +561,6 @@ export default function ApiDocumentation() {
             </div>
           </section>
 
-          <footer className="mt-[60px] border-t border-white/10 pt-[40px] text-center text-[0.9rem] text-neutral-500 w-full">
-            <p className="text-neutral-400">
-              &copy; {new Date().getFullYear()} Los<span className="text-[#ff4655]">Perris</span> Valorant API
-            </p>
-            <p className="m-[10px_auto] opacity-70 text-[11px] max-w-[600px]">
-              No afiliada a Riot Games ni a Valorant.
-            </p>
-          </footer>
         </main>
       </div>
 
