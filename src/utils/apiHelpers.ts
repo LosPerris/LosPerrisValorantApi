@@ -47,15 +47,21 @@ export async function checkRateLimit(key: string): Promise<boolean> {
 }
 
 // ─── Estadísticas Globales (Redis) ──────────────────────────────────────────
-// Coste bajo: 1 pipeline (1 RTT) por petición de jugador — incr + set latencia.
+// Coste bajo: 1 pipeline (1 RTT) por petición — total, suma de ms y muestras para la media.
 const REQUESTS_KEY = 'vlr_requests_total';
-const LATENCY_LAST_KEY = 'vlr_latency_last';
+const LATENCY_SUM_KEY = 'vlr_latency_sum';
+const LATENCY_SAMPLES_KEY = 'vlr_latency_samples';
 
-/** Cuenta la petición y guarda la última latencia (un solo round-trip a Redis). */
+/** Cuenta la petición y acumula latencia para la media (un solo round-trip a Redis). */
 export async function recordRequestMetrics(durationMs: number) {
     try {
         const safeMs = Math.max(0, Math.round(durationMs));
-        await kv.pipeline().incr(REQUESTS_KEY).set(LATENCY_LAST_KEY, safeMs).exec();
+        await kv
+            .pipeline()
+            .incr(REQUESTS_KEY)
+            .incrby(LATENCY_SUM_KEY, safeMs)
+            .incr(LATENCY_SAMPLES_KEY)
+            .exec();
     } catch (e) {
         console.warn('Failed to record request metrics:', e);
     }
@@ -63,13 +69,17 @@ export async function recordRequestMetrics(durationMs: number) {
 
 export async function getRequestMetrics(): Promise<{ requests: number; latency: number }> {
     try {
-        const [requests, latency] = await Promise.all([
+        const [requests, sum, samples] = await Promise.all([
             kv.get<number>(REQUESTS_KEY),
-            kv.get<number>(LATENCY_LAST_KEY)
+            kv.get<number>(LATENCY_SUM_KEY),
+            kv.get<number>(LATENCY_SAMPLES_KEY)
         ]);
+        const total = Number(requests) || 0;
+        const sampleCount = Number(samples) || 0;
+        const latencySum = Number(sum) || 0;
         return {
-            requests: Number(requests) || 0,
-            latency: Number(latency) || 0
+            requests: total,
+            latency: sampleCount > 0 ? Math.round(latencySum / sampleCount) : 0
         };
     } catch (e) {
         console.warn('Failed to read request metrics:', e);
