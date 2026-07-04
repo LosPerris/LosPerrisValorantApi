@@ -33,7 +33,7 @@ export default function Hero() {
           <a href="#busqueda" style={{background:'linear-gradient(135deg,#ff4655,#e0303f)',boxShadow:'0 12px 32px -10px rgba(255,70,85,0.75)'}} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white font-semibold text-sm hover:brightness-110 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#ff4655]/30 active:scale-[0.99] transition-all duration-300">
             <iconify-icon icon="solar:magnifer-linear" width="16"></iconify-icon> {t('heroBtn')}
           </a>
-          <a href="./docs" style={{background:'#15151a',border:'1px solid #2a2a30'}} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-neutral-300 font-semibold text-sm hover:text-white hover:border-neutral-600 hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300">
+          <a href="/docs" style={{background:'#15151a',border:'1px solid #2a2a30'}} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-neutral-300 font-semibold text-sm hover:text-white hover:border-neutral-600 hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300">
             <iconify-icon icon="solar:document-text-linear" width="16"></iconify-icon> {t('docsBtn')}
           </a>
         </div>
@@ -48,10 +48,10 @@ export default function Hero() {
             <span className="w-2.5 h-2.5 rounded-full" style={{background:'#28c840'}}></span>
             <span className="ml-2 text-[10px] font-mono text-neutral-500">overlay · live</span>
           </div>
-          <div style={{background:"url('/api/valorant/imgs/hero_card.png') center / cover no-repeat",borderRadius:'14px'}} className="overflow-hidden">
+          <div style={{background:"url('/imgs/hero_card.png') center / cover no-repeat",borderRadius:'14px'}} className="overflow-hidden">
             <div style={{background:'linear-gradient(90deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%)'}} className="p-5 flex items-center gap-4">
               <div className="w-14 h-14 flex items-center justify-center shrink-0">
-                <img src="/api/valorant/imgs/ascendant2.png" className="w-full h-full object-contain drop-shadow-xl" alt="Ascendente 2" />
+                <img src="/imgs/ascendant2.png" className="w-full h-full object-contain drop-shadow-xl" alt="Ascendente 2" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-white text-sm truncate">PonssLoveless <span className="text-neutral-400">#8882</span></p>

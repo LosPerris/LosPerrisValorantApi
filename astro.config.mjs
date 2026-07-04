@@ -9,7 +9,7 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
   build: {
-    assetsPrefix: 'https://los-perris-valorant-api.vercel.app'
+    assetsPrefix: 'https://vlr.losperris.dev'
   },
   output: 'server',
   adapter: vercel()

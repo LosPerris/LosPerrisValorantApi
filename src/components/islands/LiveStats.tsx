@@ -8,7 +8,7 @@ export default function LiveStats() {
 
   useEffect(() => {
     const fetchStats = async () => {
-      fetch('/api/valorant/system/stats')
+      fetch('/api/system/stats')
         .then(res => res.json())
         .then(data => {
           if (data.data) setStats(data.data);

@@ -3,7 +3,7 @@ import CodeTabs from './ui/CodeTabs';
 
 export default function ApiDocumentation() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [siteUrl, setSiteUrl] = useState('https://valorant-api.losperris.com');
+  const [siteUrl, setSiteUrl] = useState('https://vlr.losperris.dev');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -22,7 +22,7 @@ export default function ApiDocumentation() {
 
       <aside className={`fixed top-0 left-0 h-screen w-[280px] bg-[#0a0a0d]/80 backdrop-blur-2xl border-r border-white/5 shadow-[4px_0_24px_rgba(0,0,0,0.5)] p-[30px_20px] flex flex-col z-[100] transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isSidebarOpen ? 'translate-x-0 shadow-[20px_0_50px_rgba(0,0,0,0.5)]' : '-translate-x-full lg:translate-x-0'}`}>
         <div className="flex items-center gap-[12px] mb-[40px]">
-          <img src="/api/valorant/imgs/LosPerris-minimal.svg" alt="Logo" className="w-[32px] h-[32px] drop-shadow-[0_0_8px_rgba(255,70,85,0.6)]" />
+          <img src="/imgs/LosPerris-minimal.svg" alt="Logo" className="w-[32px] h-[32px] drop-shadow-[0_0_8px_rgba(255,70,85,0.6)]" />
           <h2 className="text-[1.2rem] font-[800] tracking-[1px] m-0 text-white">Docs API</h2>
         </div>
         <nav className="flex flex-col gap-2 flex-1 overflow-y-auto pr-2">
@@ -79,7 +79,7 @@ export default function ApiDocumentation() {
 
             <div className="bg-[#09090b]/60 backdrop-blur-[10px] border border-card-border rounded-[8px] p-[15px_20px] flex items-center gap-[15px] mb-[35px] font-mono shadow-[0_4px_20px_rgba(0,0,0,0.2)] break-all">
               <span className="font-[700] p-[6px_12px] rounded-[6px] text-[0.85rem] tracking-[0.5px] bg-blue-500/15 text-blue-400 border border-blue-500/30">GET</span>
-              <span className="text-text-color">/api/valorant/rank/:region/:name/:tag</span>
+              <span className="text-text-color">/api/rank/:region/:name/:tag</span>
             </div>
 
             <h3 className="text-[1.3rem] m-[35px_0_15px_0] text-white font-[600]">Parámetros</h3>
@@ -120,7 +120,7 @@ export default function ApiDocumentation() {
             <h3 className="text-[1.3rem] m-[35px_0_15px_0] text-white font-[600]">Ejemplos de Uso</h3>
             <CodeTabs 
               siteUrl={siteUrl}
-              endpoint="/api/valorant/rank/na/PonssLoveless/8882"
+              endpoint="/api/rank/na/PonssLoveless/8882"
               botQuery="?format=text"
             />
 
@@ -164,12 +164,12 @@ export default function ApiDocumentation() {
 
             <div className="bg-[#09090b]/60 backdrop-blur-[10px] border border-card-border rounded-[8px] p-[15px_20px] flex items-center gap-[15px] mb-[35px] font-mono shadow-[0_4px_20px_rgba(0,0,0,0.2)] break-all">
               <span className="font-[700] p-[6px_12px] rounded-[6px] text-[0.85rem] tracking-[0.5px] bg-blue-500/15 text-blue-400 border border-blue-500/30">GET</span>
-              <span className="text-text-color">/api/valorant/match/last/:region/:name/:tag</span>
+              <span className="text-text-color">/api/match/last/:region/:name/:tag</span>
             </div>
 
             <CodeTabs 
               siteUrl={siteUrl}
-              endpoint="/api/valorant/match/last/na/PonssLoveless/8882"
+              endpoint="/api/match/last/na/PonssLoveless/8882"
               botQuery="?format=text"
             />
 
@@ -221,7 +221,7 @@ export default function ApiDocumentation() {
 
             <div className="bg-[#09090b]/60 backdrop-blur-[10px] border border-card-border rounded-[8px] p-[15px_20px] flex items-center gap-[15px] mb-[35px] font-mono shadow-[0_4px_20px_rgba(0,0,0,0.2)] break-all">
               <span className="font-[700] p-[6px_12px] rounded-[6px] text-[0.85rem] tracking-[0.5px] bg-blue-500/15 text-blue-400 border border-blue-500/30">GET</span>
-              <span className="text-text-color">/api/valorant/today/:region/:name/:tag</span>
+              <span className="text-text-color">/api/today/:region/:name/:tag</span>
             </div>
 
             <h3 className="text-[1.3rem] m-[35px_0_15px_0] text-white font-[600]">Parámetros</h3>
@@ -247,7 +247,7 @@ export default function ApiDocumentation() {
             <h3 className="text-[1.3rem] m-[35px_0_15px_0] text-white font-[600]">Ejemplos de Uso</h3>
             <CodeTabs 
               siteUrl={siteUrl}
-              endpoint="/api/valorant/today/na/PonssLoveless/8882"
+              endpoint="/api/today/na/PonssLoveless/8882"
               botQuery="?format=text&type=1"
             />
 
@@ -279,7 +279,7 @@ export default function ApiDocumentation() {
 
             <div className="bg-[#09090b]/60 backdrop-blur-[10px] border border-card-border rounded-[8px] p-[15px_20px] flex items-center gap-[15px] mb-[35px] font-mono shadow-[0_4px_20px_rgba(0,0,0,0.2)] break-all">
               <span className="font-[700] p-[6px_12px] rounded-[6px] text-[0.85rem] tracking-[0.5px] bg-blue-500/15 text-blue-400 border border-blue-500/30">GET</span>
-              <span className="text-text-color">/api/valorant/stats/:region/:name/:tag</span>
+              <span className="text-text-color">/api/stats/:region/:name/:tag</span>
             </div>
 
             <h3 className="text-[1.3rem] m-[35px_0_15px_0] text-white font-[600]">Parámetros</h3>
@@ -305,7 +305,7 @@ export default function ApiDocumentation() {
             <h3 className="text-[1.3rem] m-[35px_0_15px_0] text-white font-[600]">Ejemplos de Uso</h3>
             <CodeTabs 
               siteUrl={siteUrl}
-              endpoint="/api/valorant/stats/na/PonssLoveless/8882"
+              endpoint="/api/stats/na/PonssLoveless/8882"
               botQuery="?format=text&type=1"
             />
 

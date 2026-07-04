@@ -1,8 +1,8 @@
-import { createValorantEndpoint, CACHE_HEADERS, errorResponse } from '../../../../../../utils/apiHelpers';
-import * as valorantService from '../../../../../../services/valorantService';
-import * as formatService from '../../../../../../services/formatService';
-import type { SummaryResponse, ValorantApiResponse, ValorantAccount } from '../../../../../../types/valorant';
-import cache from '../../../../../../utils/cache';
+import { createValorantEndpoint, CACHE_HEADERS, errorResponse } from '../../../../../utils/apiHelpers';
+import * as valorantService from '../../../../../services/valorantService';
+import * as formatService from '../../../../../services/formatService';
+import type { SummaryResponse, ValorantApiResponse, ValorantAccount } from '../../../../../types/valorant';
+import cache from '../../../../../utils/cache';
 
 export const GET = createValorantEndpoint(async ({ region, name, tag, puuid, accountData }) => {
     // ── Caché de nivel superior: sirve el summary completo sin tocar la API ──

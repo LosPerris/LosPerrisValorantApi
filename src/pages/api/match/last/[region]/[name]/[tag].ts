@@ -1,6 +1,6 @@
-import { createValorantEndpoint, CACHE_HEADERS, TEXT_HEADERS, errorResponse } from '../../../../../../../utils/apiHelpers';
-import * as valorantService from '../../../../../../../services/valorantService';
-import * as formatService from '../../../../../../../services/formatService';
+import { createValorantEndpoint, CACHE_HEADERS, TEXT_HEADERS, errorResponse } from '../../../../../../utils/apiHelpers';
+import * as valorantService from '../../../../../../services/valorantService';
+import * as formatService from '../../../../../../services/formatService';
 
 export const GET = createValorantEndpoint(async ({ region, puuid, format, lang, type }) => {
     // Obtenemos matches y MMR en paralelo para evitar llamadas secuenciales

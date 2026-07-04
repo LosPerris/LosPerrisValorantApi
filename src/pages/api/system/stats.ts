@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { kv } from '../../../../utils/cache';
+import { kv } from '../../../utils/cache';
 
 export const GET: APIRoute = async () => {
     try {

@@ -27,8 +27,8 @@ export const generateBotCommand = (
     formatStr += `&lang=${lang}`;
   }
 
-  const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://www.losperris.dev';
-  const url = `${baseUrl}/api/valorant/${endpoint}/${region}/${name}/${tag}${formatStr}`;
+  const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://vlr.losperris.dev';
+  const url = `${baseUrl}/api/${endpoint}/${region}/${name}/${tag}${formatStr}`;
   
   if (platform === 'nightbot') {
     return `!addcom !${type} $(urlfetch ${url})`;

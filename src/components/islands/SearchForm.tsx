@@ -67,7 +67,7 @@ export default function SearchForm() {
     }
     
     try {
-      const res = await fetch(`/api/valorant/summary/${r.toLowerCase()}/${encodeURIComponent(n)}/${encodeURIComponent(tId)}`);
+      const res = await fetch(`/api/summary/${r.toLowerCase()}/${encodeURIComponent(n)}/${encodeURIComponent(tId)}`);
       const data = await res.json();
       
       if (data.status === 200) {
