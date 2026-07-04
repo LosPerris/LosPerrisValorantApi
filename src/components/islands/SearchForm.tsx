@@ -139,6 +139,7 @@ export default function SearchForm() {
                 options={[
                   { value: 'na', label: 'NA' },
                   { value: 'latam', label: 'LATAM' },
+                  { value: 'br', label: 'BR' },
                   { value: 'eu', label: 'EU' },
                   { value: 'ap', label: 'AP' },
                   { value: 'kr', label: 'KR' },
