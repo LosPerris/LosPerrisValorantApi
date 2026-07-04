@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslations } from '../../hooks/useTranslations';
 
-const REGIONS_COUNT = 6; // na, eu, ap, kr, latam, br
+const REGIONS_COUNT = 5; // na, latam, eu, ap, kr (las del selector)
 
 function formatRequests(n: number): string {
   if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
