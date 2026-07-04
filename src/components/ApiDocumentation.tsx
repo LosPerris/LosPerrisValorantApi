@@ -53,7 +53,7 @@ export default function ApiDocumentation() {
             </a>
           </div>
 
-          <a href="./" className="mt-auto border border-white/5 bg-[#1a1a24]/50 justify-center flex items-center gap-3 px-4 py-2.5 text-neutral-400 rounded-xl text-[0.95rem] font-medium transition-all hover:bg-[#1a1a24] hover:text-white group">
+          <a href="/" className="mt-auto border border-white/5 bg-[#1a1a24]/50 justify-center flex items-center gap-3 px-4 py-2.5 text-neutral-400 rounded-xl text-[0.95rem] font-medium transition-all hover:bg-[#1a1a24] hover:text-white group">
             <iconify-icon icon="solar:alt-arrow-left-linear" width="20"></iconify-icon> Volver al Panel
           </a>
         </nav>
@@ -296,7 +296,7 @@ export default function ApiDocumentation() {
                     <tr className="hover:bg-white/5 transition-colors">
                     <td className="p-[18px_24px]"> <code className="bg-white/10 px-[8px] py-[3px] rounded-[6px] text-[#ff8f99] font-mono text-[0.9em]">type</code></td>
                     <td className="p-[18px_24px]">Number</td>
-                    <td className="p-[18px_24px]">(Opcional) 1: Básico, 2: Descriptivo, 3: Compacto</td>
+                    <td className="p-[18px_24px]">(Opcional) 1: Compacto, 2: Básico, 3: Descriptivo</td>
                     </tr>
                 </tbody>
                 </table>

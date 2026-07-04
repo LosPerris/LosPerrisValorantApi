@@ -1,178 +1,158 @@
-# 🎯 LosPerris Valorant API
+# LosPerris Valorant API
 
-API REST construida con **Express 5 + TypeScript** para obtener datos de Valorant (rango, últimas partidas, historial de MMR) e integrarla con bots de Twitch como **Nightbot** o **StreamElements**.
+API y panel web para stats de Valorant (rango, última partida, sesión del día, estadísticas) e integración con bots de Twitch (Nightbot, Fossabot, StreamElements).
 
-Desplegada en [Vercel](https://vercel.com). Consume la API pública de [Henrik](https://henrikdev.xyz/).
+**Producción:** [https://vlr.losperris.dev](https://vlr.losperris.dev)
+
+Construida con **Astro + React**, desplegada en Vercel. Consume la API de [Henrik](https://henrikdev.xyz/). No afiliada a Riot Games ni a Valorant.
 
 ---
 
-## 📋 Endpoints
+## Rutas web
 
-Todos los endpoints aceptan el parámetro `?format=text` para devolver texto plano (ideal para bots de Twitch), y `?lang=es|en` para el idioma.
+| Ruta | Descripción |
+|------|-------------|
+| `/` | Landing / buscador y generador de comandos |
+| `/docs` | Documentación interactiva |
+
+---
+
+## Endpoints API
+
+Base URL: `https://vlr.losperris.dev`
+
+Query opcionales en todos los endpoints de jugador:
+
+| Param | Descripción | Valores |
+|-------|-------------|---------|
+| `format` | Formato de respuesta | `text` (bots) u omitir (JSON) |
+| `lang` | Idioma del texto | `es` (default), `en` |
+| `type` | Nivel de detalle del texto | `1` (menos) → `3` (más) |
 
 ### Rango
 
 ```
-GET /api/valorant/rank/:region/:name/:tag
+GET /api/rank/:region/:name/:tag
 ```
 
-| Parámetro | Descripción | Valores válidos |
-|-----------|-------------|-----------------|
-| `region`  | Región del servidor | `na`, `eu`, `ap`, `kr`, `latam`, `br` |
-| `name`    | Nombre del jugador | 3–16 caracteres |
-| `tag`     | Tag del jugador | 3–5 caracteres |
+Regiones: `na`, `eu`, `ap`, `kr`, `latam`, `br`.
 
-**Query params opcionales:**
+**Texto (`format=text`):**
+- `type=1` → solo rango
+- `type=2` → rango + puntos
+- `type=3` → rango + puntos + MMR
 
-| Param | Descripción | Valores |
-|-------|-------------|---------|
-| `format` | Formato de respuesta | `text` (plain) ó omitir (JSON) |
-| `lang` | Idioma del texto | `en` (default), `es` |
-| `type` | Plantilla de texto | `1`, `2`, `3` |
+### Última partida
 
-**Ejemplos de respuesta (text):**
-- `type=1` → `Currently I am in Gold 3`
-- `type=2` → `Currently I am in Gold 3 with 50 RR`
-- `type=3` → `Currently I am in Gold 3 with 50 RR, my mmr is 1550`
+```
+GET /api/match/last/:region/:name/:tag
+```
+
+- `type=1` → mapa + agente + resultado
+- `type=2` → + KDA
+- `type=3` → + HS%
+
+### Sesión de hoy
+
+```
+GET /api/today/:region/:name/:tag
+```
+
+- `type=1` → victorias / derrotas
+- `type=2` → + partidas jugadas
+- `type=3` → + winrate
+
+### Estadísticas recientes
+
+```
+GET /api/stats/:region/:name/:tag
+```
+
+- `type=1` → compacto
+- `type=2` → básico
+- `type=3` → descriptivo
+
+### Resumen (JSON)
+
+```
+GET /api/summary/:region/:name/:tag
+```
+
+Cuenta + rango + última partida + historial en una sola respuesta.
+
+### Health / métricas
+
+```
+GET /api/system/stats
+```
+
+Latencia y contador de peticiones (útil para monitores de uptime).
 
 ---
 
-### Última Partida
+## Bots de Twitch
+
+### Nightbot / StreamElements
 
 ```
-GET /api/valorant/match/:region/:name/:tag
+$(urlfetch https://vlr.losperris.dev/api/rank/na/NombreJugador/TAG?format=text&lang=es&type=1)
 ```
 
-**Ejemplos de respuesta (text):**
-- `type=1` → `My last match was on Ascent with Jett won 20 RR`
-- `type=2` → `My last match was on Ascent with Jett won 20 RR my kda was 15/5/3`
+### Fossabot
+
+```
+$(customapi https://vlr.losperris.dev/api/rank/na/NombreJugador/TAG?format=text&lang=es&type=1)
+```
+
+También puedes generar el comando desde el panel en [vlr.losperris.dev](https://vlr.losperris.dev) tras buscar un jugador.
 
 ---
 
-### Historial de MMR
-
-```
-GET /api/valorant/history/:region/:name/:tag
-```
-
----
-
-### Resumen completo
-
-```
-GET /api/valorant/summary/:region/:name/:tag
-```
-
-Devuelve cuenta + rango + última partida + historial en una sola petición (ideal para overlays de stream).
-
----
-
-### Preview / Overlay
-
-```
-GET /api/valorant/preview/:region/:name/:tag
-```
-
-Devuelve una página HTML renderizada lista para usar como overlay en OBS.
-
----
-
-## 🤖 Configuración para bots de Twitch
-
-### Nightbot
-
-```
-$(urlfetch https://tu-dominio.vercel.app/api/valorant/rank/eu/NombreJugador/TAG?format=text&lang=es&type=2)
-```
-
-### StreamElements
-
-```
-${customapi.https://tu-dominio.vercel.app/api/valorant/rank/eu/NombreJugador/TAG?format=text&lang=es&type=2}
-```
-
----
-
-## 🚀 Desarrollo local
+## Desarrollo local
 
 ### Requisitos
 
-- Node.js 18+
-- Cuenta en [Henrik API](https://henrikdev.xyz/) para obtener una `HENRIK_API_KEY`
+- Node.js 20+
+- `HENRIK_API_KEY` (y opcionalmente Vercel KV para caché/rate limit)
 
 ### Instalación
 
 ```bash
 git clone https://github.com/Ponss17/LosPerrisValorantApi.git
 cd LosPerrisValorantApi
-npm install
+pnpm install
 ```
 
 ### Variables de entorno
-
-Copia el archivo de ejemplo y rellena tu clave:
 
 ```bash
 cp .env.example .env
 ```
 
 ```env
-PORT=3000
 HENRIK_API_KEY=tu_api_key_aqui
 ```
 
-### Ejecutar en modo desarrollo
-
-```bash
-npm run dev
-```
-
-El servidor arrancará en `http://localhost:3000`.
-
-### Build para producción
-
-```bash
-npm run build
-npm start
-```
-
----
-
-## 🧪 Tests
-
-```bash
-npm test
-```
-
-Los tests se ubican en `tests/` y usan **Jest** + **Supertest** con mocks de axios para no hacer peticiones reales.
-
----
-
-## 🔧 Scripts disponibles
+### Scripts
 
 | Script | Descripción |
 |--------|-------------|
-| `npm run dev` | Servidor de desarrollo con ts-node |
-| `npm run build` | Compila TypeScript a `dist/` |
-| `npm start` | Arranca el servidor compilado |
-| `npm test` | Ejecuta la suite de tests |
-| `npm run lint` | Analiza el código con ESLint |
-| `npm run type-check` | Verifica tipos sin compilar |
+| `pnpm dev` | Servidor de desarrollo Astro |
+| `pnpm build` | Build de producción |
+| `pnpm preview` | Preview del build |
+| `pnpm test` | Tests (si están configurados) |
 
 ---
 
-## 📦 Stack
+## Stack
 
-- **Runtime**: Node.js + Express 5
-- **Lenguaje**: TypeScript 5
-- **Seguridad**: Helmet, CORS, express-rate-limit, express-validator
-- **Caché**: lru-cache (en memoria) + Vercel Edge Cache (`Cache-Control: s-maxage`)
-- **HTTP Client**: Axios con keep-alive y conexiones reutilizadas
-- **Deploy**: Vercel (serverless)
-- **CI**: Husky + lint-staged (pre-commit hooks)
+- **Astro** (SSR) + **React**
+- **Deploy:** Vercel (`vlr.losperris.dev`)
+- **Caché:** Vercel KV / Redis
+- **Datos:** Henrik Unofficial Valorant API
 
 ---
 
-## 📄 Licencia
+## Licencia
 
-ISC © [Ponss17](https://github.com/Ponss17) 
+ISC © [Ponss17](https://github.com/Ponss17)
