@@ -1,5 +1,6 @@
-name: Avisar a LosPerris (novedades)
+name: Avisar a LosPerris (actualizaciones)
 
+# Dispara sync-github-updates en Ponss17/LosPerris tras cada push a main.
 on:
   push:
     branches: [main]
