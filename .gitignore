@@ -8,4 +8,6 @@ visible
 dist/
 dist/*
 package-lock.json
-.astro/
+.astro/
+
+.agents/
