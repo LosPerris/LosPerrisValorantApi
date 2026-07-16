@@ -11,3 +11,4 @@ package-lock.json
 .astro/
 
 .agents/
+.vercel
