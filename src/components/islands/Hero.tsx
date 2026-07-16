@@ -5,7 +5,7 @@ export default function Hero() {
   const t = useTranslations();
 
   return (
-    <section className="relative z-10 max-w-6xl mx-auto px-6 pt-16 pb-10 grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
+    <section className="relative z-10 max-w-6xl mx-auto px-6 pt-10 md:pt-14 pb-8 grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
       <div className="text-center lg:text-left" data-mask-wrap="true">
         <div data-mask="true" style={{background:'#15151a',border:'1px solid #2a2a30', transitionDelay: '100ms'}} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium text-neutral-400 mb-7 hover:border-[#ff4655]/40 hover:text-white hover:bg-[#ff4655]/10 transition-all cursor-default">
           <span style={{background:'#ff4655',boxShadow:'0 0 8px #ff4655'}} className="w-1.5 h-1.5 rounded-full animate-pulse"></span>
@@ -55,7 +55,7 @@ export default function Hero() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-white text-sm truncate">PonssLoveless <span className="text-neutral-400">#8882</span></p>
-                <p className="text-[11px] text-neutral-400">Ascendente 2 · 1750 ELO <span className="text-green-400 font-semibold">+22</span></p>
+                <p className="text-[11px] text-white/90">Ascendente 2 · <span className="text-neutral-200">1750 ELO</span> <span className="text-green-400 font-semibold">+22</span></p>
               </div>
               <span style={{background:'#ff4655'}} className="text-[9px] font-bold px-2 py-0.5 rounded text-white">LIVE</span>
             </div>
