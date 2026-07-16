@@ -5,20 +5,20 @@ export default function Hero() {
   const t = useTranslations();
 
   return (
-    <section className="relative z-10 max-w-6xl mx-auto px-6 pt-10 md:pt-14 pb-8 grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
+    <section className="relative z-10 max-w-6xl mx-auto px-6 pt-2 md:pt-4 pb-2 md:pb-4 grid lg:grid-cols-[1.1fr_0.9fr] gap-6 lg:gap-10 items-center shrink-0">
       <div className="text-center lg:text-left" data-mask-wrap="true">
-        <div data-mask="true" style={{background:'#15151a',border:'1px solid #2a2a30', transitionDelay: '100ms'}} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium text-neutral-400 mb-7 hover:border-[#ff4655]/40 hover:text-white hover:bg-[#ff4655]/10 transition-all cursor-default">
+        <div data-mask="true" style={{background:'#15151a',border:'1px solid #2a2a30', transitionDelay: '100ms'}} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium text-neutral-400 mb-4 md:mb-5 hover:border-[#ff4655]/40 hover:text-white hover:bg-[#ff4655]/10 transition-all cursor-default">
           <span style={{background:'#ff4655',boxShadow:'0 0 8px #ff4655'}} className="w-1.5 h-1.5 rounded-full animate-pulse"></span>
           {t('heroBadge')}
         </div>
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.02]">
+        <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.02]">
           <span className="text-white block" data-mask="true" style={{transitionDelay: '200ms'}}>LOSPERRIS</span>
           <span style={{background:'linear-gradient(120deg,#ff8a93,#ff4655)',WebkitBackgroundClip:'text',backgroundClip:'text',color:'transparent', transitionDelay: '300ms'}} className="block" data-mask="true">VALORANT API</span>
         </h1>
-        <p data-mask="true" style={{transitionDelay: '400ms'}} className="mt-5 text-base md:text-lg text-neutral-400 max-w-xl mx-auto lg:mx-0">
+        <p data-mask="true" style={{transitionDelay: '400ms'}} className="mt-3 md:mt-4 text-sm md:text-base text-neutral-400 max-w-xl mx-auto lg:mx-0">
           {t('subtitle')}
         </p>
-        <div data-mask="true" style={{transitionDelay: '500ms'}} className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-2.5 text-xs">
+        <div data-mask="true" style={{transitionDelay: '500ms'}} className="mt-5 md:mt-6 flex flex-wrap items-center justify-center lg:justify-start gap-2 text-xs">
           <div style={{background:'#121215',border:'1px solid #2a2a30'}} className="flex items-center gap-2 px-3 py-1.5 rounded-full text-neutral-400">
             <iconify-icon icon="solar:bolt-linear" width="14" className="text-[#ff4655]"></iconify-icon> {t('heroRealtime')}
           </div>
@@ -29,7 +29,7 @@ export default function Hero() {
             <iconify-icon icon="solar:global-linear" width="14" className="text-[#22c55e]"></iconify-icon> {t('heroRegion')}
           </div>
         </div>
-        <div data-mask="true" style={{transitionDelay: '600ms'}} className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-3">
+        <div data-mask="true" style={{transitionDelay: '600ms'}} className="mt-5 md:mt-6 flex flex-wrap items-center justify-center lg:justify-start gap-3">
           <a href="#busqueda" style={{background:'linear-gradient(135deg,#ff4655,#e0303f)',boxShadow:'0 12px 32px -10px rgba(255,70,85,0.75)'}} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white font-semibold text-sm hover:brightness-110 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#ff4655]/30 active:scale-[0.99] transition-all duration-300">
             <iconify-icon icon="solar:magnifer-linear" width="16"></iconify-icon> {t('heroBtn')}
           </a>
@@ -49,13 +49,15 @@ export default function Hero() {
             <span className="ml-2 text-[10px] font-mono text-neutral-500">overlay · live</span>
           </div>
           <div style={{background:"url('/imgs/hero_card.webp') center / cover no-repeat",borderRadius:'14px'}} className="overflow-hidden">
-            <div style={{background:'linear-gradient(90deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%)'}} className="p-5 flex items-center gap-4">
+            <div style={{background:'linear-gradient(90deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.2) 100%)'}} className="p-5 flex items-center gap-4">
               <div className="w-14 h-14 flex items-center justify-center shrink-0">
                 <img src="/imgs/ascendant2.webp" className="w-full h-full object-contain drop-shadow-xl" alt="Ascendente 2" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-white text-sm truncate">PonssLoveless <span className="text-neutral-400">#8882</span></p>
-                <p className="text-[11px] text-white/90">Ascendente 2 · <span className="text-neutral-200">1750 ELO</span> <span className="text-green-400 font-semibold">+22</span></p>
+                <p className="font-semibold text-white text-sm truncate drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">PonssLoveless <span className="text-neutral-300">#8882</span></p>
+                <p className="text-xs font-semibold text-white drop-shadow-[0_1px_3px_rgba(0,0,0,1)]">
+                  Ascendente 2 · 1750 ELO <span className="text-green-400">+22</span>
+                </p>
               </div>
               <span style={{background:'#ff4655'}} className="text-[9px] font-bold px-2 py-0.5 rounded text-white">LIVE</span>
             </div>

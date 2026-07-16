@@ -31,6 +31,10 @@ import AboutApiModal from '../components/islands/AboutApiModal';
   [data-mask="true"].is-visible {
     clip-path: inset(0 0 -10% 0);
   }
+  .landing-viewport {
+    min-height: 100svh;
+    min-height: 100dvh;
+  }
 </style>
 
 <Layout title="LosPerris - Valorant API">
@@ -47,14 +51,14 @@ import AboutApiModal from '../components/islands/AboutApiModal';
   <main class="min-h-screen relative overflow-hidden">
     <div style={{background:'radial-gradient(circle at 50% -20%, rgba(255, 70, 85, 0.15), rgba(8, 8, 10, 0) 60%)'}} class="absolute inset-0 pointer-events-none"></div>
 
-    <!-- Primer viewport: hero + stats. Flujo guiado solo al hacer scroll. -->
-    <div class="relative z-10 min-h-[100svh] flex flex-col justify-center pt-6 pb-10">
+    <!-- Primer viewport fijo: hero + stats. Flujo guiado solo al hacer scroll. -->
+    <div class="landing-viewport relative z-10 h-[100svh] max-h-[100svh] flex flex-col justify-center gap-3 md:gap-4 py-4 md:py-6 overflow-hidden">
       <Hero client:load />
       <LiveStats client:load />
     </div>
 
     <!-- FLUJO INTRO -->
-    <section data-reveal="true" style="transition-delay: 100ms;" class="opacity-0 relative z-10 max-w-6xl mx-auto px-6 pt-10 pb-8 text-center">
+    <section data-reveal="true" style="transition-delay: 100ms;" class="opacity-0 relative z-10 max-w-6xl mx-auto px-6 pt-14 md:pt-16 pb-8 text-center">
       <span style={{background:'rgba(255,70,85,0.1)',border:'1px solid rgba(255,70,85,0.3)',color:'#ff8a93'}} class="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-[0.2em]">
         <iconify-icon icon="solar:map-arrow-square-linear" width="12"></iconify-icon> <span id="txt-flujo">Flujo guiado</span>
       </span>
