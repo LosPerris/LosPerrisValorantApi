@@ -51,16 +51,58 @@ import AboutApiModal from '../components/islands/AboutApiModal';
   <main class="min-h-screen relative overflow-hidden">
     <div style={{background:'radial-gradient(circle at 50% -20%, rgba(255, 70, 85, 0.15), rgba(8, 8, 10, 0) 60%)'}} class="absolute inset-0 pointer-events-none"></div>
 
-    <!-- Primer viewport: hero arriba, stats abajo. Flujo guiado solo al scrollear. -->
-    <div class="landing-viewport relative z-10 h-[100svh] max-h-[100svh] flex flex-col justify-start pt-16 md:pt-20 pb-6 md:pb-8 overflow-hidden">
+    <!-- Primer viewport: hero → puente → stats. Flujo guiado solo al scrollear. -->
+    <div class="landing-viewport relative z-10 h-[100svh] max-h-[100svh] flex flex-col justify-start pt-16 md:pt-20 pb-5 md:pb-7 overflow-hidden">
       <Hero client:load />
-      <div class="mt-auto">
-        <LiveStats client:load />
+
+      <div data-reveal="true" class="opacity-0 relative z-10 flex-1 flex flex-col justify-center min-h-0 px-6" style="transition-delay: 500ms;">
+        <div class="max-w-3xl mx-auto w-full">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-0">
+            <div class="flex sm:flex-col items-center gap-3 sm:gap-2 sm:text-center px-2">
+              <span class="shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-[#ff8a93]" style="background:rgba(255,70,85,0.12);border:1px solid rgba(255,70,85,0.3)">
+                <iconify-icon icon="solar:magnifer-linear" width="18"></iconify-icon>
+              </span>
+              <div>
+                <p id="txt-bridge-1-title" class="text-sm font-semibold text-white">Busca tu cuenta</p>
+                <p id="txt-bridge-1-desc" class="text-[11px] text-neutral-500 mt-0.5">Riot ID + región</p>
+              </div>
+            </div>
+            <div class="flex sm:flex-col items-center gap-3 sm:gap-2 sm:text-center px-2 relative">
+              <div class="hidden sm:block absolute left-0 right-0 top-[18px] -translate-y-1/2 h-px opacity-30 pointer-events-none" style="background:linear-gradient(90deg,transparent,#ff4655,#a970ff,transparent)"></div>
+              <span class="relative z-[1] shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-[#c4a3ff]" style="background:rgba(169,112,255,0.12);border:1px solid rgba(169,112,255,0.3)">
+                <iconify-icon icon="solar:chart-2-linear" width="18"></iconify-icon>
+              </span>
+              <div class="relative z-[1]">
+                <p id="txt-bridge-2-title" class="text-sm font-semibold text-white">Mira tus stats</p>
+                <p id="txt-bridge-2-desc" class="text-[11px] text-neutral-500 mt-0.5">Rango, partida y RR</p>
+              </div>
+            </div>
+            <div class="flex sm:flex-col items-center gap-3 sm:gap-2 sm:text-center px-2">
+              <span class="shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-[#4ade80]" style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3)">
+                <iconify-icon icon="solar:chat-round-dots-linear" width="18"></iconify-icon>
+              </span>
+              <div>
+                <p id="txt-bridge-3-title" class="text-sm font-semibold text-white">Pégalo en el bot</p>
+                <p id="txt-bridge-3-desc" class="text-[11px] text-neutral-500 mt-0.5">Nightbot / StreamElements</p>
+              </div>
+            </div>
+          </div>
+
+          <a
+            href="#flujo-intro"
+            class="mt-6 md:mt-8 mx-auto flex flex-col items-center gap-1 text-neutral-500 hover:text-white transition-colors group"
+          >
+            <span id="txt-scroll-hint" class="text-[10px] uppercase tracking-[0.22em] font-bold">Desliza para el flujo</span>
+            <iconify-icon icon="solar:alt-arrow-down-linear" width="18" class="animate-bounce text-[#ff4655] group-hover:translate-y-0.5"></iconify-icon>
+          </a>
+        </div>
       </div>
+
+      <LiveStats client:load />
     </div>
 
     <!-- FLUJO INTRO -->
-    <section data-reveal="true" style="transition-delay: 100ms;" class="opacity-0 relative z-10 max-w-6xl mx-auto px-6 pt-14 md:pt-16 pb-8 text-center">
+    <section id="flujo-intro" data-reveal="true" style="transition-delay: 100ms;" class="opacity-0 relative z-10 max-w-6xl mx-auto px-6 pt-14 md:pt-16 pb-8 text-center scroll-mt-8">
       <span style={{background:'rgba(255,70,85,0.1)',border:'1px solid rgba(255,70,85,0.3)',color:'#ff8a93'}} class="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-[0.2em]">
         <iconify-icon icon="solar:map-arrow-square-linear" width="12"></iconify-icon> <span id="txt-flujo">Flujo guiado</span>
       </span>
@@ -175,6 +217,13 @@ import AboutApiModal from '../components/islands/AboutApiModal';
       update('txt-paso01', 'PASO 01', 'STEP 01');
       update('txt-empieza', 'Empieza la búsqueda', 'Start the search');
       update('txt-encuentra', 'Encuentra tu rango por Riot ID', 'Find your rank by Riot ID');
+      update('txt-bridge-1-title', 'Busca tu cuenta', 'Search your account');
+      update('txt-bridge-1-desc', 'Riot ID + región', 'Riot ID + region');
+      update('txt-bridge-2-title', 'Mira tus stats', 'Check your stats');
+      update('txt-bridge-2-desc', 'Rango, partida y RR', 'Rank, match and RR');
+      update('txt-bridge-3-title', 'Pégalo en el bot', 'Paste it in your bot');
+      update('txt-bridge-3-desc', 'Nightbot / StreamElements', 'Nightbot / StreamElements');
+      update('txt-scroll-hint', 'Desliza para el flujo', 'Scroll for the flow');
     });
 
     hasSearched.subscribe((val: boolean) => {
