@@ -16,12 +16,15 @@ export const generateBotCommand = (
     platform: string,
     config: { rankF: string; matchF: string; todayF: string; statsF: string },
     lang: string,
-    account: { name: string; tag: string; region: string } | null
+    account: { name: string; tag: string; region: string } | null,
+    /** Región elegida en la búsqueda (prioridad sobre account.region de Henrik) */
+    searchRegion?: string,
 ): string => {
     if (!account) return '';
     const name = encodeURIComponent(account.name);
     const tag = encodeURIComponent(account.tag);
-    const region = account.region || 'na';
+    // Henrik suele devolver "na" para LATAM/BR; usamos la región buscada
+    const region = (searchRegion || account.region || 'na').toLowerCase();
 
     let formatStr = '?format=text';
 

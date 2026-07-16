@@ -22,13 +22,17 @@ describe('generateBotCommand', () => {
     expect(cmd).not.toContain('&type=');
   });
 
-  it('codifica nombre y tag en la URL', () => {
-    const cmd = generateBotCommand('stats', 'stats', 'nightbot', config, 'pt', {
-      name: 'Player #1',
-      tag: 'EU/W',
-      region: 'eu',
-    });
-    expect(cmd).toContain('Player%20%231');
-    expect(cmd).toContain('EU%2FW');
+  it('usa searchRegion por encima de account.region de Henrik', () => {
+    const cmd = generateBotCommand(
+      'rank',
+      'rank',
+      'nightbot',
+      config,
+      'es',
+      { name: 'Player', tag: 'TAG', region: 'na' },
+      'latam',
+    );
+    expect(cmd).toContain('/api/rank/latam/');
+    expect(cmd).not.toContain('/api/rank/na/');
   });
 });

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useStore } from '@nanostores/react';
-import { botPlatform, configMode, formatRank, formatMatch, formatToday, formatStats, hasSearched, playerData, lang } from '../../store/appStore';
+import { botPlatform, configMode, formatRank, formatMatch, formatToday, formatStats, hasSearched, playerData, lang, searchRegion } from '../../store/appStore';
 import { useTranslations } from '../../hooks/useTranslations';
 import { generateBotCommand, getCommandExample } from '../../utils/commandHelpers';
 import SectionHeader from '../ui/SectionHeader';
@@ -16,39 +16,41 @@ export default function CommandGenerator() {
   const statsF = useStore(formatStats);
   const searched = useStore(hasSearched);
   const data = useStore(playerData);
+  const region = useStore(searchRegion);
   const [copied, setCopied] = useState(false);
 
 
 
   useEffect(() => {
     setCopied(false);
-  }, [currentPlatform, currentConfig, rankF, matchF, todayF, statsF, data]);
+  }, [currentPlatform, currentConfig, rankF, matchF, todayF, statsF, data, region]);
 
   if (!searched) return null;
 
+  const formats = { rankF, matchF, todayF, statsF };
+  const finalEndpoint = currentConfig === 'match' ? 'match/last' : currentConfig;
+  const command = generateBotCommand(
+    finalEndpoint,
+    currentConfig,
+    currentPlatform,
+    formats,
+    currentLang,
+    data?.account || null,
+    region,
+  );
+
   const copyToClipboard = () => {
-    const finalEndpoint = currentConfig === 'match' ? 'match/last' : currentConfig;
-    const cmd = generateBotCommand(
-      finalEndpoint, 
-      currentConfig, 
-      currentPlatform, 
-      { rankF, matchF, todayF, statsF }, 
-      currentLang, 
-      data?.account || null
-    );
-    navigator.clipboard.writeText(cmd);
+    navigator.clipboard.writeText(command);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const currentExample = getCommandExample(
     currentConfig,
-    { rankF, matchF, todayF, statsF },
+    formats,
     currentLang,
     data
   );
-
-  const finalEndpoint = currentConfig === 'match' ? 'match/last' : currentConfig;
 
   return (
     <section id="comandos" className="mt-14 scroll-mt-24 md:pl-14 relative animate-[fadeIn_0.5s_ease-out]">
@@ -67,7 +69,7 @@ export default function CommandGenerator() {
           
           <div style={{background:'#0a0a0d',border:'1px solid #2a2a30'}} className="flex items-center gap-2 rounded-lg p-1 pl-3">
             <code className="flex-1 text-xs text-neutral-300 truncate" style={{fontFamily:"'JetBrains Mono',monospace"}}>
-              {generateBotCommand(finalEndpoint, currentConfig, currentPlatform, { rankF, matchF, todayF, statsF }, currentLang, data?.account || null)}
+              {command}
             </code>
             <button 
               onClick={copyToClipboard}

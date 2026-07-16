@@ -1,6 +1,7 @@
 import { config } from '../config';
 import { fetchWithCache } from './henrikClient';
 import cache from '../utils/cache';
+import { mapHenrikHistoryRegion, mapHenrikShardRegion } from '../utils/regions';
 import {
     ValorantAccount,
     ValorantApiResponse,
@@ -18,15 +19,17 @@ async function getAccount(name: string, tag: string): Promise<ValorantApiRespons
 }
 
 export async function getMMRByPUUID(region: string, puuid: string): Promise<ValorantApiResponse<ValorantMMR>> {
-    return fetchWithCache(`mmr:${region}:${puuid}`, `/v2/by-puuid/mmr/${region}/${puuid}`, config.cacheTtl.mmr);
+    const shard = mapHenrikShardRegion(region);
+    return fetchWithCache(`mmr:${shard}:${puuid}`, `/v2/by-puuid/mmr/${shard}/${puuid}`, config.cacheTtl.mmr);
 }
 
 export async function getMatchesByPUUID(region: string, puuid: string, mode: string = 'competitive', size: number = 5): Promise<ValorantApiResponse<ValorantMatch[]>> {
-    return fetchWithCache(`matches:${region}:${puuid}:${mode}:${size}`, `/v3/by-puuid/matches/${region}/${puuid}?mode=${mode}&size=${size}`, config.cacheTtl.matches);
+    const shard = mapHenrikShardRegion(region);
+    return fetchWithCache(`matches:${shard}:${puuid}:${mode}:${size}`, `/v3/by-puuid/matches/${shard}/${puuid}?mode=${mode}&size=${size}`, config.cacheTtl.matches);
 }
 
 export async function getMMRHistoryByPUUID(region: string, puuid: string): Promise<ValorantApiResponse<ValorantMMRHistoryItem[]>> {
-    const mappedRegion = ['latam', 'br'].includes(region.toLowerCase()) ? 'na' : region;
+    const mappedRegion = mapHenrikHistoryRegion(region);
     return fetchWithCache(`history:${mappedRegion}:${puuid}`, `/v1/by-puuid/mmr-history/${mappedRegion}/${puuid}`, config.cacheTtl.history);
 }
 

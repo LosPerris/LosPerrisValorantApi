@@ -90,7 +90,7 @@ export default function SearchForm() {
           localStorage.setItem('vlr_recent_searches', JSON.stringify(updatedRecents));
         }
       } else {
-        error.set(data.message || t('errorSearch'));
+        error.set(data.error || data.message || t('errorSearch'));
       }
     } catch (err) {
       error.set(t('errorConn'));
