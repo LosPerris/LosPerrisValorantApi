@@ -31,15 +31,19 @@ const QueryParamsSchema = z.object({
 import { kv } from './cache';
 
 // Rate Limiter distribuido (Redis)
-// Permite 1 petición por segundo por clave
+// Permite 1 petición por segundo por clave.
+// EXPIRE se renueva siempre para que la clave nunca quede sin TTL.
 export async function checkRateLimit(key: string): Promise<boolean> {
     const rateLimitKey = `rate_limit:${key}`;
+    const WINDOW_SECONDS = 1;
+    const LIMIT = 1;
     try {
-        const count = await kv.incr(rateLimitKey);
-        if (count === 1) {
-            await kv.expire(rateLimitKey, 1); // ventana de 1 segundo
-        }
-        return count <= 1;
+        const [count] = (await kv
+            .pipeline()
+            .incr(rateLimitKey)
+            .expire(rateLimitKey, WINDOW_SECONDS)
+            .exec()) as [number, number];
+        return Number(count) <= LIMIT;
     } catch(e) {
         console.warn('Redis rate limit check failed, failing open:', e);
         return true; // fail-open si redis falla
