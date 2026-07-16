@@ -173,29 +173,63 @@ import AboutApiModal from '../components/islands/AboutApiModal';
     const easeInOutCubic = (t: number) =>
       t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
-    const smoothScrollToY = (endY: number, duration = 900) => {
+    /** Revela elementos visibles/pasados ya (sin esperar el observer ni delays largos). */
+    const revealInViewNow = (forceThrough?: HTMLElement | null) => {
+      const forceBottom = forceThrough
+        ? forceThrough.getBoundingClientRect().bottom + window.scrollY + Math.min(720, window.innerHeight * 0.85)
+        : null;
+
+      document.querySelectorAll('[data-reveal="true"], [data-mask="true"]').forEach((node) => {
+        const el = node as HTMLElement;
+        if (el.classList.contains('is-visible')) return;
+
+        const rect = el.getBoundingClientRect();
+        const absoluteTop = rect.top + window.scrollY;
+        const inOrAboveView = rect.top < window.innerHeight * 0.95;
+        const beforeForcedTarget = forceBottom != null && absoluteTop <= forceBottom;
+
+        if (inOrAboveView || beforeForcedTarget) {
+          el.style.transitionDelay = '0ms';
+          el.classList.add('is-visible');
+        }
+      });
+    };
+
+    const smoothScrollToY = (endY: number, duration = 900, forceThrough?: HTMLElement | null) => {
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         window.scrollTo(0, endY);
+        revealInViewNow(forceThrough);
         return;
       }
 
       cancelAnimationFrame(scrollAnim);
       const startY = window.scrollY;
       const distance = endY - startY;
-      if (Math.abs(distance) < 2) return;
+      if (Math.abs(distance) < 2) {
+        revealInViewNow(forceThrough);
+        return;
+      }
+
+      // Anticipa el reveal para que al llegar no quede todo invisible.
+      revealInViewNow(forceThrough);
 
       const start = performance.now();
       const step = (now: number) => {
         const progress = Math.min(1, (now - start) / duration);
         window.scrollTo(0, startY + distance * easeInOutCubic(progress));
-        if (progress < 1) scrollAnim = requestAnimationFrame(step);
+        if (progress >= 0.35 && progress < 0.9) revealInViewNow(forceThrough);
+        if (progress < 1) {
+          scrollAnim = requestAnimationFrame(step);
+        } else {
+          revealInViewNow(forceThrough);
+        }
       };
       scrollAnim = requestAnimationFrame(step);
     };
 
     const smoothScrollTo = (target: HTMLElement, duration = 900) => {
       const endY = target.getBoundingClientRect().top + window.scrollY - 12;
-      smoothScrollToY(endY, duration);
+      smoothScrollToY(endY, duration, target);
     };
 
     document.addEventListener('click', (event) => {
@@ -208,7 +242,7 @@ import AboutApiModal from '../components/islands/AboutApiModal';
         if (onHome) {
           event.preventDefault();
           if (location.hash) history.replaceState(null, '', location.pathname + location.search);
-          smoothScrollToY(0, 850);
+          smoothScrollToY(0, 700);
         }
         return;
       }
@@ -222,7 +256,7 @@ import AboutApiModal from '../components/islands/AboutApiModal';
       event.preventDefault();
       // No guardar el hash en la URL: evita abrir la página a mitad al recargar.
       if (location.hash) history.replaceState(null, '', location.pathname + location.search);
-      smoothScrollTo(target, link.hasAttribute('data-smooth-scroll') ? 950 : 800);
+      smoothScrollTo(target, 720);
     });
 
     const initObserver = () => {
