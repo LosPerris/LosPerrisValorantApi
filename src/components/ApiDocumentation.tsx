@@ -43,7 +43,7 @@ const COMMANDS: Cmd[] = [
     path: '/api/today/na/PonssLoveless/8882',
     query: '?format=text&type=1',
     what: 'Resumen de hoy: victorias, derrotas y RR total.',
-    chatExample: 'Hoy Jean lleva 2 Victorias, 1 Derrotas y 1 Empates (Total: +28 RR).',
+    chatExample: 'Hoy PonssLoveless lleva 2 Victorias, 1 Derrotas y 1 Empates (Total: +28 RR).',
     detail: '1 = corto · 2 = + partidas · 3 = + winrate',
   },
   {
@@ -54,7 +54,7 @@ const COMMANDS: Cmd[] = [
     path: '/api/stats/na/PonssLoveless/8882',
     query: '?format=text&type=1',
     what: 'Winrate, agente más jugado y % HS de las últimas partidas.',
-    chatExample: 'Stats de Jean (10 partidas): 58% WR | Agente: Jett | HS: 25.5%',
+    chatExample: 'Stats de PonssLoveless (10 partidas): 58% WR | Agente: Jett | HS: 25.5%',
     detail: '1 = compacto · 2 = frase · 3 = más largo',
   },
 ];
