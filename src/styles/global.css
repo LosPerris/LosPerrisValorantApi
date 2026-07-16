@@ -95,6 +95,11 @@
     padding: 1.5px;
     background: linear-gradient(135deg, #22c55e, #16161b 38%, #16161b 62%, #4ade80);
   }
+  .gradient-border-match-draw {
+    border-radius: 22px;
+    padding: 1.5px;
+    background: linear-gradient(135deg, #eab308, #16161b 38%, #16161b 62%, #facc15);
+  }
   .gradient-border-match-loss {
     border-radius: 22px;
     padding: 1.5px;

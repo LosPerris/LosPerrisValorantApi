@@ -304,7 +304,7 @@ export default function ApiDocumentation() {
               </span>{' '}
               Última Partida
             </h2>
-            <p className="mb-[20px] text-text-muted text-[1.05rem]">Obtiene estadísticas detalladas de la última partida competitiva jugada.</p>
+            <p className="mb-[20px] text-text-muted text-[1.05rem]">Obtiene estadísticas detalladas de la última partida competitiva jugada. El resultado del mapa (<code className="bg-white/10 px-1.5 py-0.5 rounded text-[#c4a3ff] text-[0.9em]">is_win</code> / <code className="bg-white/10 px-1.5 py-0.5 rounded text-[#c4a3ff] text-[0.9em]">is_draw</code>) es independiente del RR: en un empate igual puede sumar o restar puntos.</p>
 
             <div className="bg-[#09090b]/60 backdrop-blur-[10px] border border-card-border rounded-[8px] p-[15px_20px] flex items-center gap-[15px] mb-[35px] font-mono shadow-[0_4px_20px_rgba(0,0,0,0.2)] break-all">
               <span className="font-[700] p-[6px_12px] rounded-[6px] text-[0.85rem] tracking-[0.5px] bg-[#a970ff]/15 text-[#c4a3ff] border border-[#a970ff]/30">GET</span>
@@ -337,6 +337,7 @@ export default function ApiDocumentation() {
         {
           "name": "PonssLoveless",
           "character": "Jett",
+          "team": "Blue",
           "stats": {
             "kills": 24,
             "deaths": 12,
@@ -346,15 +347,21 @@ export default function ApiDocumentation() {
       ]
     },
     "teams": {
-      "blue": { "has_won": true, "rounds_won": 13 }
+      "red":  { "has_won": false, "rounds_won": 12 },
+      "blue": { "has_won": false, "rounds_won": 12 }
     },
     "derived": {
+      "is_win": false,
+      "is_draw": true,
+      "map_name": "Ascent",
+      "kda": "24/12/5",
       "hs_percent": 25.5
     }
   }
 }`}
                 </div>
             </div>
+            <p className="mb-[25px] text-text-muted text-[0.95rem]">Ejemplo de empate. En <code className="bg-white/10 px-1.5 py-0.5 rounded text-[#c4a3ff] text-[0.9em]">?format=text</code> saldría algo como: <em className="text-white/80">«…empaté 3 puntos»</em> (el RR puede ser positivo o negativo aunque el mapa empató).</p>
             </div>
           </section>
 
@@ -379,7 +386,7 @@ export default function ApiDocumentation() {
               </span>{' '}
               Sesión de Hoy
             </h2>
-            <p className="mb-[20px] text-text-muted text-[1.05rem]">Obtiene el resumen de las partidas competitivas jugadas en las últimas 24 horas.</p>
+            <p className="mb-[20px] text-text-muted text-[1.05rem]">Obtiene el resumen de las partidas competitivas jugadas en las últimas 24 horas. Victorias, derrotas y empates se cuentan por resultado del mapa; <code className="bg-white/10 px-1.5 py-0.5 rounded text-[#4ade80] text-[0.9em]">rr_change</code> suma el RR real de cada partida (un empate también puede mover puntos).</p>
 
             <div className="bg-[#09090b]/60 backdrop-blur-[10px] border border-card-border rounded-[8px] p-[15px_20px] flex items-center gap-[15px] mb-[35px] font-mono shadow-[0_4px_20px_rgba(0,0,0,0.2)] break-all">
               <span className="font-[700] p-[6px_12px] rounded-[6px] text-[0.85rem] tracking-[0.5px] bg-[#22c55e]/15 text-[#4ade80] border border-[#22c55e]/30">GET</span>
@@ -423,14 +430,15 @@ export default function ApiDocumentation() {
   "status": 200,
   "data": {
     "matches_played": 4,
-    "wins": 3,
+    "wins": 2,
     "losses": 1,
-    "draws": 0,
-    "rr_change": 42
+    "draws": 1,
+    "rr_change": 28
   }
 }`}
                 </div>
             </div>
+            <p className="mb-[25px] text-text-muted text-[0.95rem]">Aquí hay 1 empate contado aparte; el <code className="bg-white/10 px-1.5 py-0.5 rounded text-[#4ade80] text-[0.9em]">rr_change</code> total ya incluye el RR de esa partida empatada.</p>
             </div>
           </section>
 

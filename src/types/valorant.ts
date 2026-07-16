@@ -207,6 +207,7 @@ export interface FormattedRankData {
 export interface DerivedMatchData {
     map_name: string;
     is_win: boolean;
+    is_draw: boolean;
     kda: string;
     hs_percent: string | number;
     agent_name: string;

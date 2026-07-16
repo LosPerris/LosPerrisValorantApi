@@ -2,6 +2,7 @@ import { config } from '../config';
 import { fetchWithCache } from './henrikClient';
 import cache from '../utils/cache';
 import { mapHenrikHistoryRegion, mapHenrikShardRegion } from '../utils/regions';
+import { getMatchOutcome } from '../utils/matchOutcome';
 import {
     ValorantAccount,
     ValorantApiResponse,
@@ -54,29 +55,50 @@ export async function getCachedAccount(name: string, tag: string): Promise<Valor
 }
 
 export async function getTodaySummary(region: string, puuid: string): Promise<TodaySummaryData | null> {
-    const historyRes = await getMMRHistoryByPUUID(region, puuid);
+    const [historyRes, matchesRes] = await Promise.all([
+        getMMRHistoryByPUUID(region, puuid),
+        getMatchesByPUUID(region, puuid, 'competitive', 15),
+    ]);
     if (historyRes.status !== 200 || !historyRes.data) return null;
 
     const nowSecs = Math.floor(Date.now() / 1000);
-    const ONE_DAY = 86400; // 24 hours
+    const ONE_DAY = 86400;
 
-    const todayMatches = historyRes.data.filter(m => (nowSecs - m.date_raw) <= ONE_DAY);
+    const todayHistory = historyRes.data.filter(m => (nowSecs - m.date_raw) <= ONE_DAY);
+
+    const matchById = new Map<string, ValorantMatch>();
+    if (matchesRes.status === 200 && matchesRes.data) {
+        for (const match of matchesRes.data) {
+            matchById.set(match.metadata.matchid, match);
+        }
+    }
 
     let wins = 0;
     let losses = 0;
     let draws = 0;
     let rr_change = 0;
 
-    for (const match of todayMatches) {
-        if (match.mmr_change_to_last_game > 0) wins++;
-        else if (match.mmr_change_to_last_game < 0) losses++;
+    for (const hist of todayHistory) {
+        rr_change += hist.mmr_change_to_last_game;
+
+        const match = matchById.get(hist.match_id);
+        const stats = match?.players.all_players.find((p) => p.puuid === puuid);
+        if (match && stats) {
+            const outcome = getMatchOutcome(match.teams, stats.team);
+            if (outcome === 'win') wins++;
+            else if (outcome === 'loss') losses++;
+            else draws++;
+            continue;
+        }
+
+        // Sin detalle de partida: RR=0 ≈ empate; si no, victoria/derrota por signo.
+        if (hist.mmr_change_to_last_game > 0) wins++;
+        else if (hist.mmr_change_to_last_game < 0) losses++;
         else draws++;
-        
-        rr_change += match.mmr_change_to_last_game;
     }
 
     return {
-        matches_played: todayMatches.length,
+        matches_played: todayHistory.length,
         wins,
         losses,
         draws,
@@ -97,8 +119,7 @@ export async function getGeneralStats(region: string, puuid: string): Promise<Ge
         const stats = match.players.all_players.find((p) => p.puuid === puuid);
         if (!stats) continue;
 
-        const isWin = match.teams.red.has_won ? (stats.team === 'Red') : (stats.team === 'Blue');
-        if (isWin) totalWins++;
+        if (getMatchOutcome(match.teams, stats.team) === 'win') totalWins++;
 
         const matchShots = (stats.stats.headshots || 0) + (stats.stats.bodyshots || 0) + (stats.stats.legshots || 0);
         totalHeadshots += (stats.stats.headshots || 0);

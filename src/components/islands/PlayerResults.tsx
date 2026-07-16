@@ -150,7 +150,13 @@ export default function PlayerResults() {
 
         {/* LAST MATCH */}
         {data.match ? (
-        <div data-reveal="true" className={`opacity-0 flex flex-col h-full relative ${data.match.derived?.is_win ? 'gradient-border-match-win' : 'gradient-border-match-loss'}`} style={{transitionDelay: '300ms'}}>
+        <div data-reveal="true" className={`opacity-0 flex flex-col h-full relative ${
+          data.match.derived?.is_draw
+            ? 'gradient-border-match-draw'
+            : data.match.derived?.is_win
+              ? 'gradient-border-match-win'
+              : 'gradient-border-match-loss'
+        }`} style={{transitionDelay: '300ms'}}>
           <div style={{borderRadius:'20.5px', background:'linear-gradient(180deg,#16161b,#0e0e11)'}} className="p-5 md:p-6 h-full flex flex-col justify-between relative overflow-hidden group">
             {data.match.derived?.map_image && (
               <>
@@ -174,8 +180,14 @@ export default function PlayerResults() {
             <div className="flex items-end justify-between gap-4 z-10 relative">
               <div>
                 <p className="font-bold text-2xl text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] leading-none mb-1.5">{data.match.derived?.map_name}</p>
-                <p className={`text-xs font-black tracking-[0.15em] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${data.match.derived?.is_win ? 'text-[#4ade80]' : 'text-[#ff4655]'}`}>
-                  {data.match.derived?.is_win ? 'VICTORIA' : 'DERROTA'}
+                <p className={`text-xs font-black tracking-[0.15em] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${
+                  data.match.derived?.is_draw
+                    ? 'text-[#facc15]'
+                    : data.match.derived?.is_win
+                      ? 'text-[#4ade80]'
+                      : 'text-[#ff4655]'
+                }`}>
+                  {data.match.derived?.is_draw ? 'EMPATE' : data.match.derived?.is_win ? 'VICTORIA' : 'DERROTA'}
                 </p>
               </div>
               <div className="flex items-center gap-2">

@@ -34,6 +34,7 @@ const matchTextData: MatchTextData = {
   derived: {
     map_name: 'Ascent',
     is_win: true,
+    is_draw: false,
     kda: '20/10/5',
     hs_percent: '15.0',
     agent_name: 'Jett',
@@ -78,12 +79,24 @@ describe('formatMatchText', () => {
   it('añade KDA y HS en tipos más detallados', () => {
     const lossData: MatchTextData = {
       ...matchTextData,
-      derived: { ...matchTextData.derived, is_win: false },
+      derived: { ...matchTextData.derived, is_win: false, is_draw: false },
     };
     const text = formatMatchText(lossData, 'es', '3', -10);
     expect(text).toContain('20/10/5');
     expect(text).toContain('15.0% HS');
     expect(text).toContain('perdí');
+  });
+
+  it('usa empaté en empates y conserva el RR (puede ser distinto de 0)', () => {
+    const drawData: MatchTextData = {
+      ...matchTextData,
+      derived: { ...matchTextData.derived, is_win: false, is_draw: true },
+    };
+    const text = formatMatchText(drawData, 'es', '1', 3);
+    expect(text).toContain('empaté');
+    expect(text).toContain('3 puntos');
+    expect(text).not.toContain('gané');
+    expect(text).not.toContain('perdí');
   });
 });
 
@@ -131,70 +144,82 @@ describe('formatStatsText', () => {
 describe('formatMatchData', () => {
   const puuid = 'player-uuid';
 
-  const makeMatch = (isWin: boolean): ValorantMatch => ({
-    metadata: {
-      map: 'Ascent',
-      matchid: 'm1',
-      game_start: 0,
-      game_start_patched: '',
-      game_length: 0,
-      game_version: '9.0',
-      mode: 'Competitive',
-      mode_id: 'competitive',
-      queue: 'competitive',
-      rounds_played: 24,
-      season_id: '',
-      platform: '',
-      region: 'na',
-      cluster: '',
-    },
-    players: {
-      all_players: [
-        {
-          puuid,
-          name: 'Player',
-          tag: 'TAG',
-          team: isWin ? 'Blue' : 'Red',
-          level: 100,
-          character: 'Jett',
-          currenttier: 15,
-          currenttier_patched: 'Gold 3',
-          player_card: '',
-          player_title: '',
-          party_id: '',
-          session_playtime: { minutes: 0, seconds: 0, milliseconds: 0 },
-          assets: {
-            card: { small: '', large: '', wide: '' },
-            agent: { small: 'jett.png', bust: 'jett_bust.png', full: 'jett_full.png', killfeed: '' },
+  const makeMatch = (outcome: 'win' | 'loss' | 'draw'): ValorantMatch => {
+    const onBlue = outcome !== 'loss';
+    const redWon = outcome === 'loss';
+    const blueWon = outcome === 'win';
+    return {
+      metadata: {
+        map: 'Ascent',
+        matchid: 'm1',
+        game_start: 0,
+        game_start_patched: '',
+        game_length: 0,
+        game_version: '9.0',
+        mode: 'Competitive',
+        mode_id: 'competitive',
+        queue: 'competitive',
+        rounds_played: 24,
+        season_id: '',
+        platform: '',
+        region: 'na',
+        cluster: '',
+      },
+      players: {
+        all_players: [
+          {
+            puuid,
+            name: 'Player',
+            tag: 'TAG',
+            team: onBlue ? 'Blue' : 'Red',
+            level: 100,
+            character: 'Jett',
+            currenttier: 15,
+            currenttier_patched: 'Gold 3',
+            player_card: '',
+            player_title: '',
+            party_id: '',
+            session_playtime: { minutes: 0, seconds: 0, milliseconds: 0 },
+            assets: {
+              card: { small: '', large: '', wide: '' },
+              agent: { small: 'jett.png', bust: 'jett_bust.png', full: 'jett_full.png', killfeed: '' },
+            },
+            behaviour: { afk_rounds: 0, friendly_fire: { incoming: 0, outgoing: 0 }, rounds_in_spawn: 0 },
+            platform: { type: 'PC', os: { name: 'Windows', version: '10' } },
+            ability_casts: { c_cast: 0, q_cast: 0, e_cast: 0, x_cast: 0 },
+            stats: { score: 0, kills: 18, deaths: 9, assists: 4, bodyshots: 80, headshots: 20, legshots: 5 },
+            economy: { spent: { overall: 0, average: 0 }, loadout_value: { overall: 0, average: 0 } },
+            damage_made: 0,
+            damage_received: 0,
           },
-          behaviour: { afk_rounds: 0, friendly_fire: { incoming: 0, outgoing: 0 }, rounds_in_spawn: 0 },
-          platform: { type: 'PC', os: { name: 'Windows', version: '10' } },
-          ability_casts: { c_cast: 0, q_cast: 0, e_cast: 0, x_cast: 0 },
-          stats: { score: 0, kills: 18, deaths: 9, assists: 4, bodyshots: 80, headshots: 20, legshots: 5 },
-          economy: { spent: { overall: 0, average: 0 }, loadout_value: { overall: 0, average: 0 } },
-          damage_made: 0,
-          damage_received: 0,
-        },
-      ],
-      red: [],
-      blue: [],
-    },
-    teams: {
-      red: { has_won: !isWin, rounds_won: isWin ? 11 : 13, rounds_lost: isWin ? 13 : 11, roster: [] },
-      blue: { has_won: isWin, rounds_won: isWin ? 13 : 11, rounds_lost: isWin ? 11 : 13, roster: [] },
-    },
-    rounds: [],
-  });
+        ],
+        red: [],
+        blue: [],
+      },
+      teams: {
+        red: { has_won: redWon, rounds_won: redWon ? 13 : 12, rounds_lost: redWon ? 11 : 12, roster: [] },
+        blue: { has_won: blueWon, rounds_won: blueWon ? 13 : 12, rounds_lost: blueWon ? 11 : 12, roster: [] },
+      },
+      rounds: [],
+    };
+  };
 
   it('deriva KDA, HS y victoria correctamente', () => {
-    const result = formatMatchData(makeMatch(true), puuid);
+    const result = formatMatchData(makeMatch('win'), puuid);
     expect(result?.derived.kda).toBe('18/9/4');
     expect(result?.derived.is_win).toBe(true);
+    expect(result?.derived.is_draw).toBe(false);
     expect(result?.derived.hs_percent).toBe('19.0');
   });
 
+  it('marca empate cuando ningún equipo ganó', () => {
+    const result = formatMatchData(makeMatch('draw'), puuid);
+    expect(result?.derived.is_win).toBe(false);
+    expect(result?.derived.is_draw).toBe(true);
+  });
+
   it('devuelve null si el jugador no está en la partida', () => {
-    expect(formatMatchData(makeMatch(true), 'otro-uuid')).toBeNull();
+    expect(formatMatchData(makeMatch('win'), 'otro-uuid')).toBeNull();
   });
 });
 

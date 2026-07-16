@@ -22,6 +22,7 @@ export function translateRank(rankName: string, lang: string): string {
     return translation ? rankName.replace(baseName, translation) : rankName;
 }
 import { MAP_UUIDS } from '../utils/constants';
+import { getMatchOutcome } from '../utils/matchOutcome';
 import {
     ValorantAccount,
     ValorantApiResponse,
@@ -75,12 +76,13 @@ export function formatMatchData(matchData: ValorantMatch, puuid: string): Format
     const mapUuid = MAP_UUIDS[mapName] || '';
     const mapImage = mapUuid ? `https://media.valorant-api.com/maps/${mapUuid}/splash.png` : null;
 
-    const isWin = matchData.teams.red.has_won ? (stats.team === 'Red') : (stats.team === 'Blue');
+    const outcome = getMatchOutcome(matchData.teams, stats.team);
     const kda = `${stats.stats.kills}/${stats.stats.deaths}/${stats.stats.assists}`;
 
     const derived: DerivedMatchData = {
         map_name: mapName,
-        is_win: isWin,
+        is_win: outcome === 'win',
+        is_draw: outcome === 'draw',
         kda,
         hs_percent: hsPercentage,
         agent_name: stats.character,
@@ -117,11 +119,11 @@ export function formatRankText(data: FormattedRankData, lang: string, type: stri
 }
 
 export function formatMatchText(data: MatchTextData, lang: string, type: string, mmrChange = 0): string {
-    const { map_name, is_win, kda, hs_percent, agent_name } = data.derived;
+    const { map_name, is_win, is_draw, kda, hs_percent, agent_name } = data.derived;
     const isEs = lang === 'es';
 
     if (isEs) {
-        const resultVerb = is_win ? 'gané' : 'perdí';
+        const resultVerb = is_draw ? 'empaté' : is_win ? 'gané' : 'perdí';
         const pointsMsg = `${mmrChange} puntos`;
         if (type === '1') return `Mi última partida fue en ${map_name} con ${agent_name} ${resultVerb} ${pointsMsg}`;
         if (type === '2') return `Mi última partida fue en ${map_name} con ${agent_name} ${resultVerb} ${pointsMsg} mi kda fue de ${kda}`;
@@ -129,7 +131,7 @@ export function formatMatchText(data: MatchTextData, lang: string, type: string,
         return `Mi última partida fue en ${map_name} con ${agent_name} ${resultVerb} ${pointsMsg} (${kda})`;
     }
 
-    const resultVerb = is_win ? 'won' : 'lost';
+    const resultVerb = is_draw ? 'drew' : is_win ? 'won' : 'lost';
     const pointsMsg = `${mmrChange} RR`;
     if (type === '1') return `My last match was on ${map_name} with ${agent_name} ${resultVerb} ${pointsMsg}`;
     if (type === '2') return `My last match was on ${map_name} with ${agent_name} ${resultVerb} ${pointsMsg} my kda was ${kda}`;
