@@ -43,8 +43,21 @@ import AboutApiModal from '../components/islands/AboutApiModal';
 </style>
 
 <Layout title="LosPerris - Valorant API">
-  <!-- LOGO FLOTANTE -->
-  <a href="/" class="fixed top-4 left-4 md:left-8 flex items-center gap-2.5 z-50 bg-[#0a0a0d]/60 backdrop-blur-xl border border-white/5 pl-2 pr-4 py-1.5 rounded-full shadow-[0_4px_24px_rgba(0,0,0,0.5)] transition hover:bg-white/5">
+  <script is:inline>
+    // Evita abrir en #flujo-intro (u otro hash) tras un CTA anterior.
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    if (location.hash) {
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+    window.scrollTo(0, 0);
+  </script>
+
+  <!-- LOGO FLOTANTE → siempre vuelve arriba de la home -->
+  <a
+    id="home-logo"
+    href="/"
+    class="fixed top-4 left-4 md:left-8 flex items-center gap-2.5 z-50 bg-[#0a0a0d]/60 backdrop-blur-xl border border-white/5 pl-2 pr-4 py-1.5 rounded-full shadow-[0_4px_24px_rgba(0,0,0,0.5)] transition hover:bg-white/5"
+  >
     <img src="/imgs/LosPerris-minimal.svg" alt="LosPerris" class="w-6 h-6 md:w-7 md:h-7 drop-shadow-[0_0_8px_rgba(255,70,85,0.6)]" />
     <span class="text-white font-extrabold tracking-tight text-xs md:text-sm hidden sm:inline">
       LOS<span class="text-[#ff4655]">PERRIS</span> <span class="font-bold text-white opacity-90">API</span>
@@ -160,15 +173,14 @@ import AboutApiModal from '../components/islands/AboutApiModal';
     const easeInOutCubic = (t: number) =>
       t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
-    const smoothScrollTo = (target: HTMLElement, duration = 900) => {
+    const smoothScrollToY = (endY: number, duration = 900) => {
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        target.scrollIntoView();
+        window.scrollTo(0, endY);
         return;
       }
 
       cancelAnimationFrame(scrollAnim);
       const startY = window.scrollY;
-      const endY = target.getBoundingClientRect().top + window.scrollY - 12;
       const distance = endY - startY;
       if (Math.abs(distance) < 2) return;
 
@@ -181,7 +193,26 @@ import AboutApiModal from '../components/islands/AboutApiModal';
       scrollAnim = requestAnimationFrame(step);
     };
 
+    const smoothScrollTo = (target: HTMLElement, duration = 900) => {
+      const endY = target.getBoundingClientRect().top + window.scrollY - 12;
+      smoothScrollToY(endY, duration);
+    };
+
     document.addEventListener('click', (event) => {
+      const homeLogo = (event.target as HTMLElement | null)?.closest?.('#home-logo') as HTMLAnchorElement | null;
+      if (homeLogo) {
+        const onHome =
+          window.location.pathname === '/' ||
+          window.location.pathname === '' ||
+          window.location.pathname.endsWith('/index.html');
+        if (onHome) {
+          event.preventDefault();
+          if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+          smoothScrollToY(0, 850);
+        }
+        return;
+      }
+
       const link = (event.target as HTMLElement | null)?.closest?.('a[href^="#"]') as HTMLAnchorElement | null;
       if (!link) return;
       const href = link.getAttribute('href');
@@ -189,7 +220,8 @@ import AboutApiModal from '../components/islands/AboutApiModal';
       const target = document.querySelector(href) as HTMLElement | null;
       if (!target) return;
       event.preventDefault();
-      history.pushState(null, '', href);
+      // No guardar el hash en la URL: evita abrir la página a mitad al recargar.
+      if (location.hash) history.replaceState(null, '', location.pathname + location.search);
       smoothScrollTo(target, link.hasAttribute('data-smooth-scroll') ? 950 : 800);
     });
 
