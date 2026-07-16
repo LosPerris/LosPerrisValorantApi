@@ -35,6 +35,11 @@ import AboutApiModal from '../components/islands/AboutApiModal';
     min-height: 100svh;
     min-height: 100dvh;
   }
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
 </style>
 
 <Layout title="LosPerris - Valorant API">
@@ -90,6 +95,7 @@ import AboutApiModal from '../components/islands/AboutApiModal';
 
           <a
             href="#flujo-intro"
+            data-smooth-scroll
             class="mt-6 md:mt-8 mx-auto flex flex-col items-center gap-1 text-neutral-500 hover:text-white transition-colors group"
           >
             <span id="txt-scroll-hint" class="text-[10px] uppercase tracking-[0.22em] font-bold">Desliza para el flujo</span>
@@ -158,6 +164,43 @@ import AboutApiModal from '../components/islands/AboutApiModal';
     import { hasSearched, lang } from '../store/appStore';
 
     let maxLineHeight = 300;
+    let scrollAnim = 0;
+
+    const easeInOutCubic = (t: number) =>
+      t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+    const smoothScrollTo = (target: HTMLElement, duration = 900) => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        target.scrollIntoView();
+        return;
+      }
+
+      cancelAnimationFrame(scrollAnim);
+      const startY = window.scrollY;
+      const endY = target.getBoundingClientRect().top + window.scrollY - 12;
+      const distance = endY - startY;
+      if (Math.abs(distance) < 2) return;
+
+      const start = performance.now();
+      const step = (now: number) => {
+        const progress = Math.min(1, (now - start) / duration);
+        window.scrollTo(0, startY + distance * easeInOutCubic(progress));
+        if (progress < 1) scrollAnim = requestAnimationFrame(step);
+      };
+      scrollAnim = requestAnimationFrame(step);
+    };
+
+    document.addEventListener('click', (event) => {
+      const link = (event.target as HTMLElement | null)?.closest?.('a[href^="#"]') as HTMLAnchorElement | null;
+      if (!link) return;
+      const href = link.getAttribute('href');
+      if (!href || href === '#') return;
+      const target = document.querySelector(href) as HTMLElement | null;
+      if (!target) return;
+      event.preventDefault();
+      history.pushState(null, '', href);
+      smoothScrollTo(target, link.hasAttribute('data-smooth-scroll') ? 950 : 800);
+    });
 
     const initObserver = () => {
       const observer = new IntersectionObserver((entries) => {
