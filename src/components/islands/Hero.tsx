@@ -4,7 +4,7 @@ export default function Hero() {
   const t = useTranslations();
 
   return (
-    <section className="relative z-10 max-w-6xl mx-auto px-6 pt-6 md:pt-10 pb-6 grid lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-14 items-center">
+    <section className="relative z-10 max-w-7xl mx-auto px-6 pt-6 md:pt-10 pb-6 grid lg:grid-cols-[1fr_1.05fr] gap-10 lg:gap-12 items-center">
       <div className="text-center lg:text-left" data-mask-wrap="true">
         <div data-mask="true" style={{background:'#15151a',border:'1px solid #2a2a30', transitionDelay: '100ms'}} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium text-neutral-400 mb-7 hover:border-[#ff4655]/40 hover:text-white hover:bg-[#ff4655]/10 transition-all cursor-default">
           <span style={{background:'#ff4655',boxShadow:'0 0 8px #ff4655'}} className="w-1.5 h-1.5 rounded-full animate-pulse"></span>
@@ -39,40 +39,40 @@ export default function Hero() {
       </div>
 
       {/* HERO PREVIEW PANEL */}
-      <div data-reveal="true" className="opacity-0" style={{borderRadius:'22px',padding:'1.5px',background:'linear-gradient(135deg,rgba(255,70,85,0.8),rgba(26,26,31,0.5) 38%,rgba(26,26,31,0.5) 62%,rgba(169,112,255,0.8))',boxShadow:'0 40px 90px -30px rgba(255,70,85,0.28),0 30px 60px -30px rgba(0,0,0,0.9)', transitionDelay: '200ms'}}>
-        <div style={{background:'linear-gradient(180deg,#16161c,#0c0c0f)',borderRadius:'21px'}} className="p-5">
-          <div className="flex items-center gap-2 mb-4">
+      <div data-reveal="true" className="opacity-0 w-full max-w-xl mx-auto lg:max-w-none lg:mx-0" style={{borderRadius:'24px',padding:'1.5px',background:'linear-gradient(135deg,rgba(255,70,85,0.8),rgba(26,26,31,0.5) 38%,rgba(26,26,31,0.5) 62%,rgba(169,112,255,0.8))',boxShadow:'0 40px 90px -30px rgba(255,70,85,0.28),0 30px 60px -30px rgba(0,0,0,0.9)', transitionDelay: '200ms'}}>
+        <div style={{background:'linear-gradient(180deg,#16161c,#0c0c0f)',borderRadius:'22.5px'}} className="p-6 md:p-7">
+          <div className="flex items-center gap-2 mb-5">
             <span className="w-2.5 h-2.5 rounded-full" style={{background:'#ff5f57'}}></span>
             <span className="w-2.5 h-2.5 rounded-full" style={{background:'#febc2e'}}></span>
             <span className="w-2.5 h-2.5 rounded-full" style={{background:'#28c840'}}></span>
             <span className="ml-2 text-[10px] font-mono text-neutral-500">overlay · live</span>
           </div>
-          <div style={{background:"url('/imgs/hero_card.webp') center / cover no-repeat",borderRadius:'14px'}} className="overflow-hidden">
-            <div style={{background:'linear-gradient(90deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.2) 100%)'}} className="p-5 flex items-center gap-4">
-              <div className="w-14 h-14 flex items-center justify-center shrink-0">
+          <div style={{background:"url('/imgs/hero_card.webp') center / cover no-repeat",borderRadius:'16px'}} className="overflow-hidden min-h-[108px]">
+            <div style={{background:'linear-gradient(90deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.2) 100%)'}} className="p-5 md:p-6 flex items-center gap-4 min-h-[108px]">
+              <div className="w-16 h-16 md:w-[72px] md:h-[72px] flex items-center justify-center shrink-0">
                 <img src="/imgs/ascendant2.webp" className="w-full h-full object-contain drop-shadow-xl" alt="Ascendente 2" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-white text-sm truncate drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">PonssLoveless <span className="text-neutral-300">#8882</span></p>
-                <p className="text-xs font-semibold text-white drop-shadow-[0_1px_3px_rgba(0,0,0,1)]">
+                <p className="font-semibold text-white text-base truncate drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">PonssLoveless <span className="text-neutral-300">#8882</span></p>
+                <p className="text-sm font-semibold text-white drop-shadow-[0_1px_3px_rgba(0,0,0,1)] mt-0.5">
                   Ascendente 2 · 1750 ELO <span className="text-green-400">+22</span>
                 </p>
               </div>
               <span style={{background:'#ff4655'}} className="text-[9px] font-bold px-2 py-0.5 rounded text-white">LIVE</span>
             </div>
           </div>
-          <div className="mt-4 grid grid-cols-3 gap-2.5">
-            <div style={{background:'#0a0a0d',border:'1px solid #2a2a30'}} className="rounded-lg p-2.5 text-center">
-              <p className="text-lg font-bold text-white tracking-tight">1750</p>
-              <p className="text-[9px] text-neutral-400 uppercase tracking-wide">MMR</p>
+          <div className="mt-5 grid grid-cols-3 gap-3">
+            <div style={{background:'#0a0a0d',border:'1px solid #2a2a30'}} className="rounded-xl p-3.5 text-center">
+              <p className="text-xl font-bold text-white tracking-tight">1750</p>
+              <p className="text-[10px] text-neutral-400 uppercase tracking-wide mt-0.5">MMR</p>
             </div>
-            <div style={{background:'#0a0a0d',border:'1px solid #2a2a30'}} className="rounded-lg p-2.5 text-center">
-              <p className="text-lg font-bold text-green-400 tracking-tight">60%</p>
-              <p className="text-[9px] text-neutral-400 uppercase tracking-wide">{t('toNext')}</p>
+            <div style={{background:'#0a0a0d',border:'1px solid #2a2a30'}} className="rounded-xl p-3.5 text-center">
+              <p className="text-xl font-bold text-green-400 tracking-tight">60%</p>
+              <p className="text-[10px] text-neutral-400 uppercase tracking-wide mt-0.5">{t('toNext')}</p>
             </div>
-            <div style={{background:'#0a0a0d',border:'1px solid #2a2a30'}} className="rounded-lg p-2.5 text-center">
-              <p className="text-lg font-bold text-teal-400 tracking-tight">60</p>
-              <p className="text-[9px] text-neutral-400 uppercase tracking-wide">{t('points')}</p>
+            <div style={{background:'#0a0a0d',border:'1px solid #2a2a30'}} className="rounded-xl p-3.5 text-center">
+              <p className="text-xl font-bold text-teal-400 tracking-tight">60</p>
+              <p className="text-[10px] text-neutral-400 uppercase tracking-wide mt-0.5">{t('points')}</p>
             </div>
           </div>
         </div>

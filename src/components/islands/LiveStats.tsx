@@ -31,7 +31,7 @@ export default function LiveStats() {
   return (
     <section
       data-reveal="true"
-      className="opacity-0 relative z-10 max-w-6xl mx-auto px-6 pb-4"
+      className="opacity-0 relative z-10 max-w-7xl mx-auto px-6 pb-4"
       style={{ transitionDelay: '700ms' }}
     >
       <div
