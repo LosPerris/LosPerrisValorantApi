@@ -4,20 +4,20 @@ export default function Hero() {
   const t = useTranslations();
 
   return (
-    <section className="relative z-10 max-w-6xl mx-auto px-6 pt-2 md:pt-4 pb-4 grid lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-12 items-center shrink-0">
+    <section className="relative z-10 max-w-6xl mx-auto px-6 pt-6 md:pt-10 pb-6 grid lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-14 items-center">
       <div className="text-center lg:text-left" data-mask-wrap="true">
-        <div data-mask="true" style={{background:'#15151a',border:'1px solid #2a2a30', transitionDelay: '100ms'}} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium text-neutral-400 mb-5 md:mb-6 hover:border-[#ff4655]/40 hover:text-white hover:bg-[#ff4655]/10 transition-all cursor-default">
+        <div data-mask="true" style={{background:'#15151a',border:'1px solid #2a2a30', transitionDelay: '100ms'}} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium text-neutral-400 mb-7 hover:border-[#ff4655]/40 hover:text-white hover:bg-[#ff4655]/10 transition-all cursor-default">
           <span style={{background:'#ff4655',boxShadow:'0 0 8px #ff4655'}} className="w-1.5 h-1.5 rounded-full animate-pulse"></span>
           {t('heroBadge')}
         </div>
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.02]">
+        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.02]">
           <span className="text-white block" data-mask="true" style={{transitionDelay: '200ms'}}>LOSPERRIS</span>
           <span style={{background:'linear-gradient(120deg,#ff8a93,#ff4655)',WebkitBackgroundClip:'text',backgroundClip:'text',color:'transparent', transitionDelay: '300ms'}} className="block" data-mask="true">VALORANT API</span>
         </h1>
-        <p data-mask="true" style={{transitionDelay: '400ms'}} className="mt-4 md:mt-5 text-base md:text-lg text-neutral-400 max-w-xl mx-auto lg:mx-0">
+        <p data-mask="true" style={{transitionDelay: '400ms'}} className="mt-5 text-base md:text-lg text-neutral-400 max-w-xl mx-auto lg:mx-0">
           {t('subtitle')}
         </p>
-        <div data-mask="true" style={{transitionDelay: '500ms'}} className="mt-6 md:mt-7 flex flex-wrap items-center justify-center lg:justify-start gap-2.5 text-xs">
+        <div data-mask="true" style={{transitionDelay: '500ms'}} className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-2.5 text-xs">
           <div style={{background:'#121215',border:'1px solid #2a2a30'}} className="flex items-center gap-2 px-3 py-1.5 rounded-full text-neutral-400">
             <iconify-icon icon="solar:bolt-linear" width="14" className="text-[#ff4655]"></iconify-icon> {t('heroRealtime')}
           </div>
@@ -28,7 +28,7 @@ export default function Hero() {
             <iconify-icon icon="solar:global-linear" width="14" className="text-[#22c55e]"></iconify-icon> {t('heroRegion')}
           </div>
         </div>
-        <div data-mask="true" style={{transitionDelay: '600ms'}} className="mt-6 md:mt-7 flex flex-wrap items-center justify-center lg:justify-start gap-3">
+        <div data-mask="true" style={{transitionDelay: '600ms'}} className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-3">
           <a href="#flujo-intro" data-smooth-scroll style={{background:'linear-gradient(135deg,#ff4655,#e0303f)',boxShadow:'0 12px 32px -10px rgba(255,70,85,0.75)'}} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white font-semibold text-sm hover:brightness-110 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#ff4655]/30 active:scale-[0.99] transition-all duration-300">
             <iconify-icon icon="solar:map-arrow-square-linear" width="16"></iconify-icon> {t('heroBtn')}
           </a>
