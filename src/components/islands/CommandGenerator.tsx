@@ -1,6 +1,22 @@
 import { useState, useEffect } from 'react';
 import { useStore } from '@nanostores/react';
-import { botPlatform, configMode, formatRank, formatMatch, formatToday, formatStats, hasSearched, playerData, lang, searchRegion } from '../../store/appStore';
+import {
+  botPlatform,
+  configMode,
+  formatRank,
+  formatMatch,
+  formatToday,
+  formatStats,
+  outputStyle,
+  templateRank,
+  templateMatch,
+  templateToday,
+  templateStats,
+  hasSearched,
+  playerData,
+  lang,
+  searchRegion
+} from '../../store/appStore';
 import { useTranslations } from '../../hooks/useTranslations';
 import { generateBotCommand, getCommandExample } from '../../utils/commandHelpers';
 import SectionHeader from '../ui/SectionHeader';
@@ -14,20 +30,32 @@ export default function CommandGenerator() {
   const matchF = useStore(formatMatch);
   const todayF = useStore(formatToday);
   const statsF = useStore(formatStats);
+  const style = useStore(outputStyle);
+  const tplRank = useStore(templateRank);
+  const tplMatch = useStore(templateMatch);
+  const tplToday = useStore(templateToday);
+  const tplStats = useStore(templateStats);
   const searched = useStore(hasSearched);
   const data = useStore(playerData);
   const region = useStore(searchRegion);
   const [copied, setCopied] = useState(false);
 
-
-
   useEffect(() => {
     setCopied(false);
-  }, [currentPlatform, currentConfig, rankF, matchF, todayF, statsF, data, region]);
+  }, [currentPlatform, currentConfig, rankF, matchF, todayF, statsF, style, tplRank, tplMatch, tplToday, tplStats, data, region]);
 
   if (!searched) return null;
 
   const formats = { rankF, matchF, todayF, statsF };
+  const styleConfig = {
+    style,
+    templates: {
+      rank: tplRank,
+      match: tplMatch,
+      today: tplToday,
+      stats: tplStats
+    }
+  };
   const finalEndpoint = currentConfig === 'match' ? 'match/last' : currentConfig;
   const command = generateBotCommand(
     finalEndpoint,
@@ -37,6 +65,7 @@ export default function CommandGenerator() {
     currentLang,
     data?.account || null,
     region,
+    styleConfig
   );
 
   const copyToClipboard = () => {
@@ -49,7 +78,8 @@ export default function CommandGenerator() {
     currentConfig,
     formats,
     currentLang,
-    data
+    data,
+    styleConfig
   );
 
   return (

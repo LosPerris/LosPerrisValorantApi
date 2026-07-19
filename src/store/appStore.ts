@@ -29,11 +29,18 @@ export const recentSearches = atom<RecentSearch[]>([]);
 export const botPlatform = atom<string>('nightbot');
 export const configMode = atom<string>('rank');
 
-// Formats
+// Formats (detalle type 1-3)
 export const formatRank = atom<string>('1');
 export const formatMatch = atom<string>('1');
 export const formatToday = atom<string>('1');
 export const formatStats = atom<string>('1');
+
+/** Estilo de salida: frase default, limpio o plantilla editable */
+export const outputStyle = atom<'default' | 'clean' | 'custom'>('default');
+export const templateRank = atom<string>('{rank}');
+export const templateMatch = atom<string>('{map} · {agent} · {rr}');
+export const templateToday = atom<string>('{wins}W {losses}L · {rr} RR');
+export const templateStats = atom<string>('{winrate}% WR · {agent} · {hs}% HS');
 
 // Translations Map
 export const translations: Record<string, Record<string, string>> = {
@@ -57,7 +64,16 @@ export const translations: Record<string, Record<string, string>> = {
     today: "HOY",
     stats: "STATS",
     platform: "Plataforma",
-    format: "Formato",
+    format: "Detalle",
+    outputStyle: "Estilo de mensaje",
+    styleDefault: "Frase (default)",
+    styleClean: "Limpio",
+    styleCustom: "Editable",
+    styleDefaultHint: "Mensaje completo listo para el chat",
+    styleCleanHint: "Solo el dato, sin frase",
+    styleCustomHint: "Tú escribes el texto con variables",
+    templateLabel: "Plantilla",
+    templateVars: "Variables",
     formatRank: "Formato de Rango",
     formatRank1: "Solo rango",
     formatRank2: "Rango + puntos",
@@ -106,7 +122,7 @@ export const translations: Record<string, Record<string, string>> = {
     currentMmr: "MMR Actual",
     lastWin: "Última",
     toRankUp: "A Ascenso",
-    botConfigSub: "Ajusta plataforma y formato",
+    botConfigSub: "Ajusta plataforma, estilo y detalle",
     commandParams: "Parámetros del comando",
     docsSub: "Explora cada endpoint",
     interactiveRef: "Referencia interactiva",
@@ -147,7 +163,16 @@ export const translations: Record<string, Record<string, string>> = {
     today: "TODAY",
     stats: "STATS",
     platform: "Platform",
-    format: "Format",
+    format: "Detail",
+    outputStyle: "Message style",
+    styleDefault: "Sentence (default)",
+    styleClean: "Clean",
+    styleCustom: "Editable",
+    styleDefaultHint: "Full ready-to-chat sentence",
+    styleCleanHint: "Just the data, no filler",
+    styleCustomHint: "Write your own text with variables",
+    templateLabel: "Template",
+    templateVars: "Variables",
     formatRank: "Rank Format",
     formatRank1: "Rank only",
     formatRank2: "Rank + RR",
@@ -195,7 +220,7 @@ export const translations: Record<string, Record<string, string>> = {
     currentMmr: "Current MMR",
     lastWin: "Last Match",
     toRankUp: "To Rank Up",
-    botConfigSub: "Adjust platform and format",
+    botConfigSub: "Adjust platform, style and detail",
     commandParams: "Command parameters",
     docsSub: "Explore each endpoint",
     interactiveRef: "Interactive reference",

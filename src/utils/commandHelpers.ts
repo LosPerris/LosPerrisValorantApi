@@ -2,7 +2,12 @@ import {
     formatRankText,
     formatMatchText,
     formatTodayText,
-    formatStatsText
+    formatStatsText,
+    type TextStyle,
+    RANK_TEMPLATE_VARS,
+    MATCH_TEMPLATE_VARS,
+    TODAY_TEMPLATE_VARS,
+    STATS_TEMPLATE_VARS
 } from '../services/formatService';
 import type {
     SummaryResponse,
@@ -10,15 +15,42 @@ import type {
     GeneralStatsData
 } from '../types/valorant';
 
+export { RANK_TEMPLATE_VARS, MATCH_TEMPLATE_VARS, TODAY_TEMPLATE_VARS, STATS_TEMPLATE_VARS };
+
+export type CommandFormats = {
+    rankF: string;
+    matchF: string;
+    todayF: string;
+    statsF: string;
+};
+
+export type CommandStyleConfig = {
+    style: TextStyle;
+    templates: {
+        rank: string;
+        match: string;
+        today: string;
+        stats: string;
+    };
+};
+
+export const DEFAULT_TEMPLATES = {
+    rank: '{rank}',
+    match: '{map} · {agent} · {rr}',
+    today: '{wins}W {losses}L · {rr} RR',
+    stats: '{winrate}% WR · {agent} · {hs}% HS'
+};
+
 export const generateBotCommand = (
     endpoint: string,
     type: string,
     platform: string,
-    config: { rankF: string; matchF: string; todayF: string; statsF: string },
+    config: CommandFormats,
     lang: string,
     account: { name: string; tag: string; region: string } | null,
     /** Región elegida en la búsqueda (prioridad sobre account.region de Henrik) */
     searchRegion?: string,
+    styleConfig?: CommandStyleConfig
 ): string => {
     if (!account) return '';
     const name = encodeURIComponent(account.name);
@@ -34,8 +66,29 @@ export const generateBotCommand = (
     if (type === 'today') typeVal = config.todayF;
     if (type === 'stats') typeVal = config.statsF;
 
-    if (typeVal !== '1') {
+    const style = styleConfig?.style || 'default';
+
+    // type solo aplica a default/clean; custom usa plantilla
+    if (style !== 'custom' && typeVal !== '1') {
         formatStr += `&type=${typeVal}`;
+    }
+
+    if (style !== 'default') {
+        formatStr += `&style=${style}`;
+    }
+
+    if (style === 'custom' && styleConfig) {
+        const tpl =
+            type === 'rank'
+                ? styleConfig.templates.rank
+                : type === 'match'
+                  ? styleConfig.templates.match
+                  : type === 'today'
+                    ? styleConfig.templates.today
+                    : styleConfig.templates.stats;
+        if (tpl?.trim()) {
+            formatStr += `&template=${encodeURIComponent(tpl.trim())}`;
+        }
     }
 
     if (lang !== 'es') {
@@ -55,16 +108,19 @@ export const generateBotCommand = (
 /** Ejemplo de respuesta usando los datos reales del jugador buscado. */
 export const getCommandExample = (
     type: string,
-    config: { rankF: string; matchF: string; todayF: string; statsF: string },
+    config: CommandFormats,
     lang: string,
-    data: SummaryResponse | null
+    data: SummaryResponse | null,
+    styleConfig?: CommandStyleConfig
 ): string => {
     if (!data?.account) return '';
 
     const name = data.account.name || data.rank?.name || 'Player';
+    const style = styleConfig?.style || 'default';
+    const templates = styleConfig?.templates || DEFAULT_TEMPLATES;
 
     if (type === 'rank' && data.rank) {
-        return formatRankText(data.rank, lang, config.rankF);
+        return formatRankText(data.rank, lang, config.rankF, style, templates.rank);
     }
 
     if (type === 'match' && data.match?.derived) {
@@ -72,18 +128,20 @@ export const getCommandExample = (
             data.match,
             lang,
             config.matchF,
-            data.rank?.mmr_change_to_last_game ?? 0
+            data.rank?.mmr_change_to_last_game ?? 0,
+            style,
+            templates.match
         );
     }
 
     if (type === 'today') {
         const today = deriveTodayFromHistory(data);
-        return formatTodayText(today, lang, name, config.todayF);
+        return formatTodayText(today, lang, name, config.todayF, style, templates.today);
     }
 
     if (type === 'stats') {
         const stats = deriveStatsFromMatch(data, name);
-        return formatStatsText(stats, lang, name, config.statsF);
+        return formatStatsText(stats, lang, name, config.statsF, style, templates.stats);
     }
 
     return '';

@@ -65,6 +65,16 @@ describe('formatRankText', () => {
   it('genera texto según el tipo en inglés', () => {
     expect(formatRankText(rankData, 'en', '2')).toContain('45 RR');
   });
+
+  it('style=clean solo devuelve el dato', () => {
+    expect(formatRankText(rankData, 'es', '1', 'clean')).toBe('Oro 3');
+    expect(formatRankText(rankData, 'es', '2', 'clean')).toBe('Oro 3 · 45 RR');
+    expect(formatRankText(rankData, 'es', '3', 'clean')).toBe('Oro 3 · 45 RR · MMR 1550');
+  });
+
+  it('style=custom aplica plantilla con variables', () => {
+    expect(formatRankText(rankData, 'es', '1', 'custom', 'Rango: {rank} ({rr})')).toBe('Rango: Oro 3 (45)');
+  });
 });
 
 describe('formatMatchText', () => {

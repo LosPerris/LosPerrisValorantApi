@@ -38,6 +38,12 @@ const QueryParamsSchema = z.object({
         .string()
         .default('1')
         .pipe(z.enum(['1', '2', '3']).catch('1')),
+    style: z
+        .string()
+        .default('default')
+        .transform((v) => v.toLowerCase())
+        .pipe(z.enum(['default', 'clean', 'custom']).catch('default')),
+    template: z.string().nullable().optional(),
 });
 
 import { kv } from './cache';
@@ -143,13 +149,41 @@ export function validateRouteParams(
 export function validateQueryParams(
     format: string | null,
     lang: string | null,
-    type: string | null
-): { success: false, error: Response } | { success: true, data: { format?: string | null, lang: string, type: string } } {
-    const result = QueryParamsSchema.safeParse({ format, lang: lang || undefined, type: type || undefined });
+    type: string | null,
+    style: string | null = null,
+    template: string | null = null
+):
+    | { success: false; error: Response }
+    | {
+          success: true;
+          data: {
+              format?: string | null;
+              lang: string;
+              type: string;
+              style: 'default' | 'clean' | 'custom';
+              template?: string | null;
+          };
+      } {
+    const result = QueryParamsSchema.safeParse({
+        format,
+        lang: lang || undefined,
+        type: type || undefined,
+        style: style || undefined,
+        template: template ?? undefined
+    });
     if (!result.success) {
         return { success: false, error: errorResponse(400, result.error.issues[0].message) };
     }
-    return { success: true, data: result.data as { format?: string | null, lang: string, type: string } };
+    return {
+        success: true,
+        data: result.data as {
+            format?: string | null;
+            lang: string;
+            type: string;
+            style: 'default' | 'clean' | 'custom';
+            template?: string | null;
+        }
+    };
 }
 
 // ─── Resolución de PUUID con caché ──────────────────────────────────────────
@@ -184,6 +218,8 @@ export type ValorantEndpointHandler = (params: {
     format: string | null;
     lang: string;
     type: string;
+    style: 'default' | 'clean' | 'custom';
+    template: string | null;
     url: URL;
 }, context: APIContext) => Promise<Response>;
 
@@ -214,11 +250,19 @@ export function createValorantEndpoint(handler: ValorantEndpointHandler): APIRou
         const formatParam = url.searchParams.get('format');
         const langParam = url.searchParams.get('lang');
         const typeParam = url.searchParams.get('type');
+        const styleParam = url.searchParams.get('style');
+        const templateParam = url.searchParams.get('template');
 
-        const queryValidation = validateQueryParams(formatParam, langParam, typeParam);
+        const queryValidation = validateQueryParams(
+            formatParam,
+            langParam,
+            typeParam,
+            styleParam,
+            templateParam
+        );
         if (!queryValidation.success) return queryValidation.error;
 
-        const { format, lang, type } = queryValidation.data;
+        const { format, lang, type, style, template } = queryValidation.data;
 
         try {
             const resolved = await resolvePUUID(name, tag);
@@ -238,6 +282,8 @@ export function createValorantEndpoint(handler: ValorantEndpointHandler): APIRou
                     format: format || null,
                     lang,
                     type,
+                    style,
+                    template: template ?? null,
                     url
                 },
                 context

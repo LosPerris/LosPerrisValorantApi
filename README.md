@@ -98,6 +98,32 @@ Latencia y contador de peticiones (útil para monitores de uptime).
 $(urlfetch https://vlr.losperris.dev/api/rank/na/NombreJugador/TAG?format=text&lang=es&type=1)
 ```
 
+### Estilos de mensaje (`style`)
+
+| style | Ejemplo (rank) |
+|-------|----------------|
+| `default` (omitido) | `Actualmente estoy en Oro 3` |
+| `clean` | `Oro 3` |
+| `custom` + `template=` | Tú defines el texto, p. ej. `Rango: {rank}` |
+
+Variables por comando:
+- **rank:** `{rank}` `{rr}` `{mmr}` `{name}` `{tag}` `{level}`
+- **match:** `{map}` `{agent}` `{result}` `{rr}` `{kda}` `{hs}`
+- **today:** `{name}` `{wins}` `{losses}` `{draws}` `{rr}` `{matches}` `{winrate}`
+- **stats:** `{name}` `{winrate}` `{agent}` `{hs}` `{matches}`
+
+Ejemplo limpio:
+
+```
+?format=text&style=clean
+```
+
+Ejemplo editable:
+
+```
+?format=text&style=custom&template=Rango:%20{rank}%20({rr}%20RR)
+```
+
 ### Fossabot
 
 ```

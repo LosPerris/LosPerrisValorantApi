@@ -56,6 +56,7 @@ describe('validateQueryParams', () => {
     if (result.success) {
       expect(result.data.lang).toBe('es');
       expect(result.data.type).toBe('1');
+      expect(result.data.style).toBe('default');
     }
   });
 
@@ -66,6 +67,15 @@ describe('validateQueryParams', () => {
       expect(result.data.format).toBe('text');
       expect(result.data.lang).toBe('en');
       expect(result.data.type).toBe('3');
+    }
+  });
+
+  it('acepta style=clean y template', () => {
+    const result = validateQueryParams('text', 'es', '1', 'clean', '{rank}');
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.style).toBe('clean');
+      expect(result.data.template).toBe('{rank}');
     }
   });
 });

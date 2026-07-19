@@ -2,7 +2,7 @@ import { createValorantEndpoint, CACHE_HEADERS, TEXT_HEADERS, errorResponse } fr
 import * as valorantService from '../../../../../../services/valorantService';
 import * as formatService from '../../../../../../services/formatService';
 
-export const GET = createValorantEndpoint(async ({ region, puuid, format, lang, type }) => {
+export const GET = createValorantEndpoint(async ({ region, puuid, format, lang, type, style, template }) => {
     // Obtenemos matches y MMR en paralelo para evitar llamadas secuenciales
     const [matchesData, mmrData] = await Promise.all([
         valorantService.getMatchesByPUUID(region, puuid, 'competitive', 1),
@@ -18,7 +18,10 @@ export const GET = createValorantEndpoint(async ({ region, puuid, format, lang, 
 
     if (format === 'text') {
         const mmrChange = mmrData.status === 200 ? (mmrData.data?.current_data?.mmr_change_to_last_game ?? 0) : 0;
-        return new Response(formatService.formatMatchText(matchData, lang, type, mmrChange), { status: 200, headers: TEXT_HEADERS });
+        return new Response(
+            formatService.formatMatchText(matchData, lang, type, mmrChange, style, template),
+            { status: 200, headers: TEXT_HEADERS }
+        );
     }
 
     return new Response(JSON.stringify({ status: 200, data: matchData }), { status: 200, headers: CACHE_HEADERS });

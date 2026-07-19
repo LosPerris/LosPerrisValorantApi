@@ -22,7 +22,7 @@ const COMMANDS: Cmd[] = [
     query: '?format=text',
     what: 'Dice tu rango actual (ideal para !rank).',
     chatExample: 'Actualmente estoy en Ascendente 2 con 50 puntos',
-    detail: '1 = solo rango · 2 = + puntos · 3 = + MMR',
+    detail: 'Estilos: default (frase) · clean (solo dato) · custom (plantilla). type 1–3 = detalle.',
   },
   {
     id: 'match',
@@ -33,7 +33,7 @@ const COMMANDS: Cmd[] = [
     query: '?format=text',
     what: 'Cuenta mapa, agente y si ganaste o perdiste.',
     chatExample: 'Mi última partida fue en Ascent con Jett gané 18 puntos',
-    detail: '1 = básico · 2 = + KDA · 3 = + % headshots',
+    detail: 'Estilos: default · clean · custom. type 1–3 = detalle.',
   },
   {
     id: 'today',
@@ -44,7 +44,7 @@ const COMMANDS: Cmd[] = [
     query: '?format=text&type=1',
     what: 'Resumen de hoy: victorias, derrotas y RR total.',
     chatExample: 'Hoy PonssLoveless lleva 2 Victorias, 1 Derrotas y 1 Empates (Total: +28 RR).',
-    detail: '1 = corto · 2 = + partidas · 3 = + winrate',
+    detail: 'Estilos: default · clean · custom. type 1–3 = detalle.',
   },
   {
     id: 'stats',
@@ -55,7 +55,7 @@ const COMMANDS: Cmd[] = [
     query: '?format=text&type=1',
     what: 'Winrate, agente más jugado y % HS de las últimas partidas.',
     chatExample: 'Stats de PonssLoveless (10 partidas): 58% WR | Agente: Jett | HS: 25.5%',
-    detail: '1 = compacto · 2 = frase · 3 = más largo',
+    detail: 'Estilos: default · clean · custom. type 1–3 = detalle.',
   },
 ];
 

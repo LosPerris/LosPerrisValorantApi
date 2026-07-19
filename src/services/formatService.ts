@@ -38,6 +38,33 @@ import {
     GeneralStatsData
 } from '../types/valorant';
 
+/** Estilo de respuesta para bots: frase, limpio o plantilla editable. */
+export type TextStyle = 'default' | 'clean' | 'custom';
+
+export interface TextFormatOptions {
+    lang: string;
+    type?: string;
+    style?: TextStyle;
+    template?: string | null;
+}
+
+export const RANK_TEMPLATE_VARS = ['rank', 'rr', 'mmr', 'name', 'tag', 'level'] as const;
+export const MATCH_TEMPLATE_VARS = ['map', 'agent', 'result', 'rr', 'kda', 'hs', 'name'] as const;
+export const TODAY_TEMPLATE_VARS = ['name', 'wins', 'losses', 'draws', 'rr', 'matches', 'winrate'] as const;
+export const STATS_TEMPLATE_VARS = ['name', 'winrate', 'agent', 'hs', 'matches'] as const;
+
+export function applyTemplate(template: string, vars: Record<string, string | number>): string {
+    return template.replace(/\{([a-zA-Z0-9_]+)\}/g, (match, key: string) => {
+        const value = vars[key];
+        return value !== undefined && value !== null ? String(value) : match;
+    });
+}
+
+function normalizeStyle(style?: string | null): TextStyle {
+    if (style === 'clean' || style === 'custom') return style;
+    return 'default';
+}
+
 export function formatRankData(
     accountData: ValorantApiResponse<ValorantAccount>,
     mmrData: ValorantApiResponse<ValorantMMR>,
@@ -103,27 +130,98 @@ export function formatHistoryData(historyData: ValorantApiResponse<ValorantMMRHi
     })).reverse();
 }
 
-export function formatRankText(data: FormattedRankData, lang: string, type: string): string {
-    const rank = data.current_tier_patched;
-    const rr = data.ranking_in_tier;
-    const elo = data.elo;
-    const translatedRank = translateRank(rank, lang);
-    const isEs = lang === 'es';
-
-    // type 1 = menos detalle → type 3 = más detalle
-    if (type === '1') return isEs ? `Actualmente estoy en ${translatedRank}` : `Currently I am in ${translatedRank}`;
-    if (type === '2') return isEs ? `Actualmente estoy en ${translatedRank} con ${rr} puntos` : `Currently I am in ${translatedRank} with ${rr} RR`;
-    if (type === '3') return isEs ? `Actualmente estoy en ${translatedRank} con ${rr} puntos, mi mmr es de ${elo}` : `Currently I am in ${translatedRank} with ${rr} RR, my mmr is ${elo}`;
-
-    return isEs ? `Actualmente estoy en ${translatedRank}` : `Currently I am in ${translatedRank}`;
+function rankVars(data: FormattedRankData, lang: string): Record<string, string | number> {
+    return {
+        rank: translateRank(data.current_tier_patched, lang),
+        rr: data.ranking_in_tier,
+        mmr: data.elo,
+        name: data.name,
+        tag: data.tag,
+        level: data.account_level
+    };
 }
 
-export function formatMatchText(data: MatchTextData, lang: string, type: string, mmrChange = 0): string {
-    const { map_name, is_win, is_draw, kda, hs_percent, agent_name } = data.derived;
+export function formatRankText(
+    data: FormattedRankData,
+    lang: string,
+    type: string,
+    style: TextStyle | string = 'default',
+    template?: string | null
+): string {
+    const vars = rankVars(data, lang);
+    const mode = normalizeStyle(style);
     const isEs = lang === 'es';
+    const rank = String(vars.rank);
+    const rr = vars.rr;
+    const elo = vars.mmr;
+
+    if (mode === 'custom') {
+        const tpl = (template && template.trim()) || '{rank}';
+        return applyTemplate(tpl, vars);
+    }
+
+    if (mode === 'clean') {
+        if (type === '2') return `${rank} · ${rr} RR`;
+        if (type === '3') return `${rank} · ${rr} RR · MMR ${elo}`;
+        return rank;
+    }
+
+    // default — frases
+    if (type === '1') return isEs ? `Actualmente estoy en ${rank}` : `Currently I am in ${rank}`;
+    if (type === '2') return isEs ? `Actualmente estoy en ${rank} con ${rr} puntos` : `Currently I am in ${rank} with ${rr} RR`;
+    if (type === '3') return isEs ? `Actualmente estoy en ${rank} con ${rr} puntos, mi mmr es de ${elo}` : `Currently I am in ${rank} with ${rr} RR, my mmr is ${elo}`;
+    return isEs ? `Actualmente estoy en ${rank}` : `Currently I am in ${rank}`;
+}
+
+function matchResultVerb(data: MatchTextData, lang: string): string {
+    const { is_win, is_draw } = data.derived;
+    if (lang === 'es') return is_draw ? 'empaté' : is_win ? 'gané' : 'perdí';
+    return is_draw ? 'drew' : is_win ? 'won' : 'lost';
+}
+
+function matchRrSigned(mmrChange: number): string {
+    return mmrChange > 0 ? `+${mmrChange}` : String(mmrChange);
+}
+
+function matchVars(data: MatchTextData, lang: string, mmrChange: number): Record<string, string | number> {
+    return {
+        map: data.derived.map_name,
+        agent: data.derived.agent_name,
+        result: matchResultVerb(data, lang),
+        rr: matchRrSigned(mmrChange),
+        kda: data.derived.kda,
+        hs: data.derived.hs_percent,
+        name: ''
+    };
+}
+
+export function formatMatchText(
+    data: MatchTextData,
+    lang: string,
+    type: string,
+    mmrChange = 0,
+    style: TextStyle | string = 'default',
+    template?: string | null
+): string {
+    const { map_name, kda, hs_percent, agent_name } = data.derived;
+    const isEs = lang === 'es';
+    const mode = normalizeStyle(style);
+    const vars = matchVars(data, lang, mmrChange);
+    const resultVerb = String(vars.result);
+    const rrSigned = String(vars.rr);
+
+    if (mode === 'custom') {
+        const tpl = (template && template.trim()) || '{map} · {agent} · {rr}';
+        return applyTemplate(tpl, vars);
+    }
+
+    if (mode === 'clean') {
+        if (type === '2') return `${map_name} · ${agent_name} · ${rrSigned} · ${kda}`;
+        if (type === '3') return `${map_name} · ${agent_name} · ${rrSigned} · ${kda} · ${hs_percent}% HS`;
+        return `${map_name} · ${agent_name} · ${rrSigned}`;
+    }
 
     if (isEs) {
-        const resultVerb = is_draw ? 'empaté' : is_win ? 'gané' : 'perdí';
         const pointsMsg = `${mmrChange} puntos`;
         if (type === '1') return `Mi última partida fue en ${map_name} con ${agent_name} ${resultVerb} ${pointsMsg}`;
         if (type === '2') return `Mi última partida fue en ${map_name} con ${agent_name} ${resultVerb} ${pointsMsg} mi kda fue de ${kda}`;
@@ -131,7 +229,6 @@ export function formatMatchText(data: MatchTextData, lang: string, type: string,
         return `Mi última partida fue en ${map_name} con ${agent_name} ${resultVerb} ${pointsMsg} (${kda})`;
     }
 
-    const resultVerb = is_draw ? 'drew' : is_win ? 'won' : 'lost';
     const pointsMsg = `${mmrChange} RR`;
     if (type === '1') return `My last match was on ${map_name} with ${agent_name} ${resultVerb} ${pointsMsg}`;
     if (type === '2') return `My last match was on ${map_name} with ${agent_name} ${resultVerb} ${pointsMsg} my kda was ${kda}`;
@@ -139,10 +236,39 @@ export function formatMatchText(data: MatchTextData, lang: string, type: string,
     return `My last match was on ${map_name} with ${agent_name} ${resultVerb} ${pointsMsg} (${kda})`;
 }
 
-export function formatTodayText(data: TodaySummaryData, lang: string, name: string, type = '1'): string {
+function todayVars(data: TodaySummaryData, name: string): Record<string, string | number> {
+    const { matches_played, wins, losses, draws, rr_change } = data;
+    const winrate = matches_played > 0 ? Math.round((wins / matches_played) * 100) : 0;
+    const changeSymbol = rr_change > 0 ? '+' : '';
+    return {
+        name,
+        wins,
+        losses,
+        draws,
+        rr: `${changeSymbol}${rr_change}`,
+        matches: matches_played,
+        winrate
+    };
+}
+
+export function formatTodayText(
+    data: TodaySummaryData,
+    lang: string,
+    name: string,
+    type = '1',
+    style: TextStyle | string = 'default',
+    template?: string | null
+): string {
     const isEs = lang === 'es';
+    const mode = normalizeStyle(style);
+    const vars = todayVars(data, name);
 
     if (data.matches_played === 0) {
+        if (mode === 'custom') {
+            const tpl = (template && template.trim()) || (isEs ? '{name}: 0 partidas' : '{name}: 0 matches');
+            return applyTemplate(tpl, vars);
+        }
+        if (mode === 'clean') return isEs ? '0 partidas' : '0 matches';
         return isEs
             ? `Hoy ${name} no ha jugado ninguna partida de competitivo.`
             : `Today ${name} hasn't played any competitive matches.`;
@@ -151,6 +277,18 @@ export function formatTodayText(data: TodaySummaryData, lang: string, name: stri
     const { matches_played, wins, losses, draws, rr_change } = data;
     const changeSymbol = rr_change > 0 ? '+' : '';
     const winrate = Math.round((wins / matches_played) * 100);
+
+    if (mode === 'custom') {
+        const tpl = (template && template.trim()) || '{wins}W {losses}L · {rr} RR';
+        return applyTemplate(tpl, vars);
+    }
+
+    if (mode === 'clean') {
+        const drawsPart = draws > 0 ? ` ${draws}D` : '';
+        if (type === '2') return `${matches_played} · ${wins}W ${losses}L${drawsPart} · ${changeSymbol}${rr_change} RR`;
+        if (type === '3') return `${matches_played} · ${wins}W ${losses}L${drawsPart} · ${winrate}% WR · ${changeSymbol}${rr_change} RR`;
+        return `${wins}W ${losses}L${drawsPart} · ${changeSymbol}${rr_change} RR`;
+    }
 
     if (isEs) {
         const empatesMsg = draws > 0 ? ` y ${draws} Empates` : '';
@@ -165,17 +303,50 @@ export function formatTodayText(data: TodaySummaryData, lang: string, name: stri
     return `Today ${name} has ${wins} Wins, ${losses} Losses${drawsMsg} (Total: ${changeSymbol}${rr_change} RR).`;
 }
 
-export function formatStatsText(data: GeneralStatsData, lang: string, name: string, type = '1'): string {
+function statsVars(data: GeneralStatsData, name: string): Record<string, string | number> {
+    return {
+        name,
+        winrate: data.winrate,
+        agent: data.favorite_agent,
+        hs: data.hs_percent,
+        matches: data.matches_analyzed
+    };
+}
+
+export function formatStatsText(
+    data: GeneralStatsData,
+    lang: string,
+    name: string,
+    type = '1',
+    style: TextStyle | string = 'default',
+    template?: string | null
+): string {
     const isEs = lang === 'es';
+    const mode = normalizeStyle(style);
+    const vars = statsVars(data, name);
     const { winrate, favorite_agent, hs_percent, matches_analyzed } = data;
 
     if (matches_analyzed === 0) {
+        if (mode === 'custom') {
+            const tpl = (template && template.trim()) || (isEs ? '{name}: sin datos' : '{name}: no data');
+            return applyTemplate(tpl, vars);
+        }
+        if (mode === 'clean') return isEs ? 'Sin datos' : 'No data';
         return isEs
             ? `${name} no tiene suficientes partidas recientes para analizar.`
             : `${name} does not have enough recent matches to analyze.`;
     }
 
-    // type 1 = menos detalle → type 3 = más detalle
+    if (mode === 'custom') {
+        const tpl = (template && template.trim()) || '{winrate}% WR · {agent} · {hs}% HS';
+        return applyTemplate(tpl, vars);
+    }
+
+    if (mode === 'clean') {
+        if (type === '2' || type === '3') return `${matches_analyzed}p · ${winrate}% WR · ${favorite_agent} · ${hs_percent}% HS`;
+        return `${winrate}% WR · ${favorite_agent} · ${hs_percent}% HS`;
+    }
+
     if (isEs) {
         if (type === '1') return `Stats de ${name} (${matches_analyzed} partidas): ${winrate}% WR | Agente: ${favorite_agent} | HS: ${hs_percent}%`;
         if (type === '2') return `${name} tiene un winrate del ${winrate}% en sus últimas ${matches_analyzed} partidas. Su agente más jugado es ${favorite_agent} (${hs_percent}% HS).`;
