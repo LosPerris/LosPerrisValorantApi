@@ -34,13 +34,12 @@ export default function AboutApiModal() {
       {/* Modal Container — siempre montado para precargar iconos y evitar reflow al abrir */}
       <div
         className={cn(
-          'relative w-full max-w-lg rounded-2xl overflow-hidden border border-[#2a2a30] shadow-2xl',
-          'bg-[#0a0a0d] text-white transition-[opacity,transform] duration-200 ease-out',
+          'relative w-full max-w-lg rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)]',
+          'bg-[#050505] text-white transition-[opacity,transform] duration-200 ease-out',
           isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-[0.98]',
         )}
       >
         <div
-          style={{ background: 'linear-gradient(180deg,rgba(14,14,17,0.55),rgba(14,14,17,0.96))' }}
           className="p-6 md:p-8"
         >
           {/* Header */}
@@ -72,8 +71,8 @@ export default function AboutApiModal() {
           </p>
 
           {/* Features */}
-          <div className="bg-[#16161b] rounded-xl p-5 border border-white/5 mb-6">
-            <h3 className="text-sm font-bold text-white mb-3 uppercase tracking-wide opacity-90">
+          <div className="bg-[#111] rounded-xl p-5 border border-white/5 shadow-inner mb-6">
+            <h3 className="text-[10px] font-bold text-[#ff4655] mb-3 uppercase tracking-wider">
               {t('aboutModalFeaturesTitle')}
             </h3>
             <ul className="space-y-3">

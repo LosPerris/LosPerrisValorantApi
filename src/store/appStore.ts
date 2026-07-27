@@ -27,6 +27,7 @@ export const recentSearches = atom<RecentSearch[]>([]);
 
 // Config State
 export const botPlatform = atom<string>('nightbot');
+export const copyFormat = atom<'full' | 'variable' | 'url'>('full');
 export const configMode = atom<string>('rank');
 
 // Formats (detalle type 1-3)
@@ -141,7 +142,22 @@ export const translations: Record<string, Record<string, string>> = {
     readyBlock: "Bloque listo para integrar",
     points: "Puntos",
     toNext: "Ascenso",
-    rankLabel: "Rango"
+    rankLabel: "Rango",
+    copyFormatTitle: "Formato de Copiado",
+    copyFormatChat: "Para el Chat (!addcom)",
+    copyFormatWeb: "Para el Panel (Web)",
+    copyFormatUrl: "Solo Enlace (API)",
+    previewUrl: "URL Directa de la API",
+    previewVariable: "Variable para Dashboard",
+    previewCommand: "Comando para el chat",
+    copyBtn: "COPIAR",
+    copiedBtn: "COPIADO",
+    exampleOutput: "Salida de ejemplo",
+    botLabel: "Bot",
+    accountSummaryTitle: "Resumen de Cuenta",
+    accountSummaryDesc: "Estadísticas y rango en tiempo real",
+    generatorTitle: "Generador de Comandos",
+    generatorDesc: "Configura y copia tu comando para el chat de Twitch"
   },
   en: {
     subtitle: "Rank, Match History and Streamer Commands",
@@ -239,7 +255,22 @@ export const translations: Record<string, Record<string, string>> = {
     readyBlock: "Ready to use block",
     points: "Points",
     toNext: "To next",
-    rankLabel: "Rank"
+    rankLabel: "Rank",
+    copyFormatTitle: "Copy Format",
+    copyFormatChat: "For Chat (!addcom)",
+    copyFormatWeb: "For Web Panel",
+    copyFormatUrl: "URL Only (API)",
+    previewUrl: "Direct API URL",
+    previewVariable: "Dashboard Variable",
+    previewCommand: "Chat command",
+    copyBtn: "COPY",
+    copiedBtn: "COPIED",
+    exampleOutput: "Example output",
+    botLabel: "Bot",
+    accountSummaryTitle: "Account Summary",
+    accountSummaryDesc: "Real-time stats and rank",
+    generatorTitle: "Command Generator",
+    generatorDesc: "Configure and copy your Twitch chat command"
   }
 };
 

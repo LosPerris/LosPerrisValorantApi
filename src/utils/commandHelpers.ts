@@ -50,7 +50,8 @@ export const generateBotCommand = (
     account: { name: string; tag: string; region: string } | null,
     /** Región elegida en la búsqueda (prioridad sobre account.region de Henrik) */
     searchRegion?: string,
-    styleConfig?: CommandStyleConfig
+    styleConfig?: CommandStyleConfig,
+    copyFormat?: 'full' | 'variable' | 'url'
 ): string => {
     if (!account) return '';
     const name = encodeURIComponent(account.name);
@@ -99,10 +100,20 @@ export const generateBotCommand = (
         typeof window !== 'undefined' ? window.location.origin : 'https://vlr.losperris.dev';
     const url = `${baseUrl}/api/${endpoint}/${region}/${name}/${tag}${formatStr}`;
 
-    if (platform === 'nightbot') {
-        return `!addcom !${type} $(urlfetch ${url})`;
+    if (copyFormat === 'url') {
+        return url;
     }
-    return `!addcmd !${type} $(customapi ${url})`;
+
+    if (platform === 'nightbot') {
+        return copyFormat === 'variable' ? `$(urlfetch ${url})` : `!addcom !${type} $(urlfetch ${url})`;
+    }
+    
+    if (platform === 'fossabot') {
+        return copyFormat === 'variable' ? `$(customapi ${url})` : `!addcmd !${type} $(customapi ${url})`;
+    }
+    
+    // Fallback
+    return `$(urlfetch ${url})`;
 };
 
 /** Ejemplo de respuesta usando los datos reales del jugador buscado. */

@@ -18,8 +18,8 @@ export default function PlayerResults() {
           <iconify-icon icon="solar:user-circle-linear" width="16" className="text-[#ff4655]"></iconify-icon>
         </div>
         <div>
-          <h2 className="font-semibold text-base tracking-tight text-white leading-none">Resumen de Cuenta</h2>
-          <p className="text-[11px] text-neutral-500 mt-1">Estadísticas y rango en tiempo real</p>
+          <h2 className="font-semibold text-base tracking-tight text-white leading-none">{t('accountSummaryTitle')}</h2>
+          <p className="text-[11px] text-neutral-500 mt-1">{t('accountSummaryDesc')}</p>
         </div>
       </div>
 
