@@ -11,7 +11,7 @@ export default function Footer({ withSidebar = false }: FooterProps) {
 
   return (
     <footer
-      className={`relative z-10 border-t border-neutral-900 py-8 text-center px-6 ${withSidebar ? 'lg:ml-[280px]' : ''}`}
+      className={`relative z-10 py-8 text-center px-6 ${withSidebar ? 'lg:ml-[280px]' : ''}`}
     >
       <p className="text-xs text-neutral-400 flex flex-wrap justify-center items-center gap-1.5">
         <span>

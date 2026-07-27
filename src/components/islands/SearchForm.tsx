@@ -105,33 +105,24 @@ export default function SearchForm() {
   };
 
   return (
-    <div 
-      data-reveal="true" 
-      className={cn(
-        "opacity-0 rounded-[22px] p-[1.5px]",
-        "bg-[linear-gradient(135deg,#ff4655,#16161b_32%,#16161b_64%,#a970ff)]",
-        "shadow-[0_30px_70px_-25px_rgba(0,0,0,0.85)]"
-      )}
-      style={{ transitionDelay: '1100ms' }}
-    >
-      <div className="bg-[linear-gradient(180deg,#16161c,#0c0c0f)] rounded-[20.5px] p-6 md:p-8">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2.5">
-            <div style={{background:'rgba(255,70,85,0.12)',border:'1px solid rgba(255,70,85,0.3)'}} className="w-9 h-9 rounded-lg flex items-center justify-center">
+    <div className="bg-[#0a0a0a] border border-white/10 rounded-xl p-5 md:p-6 w-full">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/5 border border-white/5">
               <iconify-icon icon="solar:magnifer-linear" width="16" className="text-[#ff4655]"></iconify-icon>
             </div>
             <div>
               <h3 className="font-semibold text-base tracking-tight text-white leading-none">{t('searchTitle')}</h3>
-              <p className="text-[11px] text-neutral-400 mt-1">{t('searchDesc')}</p>
+              <p className="text-[11px] text-neutral-500 mt-1">{t('searchDesc')}</p>
             </div>
           </div>
           <span className="text-[10px] font-semibold text-neutral-500 uppercase tracking-[0.2em]">Riot ID</span>
         </div>
 
         <form onSubmit={handleSearch}>
-          <div className="grid grid-cols-1 md:grid-cols-[140px_1fr_140px] gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-[110px_1fr_110px] gap-3">
             <div>
-              <label htmlFor="region-select" className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wide">{t('region')}</label>
+              <label htmlFor="region-select" className="block mb-1.5 text-[11px] font-semibold text-neutral-400 uppercase tracking-wide">{t('region')}</label>
               <CustomSelect
                 id="region-select"
                 value={region}
@@ -147,24 +138,24 @@ export default function SearchForm() {
               />
             </div>
             <div>
-              <label htmlFor="riot-id-input" className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wide">Riot ID</label>
+              <label htmlFor="riot-id-input" className="block mb-1.5 text-[11px] font-semibold text-neutral-400 uppercase tracking-wide">Riot ID</label>
               <input 
                 id="riot-id-input"
                 value={riotId} 
                 onChange={(e) => searchRiotId.set(e.target.value)}
                 placeholder={t('namePlaceholder')}
-                className="w-full mt-1.5 px-3 py-2.5 rounded-lg text-sm text-white placeholder-neutral-600 outline-none bg-[#0a0a0d] border border-[#2a2a30] hover:border-[#ff4655] focus:border-[#ff4655] focus:ring-1 focus:ring-[#ff4655] transition"
+                className="w-full px-3 py-2 rounded-lg text-sm text-white placeholder-neutral-600 outline-none bg-[#111] border border-white/10 hover:border-[#ff4655]/50 focus:border-[#ff4655] focus:ring-1 focus:ring-[#ff4655]/30 transition"
                 required
               />
             </div>
             <div>
-              <label htmlFor="tag-input" className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wide">Tag</label>
+              <label htmlFor="tag-input" className="block mb-1.5 text-[11px] font-semibold text-neutral-400 uppercase tracking-wide">Tag</label>
               <input 
                 id="tag-input"
                 value={tag} 
                 onChange={(e) => searchTag.set(e.target.value)}
                 placeholder={t('tagPlaceholder')}
-                className="w-full mt-1.5 px-3 py-2.5 rounded-lg text-sm text-white placeholder-neutral-600 outline-none bg-[#0a0a0d] border border-[#2a2a30] hover:border-[#ff4655] focus:border-[#ff4655] focus:ring-1 focus:ring-[#ff4655] transition"
+                className="w-full px-3 py-2 rounded-lg text-sm text-white placeholder-neutral-600 outline-none bg-[#111] border border-white/10 hover:border-[#ff4655]/50 focus:border-[#ff4655] focus:ring-1 focus:ring-[#ff4655]/30 transition"
                 required
               />
             </div>
@@ -180,8 +171,7 @@ export default function SearchForm() {
           <button 
             type="submit" 
             disabled={loading}
-            style={{background:'linear-gradient(135deg,#ff4655,#e0303f)',boxShadow:'0 12px 32px -10px rgba(255,70,85,0.75)'}} 
-            className="w-full mt-5 py-3 rounded-lg text-white font-semibold text-sm flex items-center justify-center gap-2 hover:brightness-110 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#ff4655]/30 active:scale-[0.99] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+            className="w-full mt-5 py-2.5 rounded-lg border border-[#ff4655] bg-[#0a0a0a] text-[#ff4655] shadow-[0_0_10px_rgba(255,70,85,0.1)] hover:shadow-[0_0_15px_rgba(255,70,85,0.3)] hover:bg-[#ff4655]/10 font-semibold text-sm flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
               <iconify-icon icon="svg-spinners:ring-resize" width="18"></iconify-icon>
@@ -207,7 +197,6 @@ export default function SearchForm() {
             ))}
           </div>
         )}
-      </div>
     </div>
   );
 }

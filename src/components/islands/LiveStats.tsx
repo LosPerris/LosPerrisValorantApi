@@ -29,81 +29,48 @@ export default function LiveStats() {
   }, []);
 
   return (
-    <section
-      data-reveal="true"
-      className="opacity-0 relative z-10 max-w-7xl mx-auto px-6 pb-4"
-      style={{ transitionDelay: '700ms' }}
-    >
-      <div
-        style={{
-          borderRadius: '18px',
-          padding: '1px',
-          background:
-            'linear-gradient(90deg,rgba(255,70,85,0.55),rgba(42,42,48,0.4) 30%,rgba(42,42,48,0.4) 70%,rgba(169,112,255,0.55))',
-        }}
-      >
-        <div
-          style={{ background: 'linear-gradient(180deg,#121216,#0c0c0f)', borderRadius: '17px' }}
-          className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-neutral-800/70"
-        >
-          <div className="p-5 flex items-center justify-center md:justify-start gap-4">
-            <div
-              style={{
-                background: 'rgba(169,112,255,0.1)',
-                border: '1px solid rgba(169,112,255,0.25)',
-              }}
-              className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
-            >
-              <iconify-icon icon="solar:bolt-linear" width="20" className="text-[#a970ff]"></iconify-icon>
-            </div>
-            <div>
-              <p className="text-xl font-bold text-white tracking-tight leading-none">
-                {stats.latency > 0 ? (
-                  <>
-                    ~{stats.latency}ms{' '}
-                    <span className="text-xs font-medium text-neutral-400">
-                      ({(stats.latency / 1000).toFixed(2)}
-                      <span className="text-[0.65em]">s</span>)
-                    </span>
-                  </>
-                ) : (
-                  '—'
-                )}
-              </p>
-              <p className="text-xs text-neutral-400 uppercase tracking-wide mt-1">{t('avgLatency')}</p>
-            </div>
+    <section className="relative z-10 w-full">
+      <div className="bg-[#0a0a0a] border border-white/10 rounded-xl p-2 sm:p-4 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/5">
+        <div className="py-2 sm:py-0 sm:px-4 flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-white/5 border border-white/5">
+            <iconify-icon icon="solar:bolt-linear" width="16" className="text-[#ff4655]"></iconify-icon>
           </div>
-          <div className="p-5 flex items-center justify-center md:justify-start gap-4">
-            <div
-              style={{
-                background: 'rgba(34,197,94,0.1)',
-                border: '1px solid rgba(34,197,94,0.25)',
-              }}
-              className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
-            >
-              <iconify-icon icon="solar:server-linear" width="20" className="text-[#22c55e]"></iconify-icon>
-            </div>
-            <div>
-              <p className="text-xl font-bold text-white tracking-tight leading-none">
-                {formatRequests(stats.requests)}
-              </p>
-              <p className="text-xs text-neutral-400 uppercase tracking-wide mt-1">{t('realRequests')}</p>
-            </div>
+          <div>
+            <p className="text-base font-bold text-white tracking-tight leading-none">
+              {stats.latency > 0 ? (
+                <>
+                  ~{stats.latency}ms{' '}
+                  <span className="text-[10px] font-medium text-neutral-400">
+                    ({(stats.latency / 1000).toFixed(2)}s)
+                  </span>
+                </>
+              ) : (
+                '—'
+              )}
+            </p>
+            <p className="text-[10px] text-neutral-400 uppercase tracking-wide mt-0.5">{t('avgLatency')}</p>
           </div>
-          <div className="p-5 flex items-center justify-center md:justify-start gap-4">
-            <div
-              style={{
-                background: 'rgba(245,158,11,0.1)',
-                border: '1px solid rgba(245,158,11,0.25)',
-              }}
-              className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
-            >
-              <iconify-icon icon="solar:global-linear" width="20" className="text-[#f59e0b]"></iconify-icon>
-            </div>
-            <div>
-              <p className="text-xl font-bold text-white tracking-tight leading-none">{REGIONS_COUNT}</p>
-              <p className="text-xs text-neutral-400 uppercase tracking-wide mt-1">{t('regions')}</p>
-            </div>
+        </div>
+        
+        <div className="py-2 sm:py-0 sm:px-4 flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-white/5 border border-white/5">
+            <iconify-icon icon="solar:server-linear" width="16" className="text-[#ff4655]"></iconify-icon>
+          </div>
+          <div>
+            <p className="text-base font-bold text-white tracking-tight leading-none">
+              {formatRequests(stats.requests)}
+            </p>
+            <p className="text-[10px] text-neutral-400 uppercase tracking-wide mt-0.5">{t('realRequests')}</p>
+          </div>
+        </div>
+        
+        <div className="py-2 sm:py-0 sm:px-4 flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-white/5 border border-white/5">
+            <iconify-icon icon="solar:global-linear" width="16" className="text-[#ff4655]"></iconify-icon>
+          </div>
+          <div>
+            <p className="text-base font-bold text-white tracking-tight leading-none">{REGIONS_COUNT}</p>
+            <p className="text-[10px] text-neutral-400 uppercase tracking-wide mt-0.5">{t('regions')}</p>
           </div>
         </div>
       </div>

@@ -22,9 +22,7 @@ const { title } = Astro.props;
 		<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" is:inline defer></script>
 		<title>{title}</title>
 	</head>
-	<body style="font-family:'Inter',sans-serif;background:#08080a" class="text-neutral-200 antialiased min-h-screen relative overflow-x-hidden selection:bg-[#ff4655]/30">
-		<div style="position:fixed;inset:0;background:radial-gradient(circle at 50% -8%,rgba(255,70,85,0.22),transparent 52%),radial-gradient(circle at 90% 92%,rgba(169,112,255,0.14),transparent 48%),radial-gradient(circle at 6% 50%,rgba(255,70,85,0.07),transparent 42%);pointer-events:none" aria-hidden="true"></div>
-		<div style="position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.024) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.024) 1px,transparent 1px);background-size:58px 58px;mask-image:radial-gradient(circle at 50% 22%,black,transparent 72%);pointer-events:none" aria-hidden="true"></div>
+	<body style="font-family:'Inter',sans-serif;background:#000000" class="text-neutral-300 antialiased min-h-screen relative overflow-x-hidden selection:bg-[#ff4655]/30">
 		<slot />
 	</body>
 </html>

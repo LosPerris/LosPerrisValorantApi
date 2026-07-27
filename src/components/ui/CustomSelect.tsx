@@ -37,9 +37,9 @@ export default function CustomSelect({ id, value, onChange, options, className }
         id={id}
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "w-full text-left px-3 py-2.5 rounded-lg text-sm text-white outline-none transition cursor-pointer flex justify-between items-center",
-          "bg-[#0a0a0d] border",
-          isOpen ? "border-[#ff4655] ring-1 ring-[#ff4655]" : "border-[#2a2a30] hover:border-[#ff4655]",
+          "w-full text-left px-3 py-2 rounded-lg text-sm text-white outline-none transition cursor-pointer flex justify-between items-center",
+          "bg-[#111] border",
+          isOpen ? "border-[#ff4655] ring-1 ring-[#ff4655]" : "border-white/10 hover:border-[#ff4655]/50",
           className
         )}
       >
@@ -53,7 +53,7 @@ export default function CustomSelect({ id, value, onChange, options, className }
       </button>
 
       {isOpen && (
-        <div className="absolute z-50 w-full mt-2 bg-[#0a0a0d] border border-[#2a2a30] rounded-lg shadow-xl overflow-hidden py-1">
+        <div className="absolute z-50 w-full mt-2 bg-[#111] border border-white/10 rounded-lg shadow-xl overflow-hidden py-1">
           {options.map((option) => (
             <button
               key={option.value}
@@ -63,10 +63,10 @@ export default function CustomSelect({ id, value, onChange, options, className }
                 setIsOpen(false);
               }}
               className={cn(
-                "w-full text-left px-3 py-2.5 text-sm transition-colors",
+                "w-full text-left px-3 py-2 text-sm transition-colors",
                 option.value === value 
-                  ? "bg-[#ff4655]/20 text-[#ff4655] font-semibold" 
-                  : "text-white hover:bg-[#ff4655] hover:text-white"
+                  ? "bg-[#ff4655]/10 text-[#ff4655] font-semibold border-l-2 border-[#ff4655]" 
+                  : "text-neutral-400 hover:bg-white/5 hover:text-white border-l-2 border-transparent"
               )}
             >
               {option.label}
