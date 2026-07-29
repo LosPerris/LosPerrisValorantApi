@@ -46,7 +46,7 @@ export default function DashboardLayout() {
 
           <div className="w-full max-w-5xl mx-auto mt-2 animate-slide-up" style={{ animationDelay: '0.3s', opacity: 0 }}>
             <div className="flex items-center gap-4 mb-4">
-              <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">Herramientas</span>
+              <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Herramientas</span>
               
               <div className="flex bg-black/40 rounded-lg p-1 border border-white/5 relative w-72">
                 <div 

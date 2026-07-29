@@ -99,7 +99,7 @@ export default function AboutApiModal() {
               tabIndex={isOpen ? 0 : -1}
               className={cn(
                 'inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all',
-                'bg-[#ff4655] text-white hover:bg-[#ff5c6a] hover:-translate-y-0.5 shadow-[0_8px_20px_-6px_rgba(255,70,85,0.4)]',
+                'bg-[#ff4655] text-[#0a0a0a] hover:bg-[#ff5c6a] hover:-translate-y-0.5 shadow-[0_8px_20px_-6px_rgba(255,70,85,0.4)]',
               )}
             >
               <span className="inline-flex w-[22px] h-[22px] shrink-0 items-center justify-center">

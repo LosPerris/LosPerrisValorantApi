@@ -124,7 +124,7 @@ export default function CommandWizard() {
         </div>
         <div>
           <h2 className="font-semibold text-base tracking-tight text-white leading-none">{t('generatorTitle')}</h2>
-          <p className="text-[11px] text-neutral-500 mt-1">{t('generatorDesc')}</p>
+          <p className="text-[11px] text-neutral-400 mt-1">{t('generatorDesc')}</p>
         </div>
       </div>
 

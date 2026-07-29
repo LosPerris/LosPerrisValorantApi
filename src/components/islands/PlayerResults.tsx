@@ -19,7 +19,7 @@ export default function PlayerResults() {
         </div>
         <div>
           <h2 className="font-semibold text-base tracking-tight text-white leading-none">{t('accountSummaryTitle')}</h2>
-          <p className="text-[11px] text-neutral-500 mt-1">{t('accountSummaryDesc')}</p>
+          <p className="text-[11px] text-neutral-400 mt-1">{t('accountSummaryDesc')}</p>
         </div>
       </div>
 

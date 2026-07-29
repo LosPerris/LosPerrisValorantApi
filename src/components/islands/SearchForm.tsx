@@ -109,11 +109,11 @@ export default function SearchForm() {
               <iconify-icon icon="solar:magnifer-linear" width="16" className="text-[#ff4655]"></iconify-icon>
             </div>
             <div>
-              <h3 className="font-semibold text-base tracking-tight text-white leading-none">{t('searchTitle')}</h3>
-              <p className="text-[11px] text-neutral-500 mt-1">{t('searchDesc')}</p>
+              <h2 className="font-semibold text-base tracking-tight text-white leading-none">{t('searchTitle')}</h2>
+              <p className="text-[11px] text-neutral-400 mt-1">{t('searchDesc')}</p>
             </div>
           </div>
-          <span className="text-[10px] font-semibold text-neutral-500 uppercase tracking-[0.2em]">Riot ID</span>
+          <span className="text-[10px] font-semibold text-neutral-400 uppercase tracking-[0.2em]">Riot ID</span>
         </div>
 
         <form onSubmit={handleSearch}>

@@ -188,7 +188,7 @@ export default function ApiDocumentation() {
               </div>
 
               <div className="mt-6 mb-4">
-                <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block mb-2">Ejemplo en chat</span>
+                <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block mb-2">Ejemplo en chat</span>
                 <div className="flex items-start gap-3 bg-[#111] border border-white/5 p-4 rounded-xl shadow-inner">
                   <div className="shrink-0 flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-xs font-bold text-white/80">
                     <iconify-icon icon="solar:bot-linear" width="14"></iconify-icon>

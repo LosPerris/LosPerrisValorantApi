@@ -97,7 +97,7 @@ export default function OverlayGenerator() {
         </div>
         <div>
           <h2 className="font-semibold text-base tracking-tight text-white leading-none">{t('overlayTitle')}</h2>
-          <p className="text-[11px] text-neutral-500 mt-1">{t('overlayDesc')}</p>
+          <p className="text-[11px] text-neutral-400 mt-1">{t('overlayDesc')}</p>
         </div>
       </div>
 

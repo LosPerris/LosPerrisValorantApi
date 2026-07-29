@@ -11,7 +11,7 @@ export default function LanguageToggle() {
         onClick={() => lang.set('es')} 
         className={cn(
           "px-3 py-1.5 rounded-md font-bold text-xs transition-colors cursor-pointer",
-          currentLang === 'es' ? "bg-[#ff4655] text-white" : "text-neutral-400 hover:text-white"
+          currentLang === 'es' ? "bg-[#ff4655] text-[#050505]" : "text-neutral-400 hover:text-white"
         )}
       >
         ES
@@ -20,7 +20,7 @@ export default function LanguageToggle() {
         onClick={() => lang.set('en')} 
         className={cn(
           "px-3 py-1.5 rounded-md font-bold text-xs transition-colors cursor-pointer",
-          currentLang === 'en' ? "bg-[#ff4655] text-white" : "text-neutral-400 hover:text-white"
+          currentLang === 'en' ? "bg-[#ff4655] text-[#050505]" : "text-neutral-400 hover:text-white"
         )}
       >
         EN
