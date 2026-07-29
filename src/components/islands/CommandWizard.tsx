@@ -132,7 +132,7 @@ export default function CommandWizard() {
         <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-white/5">
 
           {/* LEFT SIDE: CONFIGURATION */}
-          <div className="p-5 md:p-6 lg:p-8 lg:pr-10 lg:rounded-l-xl">
+          <div className="p-3 md:p-4 lg:p-5 lg:pr-6 flex flex-col lg:rounded-l-xl">
 
             {/* TABS */}
             <div className="relative flex bg-[#111] border border-white/5 p-1 rounded-lg mb-5 isolate">
@@ -161,7 +161,7 @@ export default function CommandWizard() {
             </div>
 
             {/* CONFIGURATION OPTIONS */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-x-3 gap-y-2 content-start">
               <div>
                 <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wide px-1 block mb-1.5">{t('botLabel')}</span>
                 <CustomSelect
@@ -266,6 +266,7 @@ export default function CommandWizard() {
                     onChange={(e) => setCurrentTemplate(e.target.value)}
                     className="w-full rounded-lg border border-white/10 bg-[#111] px-3 py-2 text-sm text-white outline-none focus:border-white transition"
                     placeholder="{rank}"
+                    maxLength={150}
                   />
                   <div className="flex flex-wrap items-center gap-1.5 px-1 pt-1">
                     <span className="text-[10px] font-bold uppercase tracking-wide text-neutral-600">{t('templateVars')}:</span>
@@ -286,36 +287,86 @@ export default function CommandWizard() {
           </div>
 
           {/* RIGHT SIDE: PREVIEW */}
-          <div className="p-5 md:p-6 lg:p-8 lg:pl-10 bg-[#050505] flex flex-col lg:rounded-r-xl">
+          <div className="p-3 md:p-4 lg:p-5 lg:pl-6 bg-[#050505] flex flex-col lg:rounded-r-xl">
             <div className="flex-shrink-0">
               <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-2 block">
                 {currentCopyFormat === 'url' ? t('previewUrl') : currentCopyFormat === 'variable' ? t('previewVariable') : `${t('previewCommand')} (!${currentConfig})`}
               </span>
 
-              <div className="relative group">
+              <div className="relative group flex items-center bg-[#111] border border-white/5 rounded-xl shadow-inner h-[76px] overflow-hidden">
                 <code
                   key={command}
-                  className="block w-full pr-[80px] text-sm text-neutral-300 font-mono break-all leading-relaxed bg-[#111] border border-white/5 p-4 rounded-xl shadow-inner min-h-[60px] animate-[fadeIn_0.3s_ease-out]"
+                  className="block w-full pl-4 pr-[80px] text-[13px] text-neutral-300 font-mono break-all leading-[1.4] line-clamp-2 animate-[fadeIn_0.3s_ease-out]"
                 >
                   {command}
                 </code>
                 <button
                   onClick={copyToClipboard}
-                  className="absolute top-1/2 -translate-y-1/2 right-3 px-2.5 py-1.5 rounded-md bg-[#0a0a0a] border border-[#ff4655] text-[#ff4655] text-[10px] font-bold hover:shadow-[0_0_10px_rgba(255,70,85,0.2)] hover:bg-[#ff4655]/10 transition-all"
+                  className="absolute right-3 px-2.5 py-1.5 rounded-md bg-[#0a0a0a] border border-[#ff4655] text-[#ff4655] text-[10px] font-bold hover:shadow-[0_0_10px_rgba(255,70,85,0.2)] hover:bg-[#ff4655]/10 transition-all"
                 >
                   {copied ? t('copiedBtn') : t('copyBtn')}
                 </button>
               </div>
             </div>
 
-            <div className="flex flex-col gap-1.5 bg-[#0a0a0a] p-4 rounded-xl border border-white/10 shadow-inner mt-6 flex-1">
-              <span className="text-[10px] font-bold text-[#ff4655] uppercase tracking-wider">{t('exampleOutput')}</span>
-              <p
-                key={currentExample}
-                className="text-white font-medium leading-snug text-sm animate-[fadeIn_0.3s_ease-out]"
-              >
-                {currentExample}
-              </p>
+            <div className="flex flex-col bg-[#0e0e10] rounded-xl border border-white/5 shadow-inner mt-4 flex-1 overflow-hidden font-['Inter',sans-serif]">
+              {/* Header */}
+              <div className="flex items-center justify-between py-2 px-3 border-b border-white/10 relative shrink-0">
+                <div className="w-4"></div>
+                <span className="text-[11px] font-semibold text-[#efeff1]">Chat del stream</span>
+                <div className="flex gap-2 text-[#efeff1]">
+                  <iconify-icon icon="mdi:account-group-outline" width="14"></iconify-icon>
+                </div>
+              </div>
+              
+              {/* Content */}
+              <div className="px-3 py-2 flex flex-col gap-1.5 text-[12px] leading-[1.3] text-[#efeff1] flex-1 bg-[#0e0e10] min-h-[90px]">
+                <span className="text-neutral-500 text-[10px] mb-1">
+                  ¡Te damos la bienvenida a la sala de chat de {data?.account?.name || 'ponss17'}!
+                </span>
+
+                {/* User */}
+                <div className="break-words">
+                  <span className="font-bold text-[#e54251] hover:underline cursor-pointer">
+                    {data?.account?.name || 'Streamer'}
+                  </span>
+                  <span className="text-neutral-300 mr-1">:</span>
+                  <span>!{currentConfig}</span>
+                </div>
+
+                {/* Bot */}
+                <div className="break-words animate-[fadeIn_0.4s_ease-out]">
+                  <span 
+                    className="inline-flex items-center justify-center bg-[#05994f] rounded-[3px] mr-1.5 w-[18px] h-[18px] align-middle"
+                    title="Moderador"
+                  >
+                    <iconify-icon icon="mdi:sword" width="14" className="text-white -scale-x-100"></iconify-icon>
+                  </span>
+                  <span className="font-bold text-[#47487f] hover:underline cursor-pointer">
+                    {currentPlatform === 'nightbot' ? 'Nightbot' : 'Fossabot'}
+                  </span>
+                  <span className="text-neutral-300 mr-1">:</span>
+                  <span>{currentExample}</span>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="px-3 pb-3 shrink-0 bg-[#0e0e10]">
+                <div className="bg-[#18181b] border border-white/10 rounded p-1.5 flex items-center gap-1.5 mb-1.5 cursor-text hover:border-[#a970ff] hover:shadow-[0_0_0_1px_#a970ff] transition-all group">
+                  <span 
+                    className="inline-flex items-center justify-center bg-[#05994f] rounded-[2px] w-[14px] h-[14px]"
+                  >
+                    <iconify-icon icon="mdi:sword" width="10" className="text-white -scale-x-100"></iconify-icon>
+                  </span>
+                  <span className="text-neutral-400 text-[11px] group-hover:text-neutral-300 transition-colors">Enviar un mensaje</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <iconify-icon icon="mdi:cog" width="14" className="text-neutral-400 hover:text-white cursor-pointer transition-colors"></iconify-icon>
+                  <button className="bg-[#9146FF] hover:bg-[#772CE8] text-white text-[10px] font-bold py-1 px-3 rounded-md transition-colors shadow-sm">
+                    Enviar
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
