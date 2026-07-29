@@ -282,6 +282,10 @@ export default function OverlayGenerator() {
                 <iconify-icon icon={copied ? "solar:check-circle-bold" : "solar:copy-bold"} width="15"></iconify-icon>
                 {copied ? t('overlayCopiedBtn') || '¡URL COPIADA!' : t('overlayCopyBtn') || 'COPIAR URL PARA OBS'}
               </button>
+              <div className="mt-2.5 text-center text-[10px] text-neutral-400 font-medium">
+                Tamaño recomendado en OBS: <br/> 
+                <span className="text-[#ff4655] font-bold">{layout === 'full' ? 'Ancho: 280 | Alto: 120' : 'Ancho: 380 | Alto: 100'}</span>
+              </div>
             </div>
           </div>
 
