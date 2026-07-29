@@ -24,7 +24,7 @@ export default function LiveStats() {
     };
 
     fetchStats();
-    const interval = setInterval(fetchStats, 30_000);
+    const interval = setInterval(fetchStats, 60_000); // 60s: el stats.ts tiene s-maxage=30, no tiene sentido pedir antes
     return () => clearInterval(interval);
   }, []);
 
@@ -38,12 +38,7 @@ export default function LiveStats() {
           <div>
             <p className="text-base font-bold text-white tracking-tight leading-none">
               {stats.latency > 0 ? (
-                <>
-                  ~{stats.latency}ms{' '}
-                  <span className="text-[10px] font-medium text-neutral-400">
-                    ({(stats.latency / 1000).toFixed(2)}s)
-                  </span>
-                </>
+                `~${stats.latency} ms`
               ) : (
                 '—'
               )}

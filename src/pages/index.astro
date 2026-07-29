@@ -1,10 +1,11 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import LanguageToggle from '../components/islands/LanguageToggle';
-import DashboardLayout from '../components/islands/DashboardLayout';
-import Footer from '../components/islands/Footer';
-import AboutApiModal from '../components/islands/AboutApiModal';
-import BackgroundGlow from '../components/islands/BackgroundGlow';
+export const prerender = true;
+import Layout from "../layouts/Layout.astro";
+import LanguageToggle from "../components/islands/LanguageToggle";
+import DashboardLayout from "../components/islands/DashboardLayout";
+import Footer from "../components/islands/Footer";
+import AboutApiModal from "../components/islands/AboutApiModal";
+import BackgroundGlow from "../components/islands/BackgroundGlow";
 ---
 
 <style is:global>
@@ -20,50 +21,64 @@ import BackgroundGlow from '../components/islands/BackgroundGlow';
 </style>
 
 <Layout title="LosPerris - Valorant API">
-  <!-- LOGO FLOTANTE -->
   <a
     id="home-logo"
     href="/"
     class="fixed top-3 left-4 flex items-center gap-3 z-50 bg-[#0a0a0d]/80 backdrop-blur-md border border-white/10 pl-3 pr-5 py-1.5 rounded-full shadow-sm transition hover:bg-white/5"
   >
-    <img src="/imgs/LosPerris-minimal.svg" alt="LosPerris" class="w-6 h-6 drop-shadow-[0_0_4px_rgba(255,70,85,0.4)]" />
-    <span class="text-white font-extrabold tracking-tight text-sm hidden sm:inline">
-      LOS<span class="text-[#ff4655]">PERRIS</span> <span class="font-bold text-white opacity-90">API</span>
+    <img
+      src="/imgs/LosPerris-minimal.svg"
+      alt="LosPerris"
+      class="w-6 h-6 drop-shadow-[0_0_4px_rgba(255,70,85,0.4)]"
+    />
+    <span
+      class="text-white font-extrabold tracking-tight text-sm hidden sm:inline"
+    >
+      LOS<span class="text-[#ff4655]">PERRIS</span>
+      <span class="font-bold text-white opacity-90">API</span>
     </span>
   </a>
 
   <LanguageToggle client:load />
-  <BackgroundGlow client:load />
-  
-  <main class="min-h-screen flex flex-col relative text-white pt-10 pb-4 px-4 md:px-6">
+  <BackgroundGlow />
 
-    <div class="max-w-[1400px] mx-auto w-full relative z-10 flex flex-col gap-4 flex-1">
+  <main
+    class="min-h-screen flex flex-col relative text-white pt-10 pb-4 px-4 md:px-6"
+  >
+    <div
+      class="max-w-[1400px] mx-auto w-full relative z-10 flex flex-col gap-4 flex-1"
+    >
       <DashboardLayout client:load />
     </div>
 
     <div class="mt-auto w-full">
-      <Footer client:load />
+      <Footer client:visible />
     </div>
   </main>
 
-  <AboutApiModal client:load />
+  <AboutApiModal client:idle />
 
   <script>
-    import { hasSearched } from '../store/appStore';
-    
-    const initObserver = () => {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-          }
-        });
-      }, { threshold: 0.05 });
+    import { hasSearched } from "../store/appStore";
 
-      document.querySelectorAll('[data-reveal="true"]:not(.is-visible)').forEach(el => observer.observe(el));
+    const initObserver = () => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+            }
+          });
+        },
+        { threshold: 0.05 },
+      );
+
+      document
+        .querySelectorAll('[data-reveal="true"]:not(.is-visible)')
+        .forEach((el) => observer.observe(el));
     };
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener("DOMContentLoaded", () => {
       setTimeout(initObserver, 100);
     });
 

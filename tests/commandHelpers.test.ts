@@ -17,7 +17,7 @@ describe('generateBotCommand', () => {
 
   it('genera comando StreamElements con lang distinto de es', () => {
     const cmd = generateBotCommand('match', 'match', 'streamelements', config, 'en', account);
-    expect(cmd).toContain('$(customapi ');
+    expect(cmd).toContain('$(urlfetch ');
     expect(cmd).toContain('&lang=en');
     expect(cmd).not.toContain('&type=');
   });

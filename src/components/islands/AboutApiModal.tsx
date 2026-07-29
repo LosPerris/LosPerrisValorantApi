@@ -4,10 +4,10 @@ import { useTranslations } from '../../hooks/useTranslations';
 import { cn } from '../../utils/cn';
 
 const FEATURES = [
-  { icon: 'solar:shield-check-bold-duotone', color: '#4ade80', key: 'aboutModalFeature1' },
-  { icon: 'solar:bolt-bold-duotone', color: '#fbbf24', key: 'aboutModalFeature2' },
-  { icon: 'solar:code-square-bold-duotone', color: '#c084fc', key: 'aboutModalFeature3' },
-  { icon: 'solar:earth-bold-duotone', color: '#60a5fa', key: 'aboutModalFeature4' },
+  { icon: 'solar:monitor-camera-bold-duotone', color: '#ff4655', key: 'aboutModalFeature1' },
+  { icon: 'solar:chat-round-line-bold-duotone', color: '#ff4655', key: 'aboutModalFeature2' },
+  { icon: 'solar:bolt-bold-duotone', color: '#ff4655', key: 'aboutModalFeature3' },
+  { icon: 'solar:earth-bold-duotone', color: '#ff4655', key: 'aboutModalFeature4' },
 ] as const;
 
 export default function AboutApiModal() {

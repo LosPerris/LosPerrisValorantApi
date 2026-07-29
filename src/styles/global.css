@@ -131,6 +131,26 @@
   .animate-zoom-in {
     animation: zoomInEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
+
+  @keyframes rankPop {
+    0% { transform: scale(1); filter: brightness(1); }
+    20% { transform: scale(1.05); filter: brightness(1.3) drop-shadow(0 0 20px rgba(255, 255, 255, 0.5)); }
+    100% { transform: scale(1); filter: brightness(1); }
+  }
+
+  .animate-rank-pop {
+    animation: rankPop 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes bouncePop {
+    0% { transform: scale(0.5); opacity: 0; filter: brightness(2); }
+    60% { transform: scale(1.2); opacity: 1; filter: brightness(1.5); }
+    100% { transform: scale(1); opacity: 1; filter: brightness(1); }
+  }
+
+  .animate-bounce-pop {
+    animation: bouncePop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  }
 }
 
 ::-webkit-scrollbar {
@@ -142,12 +162,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--accent-color);
+  background: rgba(255,255,255,0.15);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #d93a46;
+  background: rgba(255,255,255,0.25);
 }
 
 ::selection {

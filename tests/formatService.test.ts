@@ -23,6 +23,7 @@ const rankData: FormattedRankData = {
   tag: 'TAG',
   card: '',
   last_update: '',
+  current_tier: 14,
   current_tier_patched: 'Gold 3',
   ranking_in_tier: 45,
   mmr_change_to_last_game: 12,

@@ -1,4 +1,4 @@
-import { createValorantEndpoint, CACHE_HEADERS, TEXT_HEADERS, errorResponse } from '../../../../../../utils/apiHelpers';
+import { createValorantEndpoint, BOT_CACHE_HEADERS, TEXT_HEADERS, errorResponse } from '../../../../../../utils/apiHelpers';
 import * as valorantService from '../../../../../../services/valorantService';
 import * as formatService from '../../../../../../services/formatService';
 
@@ -24,5 +24,5 @@ export const GET = createValorantEndpoint(async ({ region, puuid, format, lang, 
         );
     }
 
-    return new Response(JSON.stringify({ status: 200, data: matchData }), { status: 200, headers: CACHE_HEADERS });
+    return new Response(JSON.stringify({ status: 200, data: matchData }), { status: 200, headers: BOT_CACHE_HEADERS });
 });

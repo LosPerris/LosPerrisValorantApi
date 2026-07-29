@@ -5,14 +5,11 @@ import {
   playerData, hasSearched, recentSearches 
 } from '../../store/appStore';
 import { useTranslations } from '../../hooks/useTranslations';
-
-import { cn } from '../../utils/cn';
 import CustomSelect from '../ui/CustomSelect';
 
 const MAX_RECENT_SEARCHES = 3;
 
 export default function SearchForm() {
-  const currentLang = useStore(lang);
   const loading = useStore(isLoading);
   const err = useStore(error);
   const region = useStore(searchRegion);

@@ -1,4 +1,5 @@
 ---
+export const prerender = true;
 import Layout from '../layouts/Layout.astro';
 import ApiDocumentation from '../components/ApiDocumentation';
 import Footer from '../components/islands/Footer';
@@ -7,6 +8,6 @@ import AboutApiModal from '../components/islands/AboutApiModal';
 
 <Layout title="Guía de comandos | LosPerris Valorant API">
   <ApiDocumentation client:load />
-  <AboutApiModal client:load />
-  <Footer client:load withSidebar />
+  <AboutApiModal client:idle />
+  <Footer client:visible withSidebar />
 </Layout>

@@ -1,7 +1,6 @@
 import { useStore } from '@nanostores/react';
 import { hasSearched } from '../../store/appStore';
 import { useTranslations } from '../../hooks/useTranslations';
-import SectionHeader from '../ui/SectionHeader';
 
 export default function DocsLinkCard() {
   const t = useTranslations();

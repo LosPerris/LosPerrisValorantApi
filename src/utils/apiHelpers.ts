@@ -2,10 +2,15 @@ import * as valorantService from '../services/valorantService';
 import type { ValorantAccount } from '../types/valorant';
 
 // ─── Constantes de Headers compartidas por todos los endpoints ──────────────
-export const JSON_HEADERS = { 'Content-Type': 'application/json' };
+const JSON_HEADERS = { 'Content-Type': 'application/json' };
 export const CACHE_HEADERS = {
     'Content-Type': 'application/json',
-    // Alineado con TTL Redis de datos de jugador (~5–10 min)
+    // Alineado con polling del overlay (10 min) para que CDN absorba peticiones sin ejecutar funciones
+    'Cache-Control': 'public, s-maxage=600, stale-while-revalidate=1200'
+};
+// Headers para endpoints de bot (Nightbot, Fossabot, SE): 5 min para que el rango se actualice más rápido
+export const BOT_CACHE_HEADERS = {
+    'Content-Type': 'application/json',
     'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600'
 };
 export const TEXT_HEADERS = {
@@ -75,20 +80,19 @@ export async function checkRateLimit(
 }
 
 // ─── Estadísticas Globales (Redis) ──────────────────────────────────────────
-// Coste bajo: 1 pipeline (1 RTT) por petición — total, suma de ms y muestras para la media.
+// Coste bajo: 1 pipeline (1 RTT) por petición. Guardamos las últimas 100 muestras para una media móvil.
 const REQUESTS_KEY = 'vlr_requests_total';
-const LATENCY_SUM_KEY = 'vlr_latency_sum';
-const LATENCY_SAMPLES_KEY = 'vlr_latency_samples';
+const LATENCY_LIST_KEY = 'vlr_latency_list';
 
-/** Cuenta la petición y acumula latencia para la media (un solo round-trip a Redis). */
-export async function recordRequestMetrics(durationMs: number) {
+/** Cuenta la petición y guarda la latencia en una lista para una media móvil (últimas 100 peticiones). */
+async function recordRequestMetrics(durationMs: number) {
     try {
         const safeMs = Math.max(0, Math.round(durationMs));
         await kv
             .pipeline()
             .incr(REQUESTS_KEY)
-            .incrby(LATENCY_SUM_KEY, safeMs)
-            .incr(LATENCY_SAMPLES_KEY)
+            .lpush(LATENCY_LIST_KEY, safeMs)
+            .ltrim(LATENCY_LIST_KEY, 0, 99) // Mantiene solo las últimas 100
             .exec();
     } catch (e) {
         console.warn('Failed to record request metrics:', e);
@@ -97,17 +101,22 @@ export async function recordRequestMetrics(durationMs: number) {
 
 export async function getRequestMetrics(): Promise<{ requests: number; latency: number }> {
     try {
-        const [requests, sum, samples] = await Promise.all([
+        const [requests, latencySamples] = await Promise.all([
             kv.get<number>(REQUESTS_KEY),
-            kv.get<number>(LATENCY_SUM_KEY),
-            kv.get<number>(LATENCY_SAMPLES_KEY)
+            kv.lrange<number>(LATENCY_LIST_KEY, 0, -1)
         ]);
+        
         const total = Number(requests) || 0;
-        const sampleCount = Number(samples) || 0;
-        const latencySum = Number(sum) || 0;
+        let latency = 0;
+        
+        if (latencySamples && latencySamples.length > 0) {
+            const sum = latencySamples.reduce((a, b) => Number(a) + Number(b), 0);
+            latency = Math.round(sum / latencySamples.length);
+        }
+
         return {
             requests: total,
-            latency: sampleCount > 0 ? Math.round(latencySum / sampleCount) : 0
+            latency
         };
     } catch (e) {
         console.warn('Failed to read request metrics:', e);

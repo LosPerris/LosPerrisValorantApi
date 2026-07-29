@@ -53,7 +53,7 @@ export const MATCH_TEMPLATE_VARS = ['map', 'agent', 'result', 'rr', 'kda', 'hs',
 export const TODAY_TEMPLATE_VARS = ['name', 'wins', 'losses', 'draws', 'rr', 'matches', 'winrate'] as const;
 export const STATS_TEMPLATE_VARS = ['name', 'winrate', 'agent', 'hs', 'matches'] as const;
 
-export function applyTemplate(template: string, vars: Record<string, string | number>): string {
+function applyTemplate(template: string, vars: Record<string, string | number>): string {
     return template.replace(/\{([a-zA-Z0-9_]+)\}/g, (match, key: string) => {
         const value = vars[key];
         return value !== undefined && value !== null ? String(value) : match;
@@ -81,6 +81,7 @@ export function formatRankData(
         tag: accountData.data.tag || mmrData.data.tag || fallbackTag || 'Unknown',
         card: accountData.data.card,
         last_update: accountData.data.last_update,
+        current_tier: currentData.currenttier,
         current_tier_patched: currentData.currenttierpatched,
         ranking_in_tier: currentData.ranking_in_tier,
         mmr_change_to_last_game: currentData.mmr_change_to_last_game,

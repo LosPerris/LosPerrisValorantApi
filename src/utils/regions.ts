@@ -3,9 +3,9 @@
  * LATAM/BR usan shard propio en MMR/matches; el historial MMR v1
  * solo entiende clusters globales (na/eu/ap/kr).
  */
-export type PublicRegion = 'eu' | 'na' | 'ap' | 'kr' | 'latam' | 'br';
+type PublicRegion = 'eu' | 'na' | 'ap' | 'kr' | 'latam' | 'br';
 
-export function normalizeRegion(region: string): PublicRegion {
+function normalizeRegion(region: string): PublicRegion {
   return region.toLowerCase() as PublicRegion;
 }
 

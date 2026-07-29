@@ -34,7 +34,7 @@ export type CommandStyleConfig = {
     };
 };
 
-export const DEFAULT_TEMPLATES = {
+const DEFAULT_TEMPLATES = {
     rank: '{rank}',
     match: '{map} · {agent} · {rr}',
     today: '{wins}W {losses}L · {rr} RR',

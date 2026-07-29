@@ -197,6 +197,7 @@ export interface FormattedRankData {
     tag: string;
     card: ValorantAccount['card'];
     last_update: string;
+    current_tier: number;
     current_tier_patched: string;
     ranking_in_tier: number;
     mmr_change_to_last_game: number;

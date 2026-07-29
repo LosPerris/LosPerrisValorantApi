@@ -42,8 +42,8 @@ export const GET = createValorantEndpoint(async ({ region, name, tag, puuid, acc
         responseData.history = formatService.formatHistoryData(historyData);
     }
 
-    // Cachear resultado completo por 5 minutos
-    await cache.set(summaryCacheKey, responseData, { ttl: 300 });
+    // Cachear resultado completo por 10 minutos (alineado con CDN y polling del overlay)
+    await cache.set(summaryCacheKey, responseData, { ttl: 600 });
 
     return new Response(JSON.stringify({ status: 200, data: responseData }), { status: 200, headers: CACHE_HEADERS });
 });

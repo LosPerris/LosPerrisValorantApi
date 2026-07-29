@@ -26,7 +26,16 @@ export async function getMMRByPUUID(region: string, puuid: string): Promise<Valo
 
 export async function getMatchesByPUUID(region: string, puuid: string, mode: string = 'competitive', size: number = 5): Promise<ValorantApiResponse<ValorantMatch[]>> {
     const shard = mapHenrikShardRegion(region);
-    return fetchWithCache(`matches:${shard}:${puuid}:${mode}:${size}`, `/v3/by-puuid/matches/${shard}/${puuid}?mode=${mode}&size=${size}`, config.cacheTtl.matches);
+    // Optimización Masiva: Siempre pedimos 15 para unificar la clave de caché en todos los endpoints
+    const res = await fetchWithCache<ValorantMatch[]>(`matches:${shard}:${puuid}:${mode}:15`, `/v3/by-puuid/matches/${shard}/${puuid}?mode=${mode}&size=15`, config.cacheTtl.matches);
+    
+    if (res.status === 200 && Array.isArray(res.data)) {
+        return {
+            ...res,
+            data: res.data.slice(0, size)
+        };
+    }
+    return res;
 }
 
 export async function getMMRHistoryByPUUID(region: string, puuid: string): Promise<ValorantApiResponse<ValorantMMRHistoryItem[]>> {
@@ -36,12 +45,7 @@ export async function getMMRHistoryByPUUID(region: string, puuid: string): Promi
 
 export async function getPUUID(name: string, tag: string): Promise<ValorantApiResponse<ValorantAccount>> {
     // getAccount ya usa fetchWithCache que cachea la respuesta completa bajo 'account:name:tag' en minúsculas
-    const accountData = await getAccount(name, tag);
-    if (accountData.status === 200) {
-        // puuid: caché ligero solo del ID (24h, para compatibilidad con getCachedPUUID)
-        await cache.set(`puuid:${name.toLowerCase()}:${tag.toLowerCase()}`, accountData.data.puuid, { ttl: 24 * 60 * 60 });
-    }
-    return accountData;
+    return getAccount(name, tag);
 }
 
 
