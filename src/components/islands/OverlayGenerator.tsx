@@ -280,12 +280,11 @@ export default function OverlayGenerator() {
                 onMouseLeave={e => { if (!copied) { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)'; (e.currentTarget as HTMLElement).style.boxShadow = ''; } }}
               >
                 <iconify-icon icon={copied ? "solar:check-circle-bold" : "solar:copy-bold"} width="15"></iconify-icon>
-                {copied ? t('overlayCopiedBtn') || '¡URL COPIADA!' : t('overlayCopyBtn') || 'COPIAR URL PARA OBS'}
+                {copied 
+                  ? (t('overlayCopiedBtn') || '¡URL COPIADA!') 
+                  : `${t('overlayCopyBtn') || 'COPIAR URL PARA OBS'} (${layout === 'full' ? '280x120' : '380x100'})`
+                }
               </button>
-              <div className="mt-2.5 text-center text-[10px] text-neutral-400 font-medium">
-                Tamaño recomendado en OBS: <br/> 
-                <span className="text-[#ff4655] font-bold">{layout === 'full' ? 'Ancho: 280 | Alto: 120' : 'Ancho: 380 | Alto: 100'}</span>
-              </div>
             </div>
           </div>
 
