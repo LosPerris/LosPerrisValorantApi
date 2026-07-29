@@ -21,7 +21,7 @@ export function OverlayCard({ config, data }: { config: OverlayConfig; data: Ove
       <div className={`relative z-10 flex flex-col items-center w-full ${innerPad} pb-2`}>
         
         {/* Watermark */}
-        <span className="text-[6px] text-white/60 font-black uppercase tracking-[0.2em] mb-1.5 select-none drop-shadow-sm">
+        <span className="text-[8px] text-[#ff4655] font-black tracking-widest mb-1.5 select-none drop-shadow-[0_0_5px_rgba(255,70,85,0.4)]">
           LosPerris
         </span>
 

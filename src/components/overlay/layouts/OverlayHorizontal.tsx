@@ -33,7 +33,7 @@ export function OverlayHorizontal({ config, data }: { config: OverlayConfig; dat
       <div className={`flex flex-col pr-2 justify-center ${!config.showRankIcon ? 'pl-2' : ''} ${innerPad}`} style={config.bg === 'none' ? { textShadow: '0 2px 10px rgba(0,0,0,1), 0 0 4px rgba(0,0,0,0.8)' } : {}}>
         
         {/* Watermark */}
-        <span className="text-[6px] text-white/50 font-black uppercase tracking-[0.2em] mb-0.5 select-none drop-shadow-sm">
+        <span className="text-[8px] text-[#ff4655] font-black tracking-widest mb-0.5 select-none drop-shadow-[0_0_5px_rgba(255,70,85,0.4)]">
           LosPerris
         </span>
 
