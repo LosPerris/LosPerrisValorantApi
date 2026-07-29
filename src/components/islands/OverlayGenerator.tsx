@@ -343,8 +343,16 @@ export default function OverlayGenerator() {
 
               <div
                 className={`flex-1 w-full min-h-[220px] flex items-center justify-center rounded-xl overflow-hidden relative isolate transition-all duration-500 bg-cover bg-center`}
-                style={showMap ? { backgroundImage: `url('/imgs/${backgrounds[bgIndex]}')` } : { backgroundImage: checkerboard }}
+                style={!showMap ? { backgroundImage: checkerboard } : {}}
               >
+                {/* Background Maps with smooth crossfade */}
+                {backgrounds.map((bgImg, i) => (
+                  <div
+                    key={bgImg}
+                    className={`absolute inset-0 bg-cover bg-center transition-opacity duration-700 ease-in-out ${showMap && i === bgIndex ? 'opacity-100' : 'opacity-0'}`}
+                    style={{ backgroundImage: `url('/imgs/${bgImg}')` }}
+                  />
+                ))}
 
                 <div className="relative z-10 flex items-center justify-center w-full h-full p-4 overflow-hidden">
                   <div className="origin-center max-w-full flex items-center justify-center" style={{ transform: size === 'large' ? 'scale(0.85)' : 'scale(1)' }}>
