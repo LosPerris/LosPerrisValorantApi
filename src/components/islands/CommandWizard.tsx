@@ -321,7 +321,7 @@ export default function CommandWizard() {
               
               {/* Content */}
               <div className="px-3 py-2 flex flex-col gap-1.5 text-[12px] leading-[1.3] text-[#efeff1] flex-1 bg-[#0e0e10] min-h-[90px]">
-                <span className="text-neutral-500 text-[10px] mb-1">
+                <span className="text-neutral-500 text-[10px] mb-1 text-center block">
                   ¡Te damos la bienvenida a la sala de chat de {data?.account?.name || 'ponss17'}!
                 </span>
 
