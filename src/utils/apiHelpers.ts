@@ -48,7 +48,9 @@ const QueryParamsSchema = z.object({
         .default('default')
         .transform((v) => v.toLowerCase())
         .pipe(z.enum(['default', 'clean', 'custom']).catch('default')),
-    template: z.string().nullable().optional(),
+    template: z.string().max(200, 'Template too long (max 200 chars)').nullable().optional(),
+    // La api_key no se valida exhaustivamente pero se limita en longitud para evitar payloads absurdos
+    api_key: z.string().max(128, 'api_key too long').nullable().optional(),
 });
 
 import { kv } from './cache';
@@ -160,7 +162,8 @@ export function validateQueryParams(
     lang: string | null,
     type: string | null,
     style: string | null = null,
-    template: string | null = null
+    template: string | null = null,
+    api_key: string | null = null
 ):
     | { success: false; error: Response }
     | {
@@ -171,6 +174,7 @@ export function validateQueryParams(
               type: string;
               style: 'default' | 'clean' | 'custom';
               template?: string | null;
+              api_key?: string | null;
           };
       } {
     const result = QueryParamsSchema.safeParse({
@@ -178,7 +182,8 @@ export function validateQueryParams(
         lang: lang || undefined,
         type: type || undefined,
         style: style || undefined,
-        template: template ?? undefined
+        template: template ?? undefined,
+        api_key: api_key ?? undefined
     });
     if (!result.success) {
         return { success: false, error: errorResponse(400, result.error.issues[0].message) };
@@ -191,6 +196,7 @@ export function validateQueryParams(
             type: string;
             style: 'default' | 'clean' | 'custom';
             template?: string | null;
+            api_key?: string | null;
         }
     };
 }
@@ -199,12 +205,13 @@ export function validateQueryParams(
 // Centraliza la lógica que antes estaba copiada en los 5 endpoints.
 export async function resolvePUUID(
     name: string,
-    tag: string
+    tag: string,
+    apiKey?: string
 ): Promise<{ puuid: string; accountData: ValorantAccount; error?: never } | { puuid?: never; accountData?: never; error: Response }> {
     let accountData = await valorantService.getCachedAccount(name, tag);
 
     if (!accountData) {
-        const accountRes = await valorantService.getPUUID(name, tag);
+        const accountRes = await valorantService.getPUUID(name, tag, apiKey);
         if (accountRes.status !== 200) {
             return { error: errorResponse(accountRes.status, accountRes.message || 'Player not found') };
         }
@@ -229,6 +236,7 @@ export type ValorantEndpointHandler = (params: {
     type: string;
     style: 'default' | 'clean' | 'custom';
     template: string | null;
+    api_key: string | null;
     url: URL;
 }, context: APIContext) => Promise<Response>;
 
@@ -261,20 +269,22 @@ export function createValorantEndpoint(handler: ValorantEndpointHandler): APIRou
         const typeParam = url.searchParams.get('type');
         const styleParam = url.searchParams.get('style');
         const templateParam = url.searchParams.get('template');
+        const apiKeyParam = url.searchParams.get('api_key');
 
         const queryValidation = validateQueryParams(
             formatParam,
             langParam,
             typeParam,
             styleParam,
-            templateParam
+            templateParam,
+            apiKeyParam
         );
         if (!queryValidation.success) return queryValidation.error;
 
-        const { format, lang, type, style, template } = queryValidation.data;
+        const { format, lang, type, style, template, api_key } = queryValidation.data;
 
         try {
-            const resolved = await resolvePUUID(name, tag);
+            const resolved = await resolvePUUID(name, tag, api_key ?? undefined);
             if (resolved.error) {
                 // await: en Vercel el proceso se congela al responder y un void no llega a Redis
                 await recordRequestMetrics(Date.now() - started);
@@ -293,6 +303,7 @@ export function createValorantEndpoint(handler: ValorantEndpointHandler): APIRou
                     type,
                     style,
                     template: template ?? null,
+                    api_key: api_key ?? null,
                     url
                 },
                 context

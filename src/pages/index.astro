@@ -5,6 +5,7 @@ import LanguageToggle from "../components/islands/LanguageToggle";
 import DashboardLayout from "../components/islands/DashboardLayout";
 import Footer from "../components/islands/Footer";
 import AboutApiModal from "../components/islands/AboutApiModal";
+import ApiKeyModal from "../components/islands/ApiKeyModal";
 import BackgroundGlow from "../components/islands/BackgroundGlow";
 ---
 
@@ -57,6 +58,7 @@ import BackgroundGlow from "../components/islands/BackgroundGlow";
   </main>
 
   <AboutApiModal client:idle />
+  <ApiKeyModal client:idle />
 
   <script>
     import { hasSearched } from "../store/appStore";

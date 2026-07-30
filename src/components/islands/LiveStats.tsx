@@ -15,6 +15,8 @@ export default function LiveStats() {
 
   useEffect(() => {
     const fetchStats = () => {
+      // No hacer fetch si el tab está en background
+      if (document.visibilityState === 'hidden') return;
       fetch('/api/system/stats')
         .then((res) => res.json())
         .then((data) => {
@@ -24,8 +26,18 @@ export default function LiveStats() {
     };
 
     fetchStats();
-    const interval = setInterval(fetchStats, 60_000); // 60s: el stats.ts tiene s-maxage=30, no tiene sentido pedir antes
-    return () => clearInterval(interval);
+    const interval = setInterval(fetchStats, 60_000);
+
+    // Refetch al volver al tab si han pasado los 60s
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') fetchStats();
+    };
+    document.addEventListener('visibilitychange', onVisible);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', onVisible);
+    };
   }, []);
 
   return (

@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useStore } from '@nanostores/react';
-import { hasSearched, playerData, searchRegion, lang } from '../../store/appStore';
+import { hasSearched, playerData, searchRegion, lang, customApiKey } from '../../store/appStore';
 import { useTranslations } from '../../hooks/useTranslations';
 import { translateRank } from '../../services/formatService';
 import CustomSelect from '../ui/CustomSelect';
@@ -12,6 +12,7 @@ export default function OverlayGenerator() {
   const data = useStore(playerData);
   const region = useStore(searchRegion);
   const currentLang = useStore(lang);
+  const userApiKey = useStore(customApiKey);
 
   const [bg, setBg] = useState('glass');
   const [size, setSize] = useState('normal');
@@ -51,11 +52,15 @@ export default function OverlayGenerator() {
 
   const overlayUrl = useMemo(() => {
     if (!data?.account) return '';
-    return `${window.location.origin}/overlay?name=${encodeURIComponent(data.account.name)}&tag=${encodeURIComponent(data.account.tag)}&region=${region}&bg=${bg}&size=${size}&layout=${layout}&showName=${showName ? '1' : '0'}&lastMatch=${showLastMatch ? '1' : '0'}&rankIcon=${showRankIcon ? '1' : '0'}&rankLabel=${showRankLabel ? '1' : '0'}&rr=${showRR ? '1' : '0'}&progressBar=${showProgressBar ? '1' : '0'}&radius=${borderRadius}&iconPos=${iconPosition}&rankColor=${encodeURIComponent(rankColor)}&color=${encodeURIComponent(primaryColor)}&accent=${encodeURIComponent(accentColor)}&progress=${encodeURIComponent(progressColor)}&rrColor=${encodeURIComponent(rrColor)}&borderColor=${encodeURIComponent(borderColor)}&bgOpacity=${bgOpacity}&bgColor=${encodeURIComponent(bgColor)}&lang=${currentLang}`;
+    let url = `${window.location.origin}/overlay?name=${encodeURIComponent(data.account.name)}&tag=${encodeURIComponent(data.account.tag)}&region=${region}&bg=${bg}&size=${size}&layout=${layout}&showName=${showName ? '1' : '0'}&lastMatch=${showLastMatch ? '1' : '0'}&rankIcon=${showRankIcon ? '1' : '0'}&rankLabel=${showRankLabel ? '1' : '0'}&showRR=${showRR ? '1' : '0'}&showProgress=${showProgressBar ? '1' : '0'}&radius=${borderRadius}&iconPos=${iconPosition}&rankColor=${encodeURIComponent(rankColor)}&color=${encodeURIComponent(primaryColor)}&accent=${encodeURIComponent(accentColor)}&progress=${encodeURIComponent(progressColor)}&rrColor=${encodeURIComponent(rrColor)}&borderColor=${encodeURIComponent(borderColor)}&bgOpacity=${bgOpacity}&bgColor=${encodeURIComponent(bgColor)}&lang=${currentLang}`;
+    if (userApiKey?.trim()) {
+      url += `&api_key=${encodeURIComponent(userApiKey.trim())}`;
+    }
+    return url;
   }, [
     data?.account?.name, data?.account?.tag, region, bg, size, layout, showName, showLastMatch, 
     showRankIcon, showRankLabel, showRR, showProgressBar, borderRadius, iconPosition, rankColor, 
-    primaryColor, accentColor, progressColor, rrColor, borderColor, bgOpacity, bgColor, currentLang
+    primaryColor, accentColor, progressColor, rrColor, borderColor, bgOpacity, bgColor, currentLang, userApiKey
   ]);
 
   const previewConfig = useMemo(() => ({

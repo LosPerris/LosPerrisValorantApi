@@ -17,7 +17,8 @@ import {
   hasSearched,
   playerData,
   lang,
-  searchRegion
+  searchRegion,
+  customApiKey
 } from '../../store/appStore';
 import { useTranslations } from '../../hooks/useTranslations';
 import { generateBotCommand, getCommandExample, RANK_TEMPLATE_VARS, MATCH_TEMPLATE_VARS, TODAY_TEMPLATE_VARS, STATS_TEMPLATE_VARS } from '../../utils/commandHelpers';
@@ -40,12 +41,13 @@ export default function CommandWizard() {
   const searched = useStore(hasSearched);
   const data = useStore(playerData);
   const region = useStore(searchRegion);
+  const userApiKey = useStore(customApiKey);
 
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     setCopied(false);
-  }, [currentPlatform, currentCopyFormat, currentConfig, rankF, matchF, todayF, statsF, style, tplRank, tplMatch, tplToday, tplStats, data, region]);
+  }, [currentPlatform, currentCopyFormat, currentConfig, rankF, matchF, todayF, statsF, style, tplRank, tplMatch, tplToday, tplStats, data, region, userApiKey]);
 
   if (!searched) return null;
 
@@ -99,7 +101,8 @@ export default function CommandWizard() {
     data?.account || null,
     region,
     styleConfig,
-    currentCopyFormat as 'full' | 'variable' | 'url'
+    currentCopyFormat as 'full' | 'variable' | 'url',
+    userApiKey
   );
 
   const copyToClipboard = () => {

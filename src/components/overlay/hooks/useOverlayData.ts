@@ -109,7 +109,12 @@ export function useOverlayData(previewConfig?: OverlayConfig, previewData?: Over
     const fetchData = async () => {
       try {
         const lang = params.get('lang') || 'es';
-        const res = await fetch(`/api/overlay/${region}/${encodeURIComponent(name)}/${encodeURIComponent(tag)}?lang=${lang}`);
+        const apiKey = params.get('api_key');
+        let fetchUrl = `/api/overlay/${region}/${encodeURIComponent(name)}/${encodeURIComponent(tag)}?lang=${lang}`;
+        if (apiKey) {
+          fetchUrl += `&api_key=${encodeURIComponent(apiKey)}`;
+        }
+        const res = await fetch(fetchUrl);
         
         if (res.status === 429) return;
         
@@ -127,9 +132,10 @@ export function useOverlayData(previewConfig?: OverlayConfig, previewData?: Over
           return json.data;
         });
         setError(null);
-      } catch (err: any) {
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : 'Error al obtener datos';
         setData((prev) => {
-          if (!prev) setError(err.message);
+          if (!prev) setError(message);
           return prev;
         });
       } finally {

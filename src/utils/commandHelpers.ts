@@ -51,7 +51,8 @@ export const generateBotCommand = (
     /** Región elegida en la búsqueda (prioridad sobre account.region de Henrik) */
     searchRegion?: string,
     styleConfig?: CommandStyleConfig,
-    copyFormat?: 'full' | 'variable' | 'url'
+    copyFormat?: 'full' | 'variable' | 'url',
+    apiKey?: string
 ): string => {
     if (!account) return '';
     const name = encodeURIComponent(account.name);
@@ -94,6 +95,10 @@ export const generateBotCommand = (
 
     if (lang !== 'es') {
         formatStr += `&lang=${lang}`;
+    }
+
+    if (apiKey?.trim()) {
+        formatStr += `&api_key=${encodeURIComponent(apiKey.trim())}`;
     }
 
     const baseUrl =

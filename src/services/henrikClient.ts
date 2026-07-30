@@ -12,15 +12,18 @@ const inFlightRequests = new Map<string, Promise<unknown>>();
 export async function fetchWithCache<T>(
     key: string,
     endpoint: string,
-    ttl: number = 300 // 5 minutos por defecto (en segundos)
+    ttl: number = 300, // 5 minutos por defecto (en segundos)
+    apiKey?: string
 ): Promise<ValorantApiResponse<T>> {
     // 1. Verificar Caché (Redis)
     const cachedData = await cache.get<ValorantApiResponse<T>>(key);
     if (cachedData) return cachedData;
 
     // 2. Verificar In-Flight Cache (Deduplicación de Promesas para Dogpiling)
-    if (inFlightRequests.has(key)) {
-        return inFlightRequests.get(key) as Promise<ValorantApiResponse<T>>;
+    // La clave incluye los últimos 6 chars de la api_key para no mezclar promesas entre keys distintas
+    const inflightKey = apiKey ? `${key}:${apiKey.slice(-6)}` : key;
+    if (inFlightRequests.has(inflightKey)) {
+        return inFlightRequests.get(inflightKey) as Promise<ValorantApiResponse<T>>;
     }
 
     // 3. Crear nueva promesa y guardarla en In-Flight
@@ -28,7 +31,7 @@ export async function fetchWithCache<T>(
         try {
             const response = await fetch(`${config.henrikBaseUrl}${endpoint}`, {
                 headers: {
-                    'Authorization': config.henrikApiKey || '',
+                    'Authorization': apiKey || config.henrikApiKey || '',
                     'accept': 'application/json'
                 }
             });
@@ -58,10 +61,10 @@ export async function fetchWithCache<T>(
             };
         } finally {
             // Eliminar de in-flight al terminar (éxito o error)
-            inFlightRequests.delete(key);
+            inFlightRequests.delete(inflightKey);
         }
     })();
 
-    inFlightRequests.set(key, fetchPromise);
+    inFlightRequests.set(inflightKey, fetchPromise);
     return fetchPromise;
 }

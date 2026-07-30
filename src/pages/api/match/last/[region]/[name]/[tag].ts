@@ -2,11 +2,11 @@ import { createValorantEndpoint, BOT_CACHE_HEADERS, TEXT_HEADERS, errorResponse 
 import * as valorantService from '../../../../../../services/valorantService';
 import * as formatService from '../../../../../../services/formatService';
 
-export const GET = createValorantEndpoint(async ({ region, puuid, format, lang, type, style, template }) => {
+export const GET = createValorantEndpoint(async ({ region, puuid, format, lang, type, style, template, api_key }) => {
     // Obtenemos matches y MMR en paralelo para evitar llamadas secuenciales
     const [matchesData, mmrData] = await Promise.all([
-        valorantService.getMatchesByPUUID(region, puuid, 'competitive', 1),
-        valorantService.getMMRByPUUID(region, puuid)
+        valorantService.getMatchesByPUUID(region, puuid, 'competitive', 1, api_key ?? undefined),
+        valorantService.getMMRByPUUID(region, puuid, api_key ?? undefined)
     ]);
 
     if (!matchesData.data || matchesData.data.length === 0) {

@@ -1,8 +1,7 @@
 import { useStore } from '@nanostores/react';
-import { useEffect } from 'react';
 import { 
   lang, isLoading, error, searchRegion, searchRiotId, searchTag,
-  playerData, hasSearched, recentSearches 
+  playerData, hasSearched, recentSearches, customApiKey, isApiKeyModalOpen
 } from '../../store/appStore';
 import { useTranslations } from '../../hooks/useTranslations';
 import CustomSelect from '../ui/CustomSelect';
@@ -16,19 +15,7 @@ export default function SearchForm() {
   const riotId = useStore(searchRiotId);
   const tag = useStore(searchTag);
   const recents = useStore(recentSearches);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('vlr_recent_searches');
-      if (saved) {
-        try {
-          recentSearches.set(JSON.parse(saved));
-        } catch (e) {
-          console.warn('Failed to parse recent searches from localStorage:', e);
-        }
-      }
-    }
-  }, []);
+  const userApiKey = useStore(customApiKey);
 
   const t = useTranslations();
 
@@ -40,7 +27,9 @@ export default function SearchForm() {
     
     // CACHÉ DEL CLIENTE (Navegador)
     // Evita hacer peticiones al servidor si buscamos al mismo jugador hace menos de 5 minutos
-    const cacheKey = `vlr_cache_${r}_${n.toLowerCase()}_${tId.toLowerCase()}`;
+    // La api_key (últimos 6 chars) se incluye para diferenciar resultados por key
+    const apiKeyPart = userApiKey?.trim() ? `_${userApiKey.trim().slice(-6)}` : '';
+    const cacheKey = `vlr_cache_${r}_${n.toLowerCase()}_${tId.toLowerCase()}${apiKeyPart}`;
     if (typeof window !== 'undefined') {
       const cached = localStorage.getItem(cacheKey);
       if (cached) {
@@ -53,9 +42,6 @@ export default function SearchForm() {
             // Actualizar recientes
             const newRecent = { region: r, riotId: n, tag: tId };
             const updatedRecents = [newRecent, ...recents.filter(x => x.riotId !== n || x.tag !== tId)].slice(0, 3);
-            recentSearches.set(updatedRecents);
-            localStorage.setItem('vlr_recent_searches', JSON.stringify(updatedRecents));
-            
             isLoading.set(false);
             return; // Detenemos la ejecución, no tocamos el servidor
           }
@@ -64,7 +50,11 @@ export default function SearchForm() {
     }
     
     try {
-      const res = await fetch(`/api/summary/${r.toLowerCase()}/${encodeURIComponent(n)}/${encodeURIComponent(tId)}`);
+      let fetchUrl = `/api/summary/${r.toLowerCase()}/${encodeURIComponent(n)}/${encodeURIComponent(tId)}`;
+      if (userApiKey?.trim()) {
+        fetchUrl += `?api_key=${encodeURIComponent(userApiKey.trim())}`;
+      }
+      const res = await fetch(fetchUrl);
       const data = await res.json();
       
       if (data.status === 200) {
@@ -79,13 +69,10 @@ export default function SearchForm() {
           }));
         }
         
-        // Agregar a recientes
+        // Agregar a recientes — persistentAtom persiste automáticamente
         const newRecent = { region: r, riotId: n, tag: tId };
         const updatedRecents = [newRecent, ...recents.filter(x => x.riotId !== n || x.tag !== tId)].slice(0, MAX_RECENT_SEARCHES);
         recentSearches.set(updatedRecents);
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('vlr_recent_searches', JSON.stringify(updatedRecents));
-        }
       } else {
         error.set(data.error || data.message || t('errorSearch'));
       }
@@ -164,6 +151,26 @@ export default function SearchForm() {
               {err}
             </div>
           )}
+
+          <div className="mt-4 pt-4 border-t border-white/5">
+            <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wide px-1 block mb-1.5 flex items-center justify-between">
+              <span>Tu API Key de HenrikDev (Opcional)</span>
+              <button
+                type="button"
+                onClick={() => isApiKeyModalOpen.set(true)}
+                className="text-[9px] font-normal text-[#ff4655] opacity-70 hover:opacity-100 hover:underline underline-offset-2 transition-all cursor-pointer"
+              >
+                ¿Usar mis límites?
+              </button>
+            </span>
+            <input
+              type="password"
+              value={userApiKey}
+              onChange={(e) => customApiKey.set(e.target.value)}
+              className="w-full px-3 py-2 rounded-lg text-sm text-white placeholder-neutral-600 outline-none bg-[#111] border border-white/10 hover:border-[#ff4655]/50 focus:border-[#ff4655] focus:ring-1 focus:ring-[#ff4655]/30 transition"
+              placeholder="HDEV-XXXX-XXXX-XXXX..."
+            />
+          </div>
 
           <button 
             type="submit" 

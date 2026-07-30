@@ -2,8 +2,8 @@ import { createValorantEndpoint, BOT_CACHE_HEADERS, TEXT_HEADERS, errorResponse 
 import * as valorantService from '../../../../../services/valorantService';
 import * as formatService from '../../../../../services/formatService';
 
-export const GET = createValorantEndpoint(async ({ region, name, puuid, format, lang, type, style, template }) => {
-    const statsData = await valorantService.getGeneralStats(region, puuid);
+export const GET = createValorantEndpoint(async ({ region, name, tag: _tag, puuid, accountData: _accountData, format, lang, type, style, template, api_key }) => {
+    const statsData = await valorantService.getGeneralStats(region, puuid, api_key ?? undefined);
     if (!statsData) return errorResponse(404, 'No match data available');
 
     if (format === 'text') {

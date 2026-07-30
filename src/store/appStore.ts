@@ -1,4 +1,5 @@
 import { atom } from 'nanostores';
+import { persistentAtom } from '@nanostores/persistent';
 import type { SummaryResponse } from '../types/valorant';
 
 // UI State
@@ -9,6 +10,7 @@ export const lang = atom<string>('es');
 
 // Modal State
 export const isAboutModalOpen = atom<boolean>(false);
+export const isApiKeyModalOpen = atom<boolean>(false);
 
 // Form State
 export const searchRegion = atom<string>('na');
@@ -23,18 +25,22 @@ export interface RecentSearch {
   riotId: string;
   tag: string;
 }
-export const recentSearches = atom<RecentSearch[]>([]);
+export const recentSearches = persistentAtom<RecentSearch[]>('vlr_recent_searches', [], {
+  encode: JSON.stringify,
+  decode: JSON.parse,
+});
 
 // Config State
 export const botPlatform = atom<string>('nightbot');
 export const copyFormat = atom<'full' | 'variable' | 'url'>('full');
 export const configMode = atom<string>('rank');
 
-// Formats (detalle type 1-3)
-export const formatRank = atom<string>('1');
-export const formatMatch = atom<string>('1');
-export const formatToday = atom<string>('1');
-export const formatStats = atom<string>('1');
+// Formats (detalle type 1-3) — todos persistentes para que no se pierdan al recargar
+export const formatRank = persistentAtom<string>('vlr_format_rank', '1');
+export const formatMatch = persistentAtom<string>('vlr_format_match', '1');
+export const formatToday = persistentAtom<string>('vlr_format_today', '1');
+export const formatStats = persistentAtom<string>('vlr_format_stats', '1');
+export const customApiKey = persistentAtom<string>('vlr_custom_api_key', '');
 
 /** Estilo de salida: frase default, limpio o plantilla editable */
 export const outputStyle = atom<'default' | 'clean' | 'custom'>('default');

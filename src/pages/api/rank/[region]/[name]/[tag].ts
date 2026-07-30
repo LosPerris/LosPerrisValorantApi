@@ -3,12 +3,12 @@ import * as valorantService from '../../../../../services/valorantService';
 import * as formatService from '../../../../../services/formatService';
 import type { ValorantApiResponse, ValorantAccount } from '../../../../../types/valorant';
 
-export const GET = createValorantEndpoint(async ({ region, name, tag, puuid, accountData, format, lang, type, style, template }) => {
+export const GET = createValorantEndpoint(async ({ region, name, tag, puuid, accountData, format, lang, type, style, template, api_key }) => {
     // accountData viene siempre de resolvePUUID cuando no hay error
     const accountRes = { status: 200, data: accountData } as ValorantApiResponse<ValorantAccount>;
 
     // Solo fetch de MMR — account ya resuelto sin doble-fetch
-    const mmrData = await valorantService.getMMRByPUUID(region, puuid);
+    const mmrData = await valorantService.getMMRByPUUID(region, puuid, api_key ?? undefined);
 
     if (mmrData.status !== 200) return errorResponse(mmrData.status, mmrData.message || 'MMR data unavailable');
 

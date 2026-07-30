@@ -4,6 +4,18 @@ import * as formatService from '../../../../../services/formatService';
 import { translateRank } from '../../../../../services/formatService';
 import cache from '../../../../../utils/cache';
 import type { APIRoute } from 'astro';
+import type { ValorantApiResponse, ValorantAccount } from '../../../../../types/valorant';
+
+interface CachedOverlayData {
+    name: string;
+    tag: string;
+    tier: number;
+    tierNameRaw: string;
+    tierName: string;
+    rr: number;
+    iconUrl: string;
+    lastChange: number;
+}
 
 const OVERLAY_TTL = 900;
 
@@ -18,13 +30,18 @@ export const GET: APIRoute = async (context) => {
     const name = params.name as string;
     const tag = params.tag as string;
     const lang = url.searchParams.get('lang') || 'en';
+    // Limitar longitud de api_key por seguridad (mismo límite que el schema Zod del wrapper)
+    const rawApiKey = url.searchParams.get('api_key');
+    const apiKey = rawApiKey ? rawApiKey.slice(0, 128) : undefined;
 
     const paramValidation = validateRouteParams(rawRegion, name, tag);
     if (!paramValidation.ok) return paramValidation.error;
     const { region } = paramValidation.data;
 
-    const cacheKey = `overlay:${region}:${name.toLowerCase()}:${tag.toLowerCase()}`;
-    const cached = await cache.get<any>(cacheKey);
+    // Si hay api_key, diferenciamos la clave de caché para evitar mezclar resultados entre keys distintas
+    const apiKeySuffix = apiKey ? `:key` : '';
+    const cacheKey = `overlay:${region}:${name.toLowerCase()}:${tag.toLowerCase()}${apiKeySuffix}`;
+    const cached = await cache.get<CachedOverlayData>(cacheKey);
     if (cached) {
         const data = { ...cached };
         if (data.tierNameRaw) {
@@ -43,18 +60,18 @@ export const GET: APIRoute = async (context) => {
         return errorResponse(429, 'Rate limit exceeded. Please try again later.', { 'Retry-After': String(retryAfter) });
     }
 
-    const resolved = await resolvePUUID(name, tag);
+    const resolved = await resolvePUUID(name, tag, apiKey);
     if (resolved.error) return resolved.error;
 
     const { puuid, accountData } = resolved;
 
-    const mmrData = await valorantService.getMMRByPUUID(region, puuid);
+    const mmrData = await valorantService.getMMRByPUUID(region, puuid, apiKey);
     if (mmrData.status !== 200) {
         return errorResponse(mmrData.status, mmrData.message || 'Error fetching MMR');
     }
 
     const accountRes = { status: 200 as const, data: accountData };
-    const rankData = formatService.formatRankData(accountRes as any, mmrData, name, tag);
+    const rankData = formatService.formatRankData(accountRes as unknown as ValorantApiResponse<ValorantAccount>, mmrData, name, tag);
 
     const rawTierName = rankData.current_tier_patched || 'Unranked';
     const responseData = {
