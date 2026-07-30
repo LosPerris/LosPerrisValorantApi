@@ -62,7 +62,7 @@ export default function ApiKeyModal() {
             </p>
             <ul className="list-disc pl-5 space-y-2 text-sm">
               <li>El bot usará <strong className="text-white">tus propios límites</strong> (rate limits) privados.</li>
-              <li>Tu clave <strong>no se guardará en nuestros servidores</strong>, solo viajará desde Nightbot/OBS directamente para la consulta.</li>
+              <li>Tu clave <strong>no se guardará en ninguna base de datos</strong>; solo cruzará como un pase temporal por nuestro sistema para realizar la consulta a HenrikDev con tus propios límites.</li>
               <li>Tus comandos y overlays estarán protegidos contra bloqueos masivos en caso de saturación.</li>
             </ul>
           </div>
