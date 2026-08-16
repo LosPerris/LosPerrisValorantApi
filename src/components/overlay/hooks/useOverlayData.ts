@@ -148,7 +148,7 @@ export function useOverlayData(previewConfig?: OverlayConfig, previewData?: Over
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 600000);
+    const interval = setInterval(fetchData, 120000);
     return () => clearInterval(interval);
   }, []);
 
