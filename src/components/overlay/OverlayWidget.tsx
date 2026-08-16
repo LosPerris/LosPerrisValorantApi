@@ -3,28 +3,26 @@ import { OverlayCard } from './layouts/OverlayCard';
 import { OverlayHorizontal } from './layouts/OverlayHorizontal';
 import { OverlayBanner } from './layouts/OverlayBanner';
 
-export default function OverlayWidget({ 
-  previewConfig, 
-  previewData 
-}: { 
-  previewConfig?: OverlayConfig, 
-  previewData?: OverlayData 
+export default function OverlayWidget({
+  previewConfig,
+  previewData
+}: {
+  previewConfig?: OverlayConfig,
+  previewData?: OverlayData
 }) {
-  const { data, error, loading, config, isAnimating } = useOverlayData(previewConfig, previewData);
+  const { data, error, loading, config, animationType, lang } = useOverlayData(previewConfig, previewData);
 
   // In OBS, the overlay should be invisible if it's loading or has an error.
   if (loading || error || !data) return null;
 
-  const animationClass = isAnimating ? 'animate-rank-pop' : '';
-
   return (
-    <div className={`transition-transform duration-300 ${animationClass}`}>
+    <div>
       {config.layout === 'full' ? (
-        <OverlayCard config={config} data={data} />
+        <OverlayCard config={config} data={data} animationType={animationType} lang={lang} />
       ) : config.layout === 'banner' ? (
-        <OverlayBanner config={config} data={data} />
+        <OverlayBanner config={config} data={data} animationType={animationType} lang={lang} />
       ) : (
-        <OverlayHorizontal config={config} data={data} />
+        <OverlayHorizontal config={config} data={data} animationType={animationType} lang={lang} />
       )}
     </div>
   );

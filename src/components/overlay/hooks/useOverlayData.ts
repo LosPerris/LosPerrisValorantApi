@@ -36,7 +36,8 @@ export function useOverlayData(previewConfig?: OverlayConfig, previewData?: Over
   const [data, setData] = useState<OverlayData | null>(previewData || null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(!previewData);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [animationType, setAnimationType] = useState<'up' | 'down' | null>(null);
+  const [lang, setLang] = useState('es');
   const [config, setConfig] = useState<OverlayConfig>(previewConfig || {
     bg: 'glass',
     size: 'normal',
@@ -63,8 +64,9 @@ export function useOverlayData(previewConfig?: OverlayConfig, previewData?: Over
     if (previewConfig) setConfig(previewConfig);
     if (previewData) {
       if (data && (previewData.rr !== data.rr || previewData.tier !== data.tier)) {
-        setIsAnimating(true);
-        setTimeout(() => setIsAnimating(false), 1500);
+        const isUp = (previewData.tier > data.tier) || (previewData.tier === data.tier && previewData.rr > data.rr);
+        setAnimationType(isUp ? 'up' : 'down');
+        setTimeout(() => setAnimationType(null), 2500);
       }
       setData(previewData);
     }
@@ -72,12 +74,14 @@ export function useOverlayData(previewConfig?: OverlayConfig, previewData?: Over
 
   useEffect(() => {
     if (previewConfig || previewData) return;
-    
+
     const params = new URLSearchParams(window.location.search);
     const name = params.get('name');
     const tag = params.get('tag');
     const region = params.get('region') || 'latam';
-    
+    const urlLang = params.get('lang') || 'es';
+    setLang(urlLang);
+
     setConfig({
       bg: params.get('bg') || 'glass',
       size: params.get('size') || 'normal',
@@ -108,16 +112,15 @@ export function useOverlayData(previewConfig?: OverlayConfig, previewData?: Over
 
     const fetchData = async () => {
       try {
-        const lang = params.get('lang') || 'es';
         const apiKey = params.get('api_key');
-        let fetchUrl = `/api/overlay/${region}/${encodeURIComponent(name)}/${encodeURIComponent(tag)}?lang=${lang}`;
+        let fetchUrl = `/api/overlay/${region}/${encodeURIComponent(name)}/${encodeURIComponent(tag)}?lang=${urlLang}`;
         if (apiKey) {
           fetchUrl += `&api_key=${encodeURIComponent(apiKey)}`;
         }
         const res = await fetch(fetchUrl);
-        
+
         if (res.status === 429) return;
-        
+
         const json = await res.json();
         if (json.status !== 200) {
           throw new Error(json.errors?.[0]?.message || json.message || 'Error al obtener datos');
@@ -126,8 +129,9 @@ export function useOverlayData(previewConfig?: OverlayConfig, previewData?: Over
         setData((prevData) => {
           // If we already have data and RR or Tier changed, trigger animation pop
           if (prevData && (prevData.rr !== json.data.rr || prevData.tier !== json.data.tier)) {
-            setIsAnimating(true);
-            setTimeout(() => setIsAnimating(false), 1500);
+            const isUp = (json.data.tier > prevData.tier) || (json.data.tier === prevData.tier && json.data.rr > prevData.rr);
+            setAnimationType(isUp ? 'up' : 'down');
+            setTimeout(() => setAnimationType(null), 2500);
           }
           return json.data;
         });
@@ -148,5 +152,5 @@ export function useOverlayData(previewConfig?: OverlayConfig, previewData?: Over
     return () => clearInterval(interval);
   }, []);
 
-  return { data, error, loading, config, isAnimating };
+  return { data, error, loading, config, animationType, lang };
 }

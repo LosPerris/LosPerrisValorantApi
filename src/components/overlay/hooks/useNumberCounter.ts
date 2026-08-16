@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-export function useNumberCounter(value: number, duration: number = 1000) {
+export function useNumberCounter(value: number, duration: number = 1000, delay: number = 0) {
   const [displayValue, setDisplayValue] = useState(value);
   const startTimeRef = useRef<number | null>(null);
   const startValueRef = useRef<number>(value);
@@ -32,12 +32,21 @@ export function useNumberCounter(value: number, duration: number = 1000) {
     };
 
     if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
-    animationFrameRef.current = requestAnimationFrame(animate);
+
+    let timeoutId: ReturnType<typeof setTimeout>;
+    if (delay > 0) {
+      timeoutId = setTimeout(() => {
+        animationFrameRef.current = requestAnimationFrame(animate);
+      }, delay);
+    } else {
+      animationFrameRef.current = requestAnimationFrame(animate);
+    }
 
     return () => {
+      if (timeoutId) clearTimeout(timeoutId);
       if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
     };
-  }, [value, duration]); // We don't want displayValue as dependency here
+  }, [value, duration, delay]); // We don't want displayValue as dependency here
 
   return displayValue;
 }

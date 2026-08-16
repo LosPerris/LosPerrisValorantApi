@@ -1,3 +1,5 @@
+import type { OverlayConfig, OverlayData } from './hooks/useOverlayData';
+
 const rankColors: Record<number, string> = {
   0: '#ffffff', // Unranked
   1: '#ffffff', 2: '#ffffff', // Unused
@@ -17,7 +19,7 @@ const hexToRgb = (hex: string) => {
   return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '10, 10, 10';
 };
 
-export const getBgClasses = (config: any) => {
+export const getBgClasses = (config: OverlayConfig) => {
   const borderClass = config.borderColor === 'none' ? '' : 'border';
   return {
     glass: `backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.5)] p-4 ${borderClass} ${config.borderRadius === 'none' ? 'rounded-none' : config.borderRadius === 'md' ? 'rounded-md' : 'rounded-2xl'}`,
@@ -26,7 +28,7 @@ export const getBgClasses = (config: any) => {
   }[config.bg as 'glass' | 'solid' | 'none'] || `backdrop-blur-md ${borderClass} p-4 ${config.borderRadius === 'none' ? 'rounded-none' : config.borderRadius === 'md' ? 'rounded-md' : 'rounded-2xl'}`;
 };
 
-export const getSizeClasses = (config: any) => {
+export const getSizeClasses = (config: OverlayConfig) => {
   return {
     small: 'scale-75 origin-center',
     normal: 'scale-100 origin-center',
@@ -34,7 +36,7 @@ export const getSizeClasses = (config: any) => {
   }[config.size as 'small' | 'normal' | 'large'] || 'scale-100 origin-center';
 };
 
-export const getCommonStyles = (config: any, data: any) => {
+export const getCommonStyles = (config: OverlayConfig, data: OverlayData) => {
   const currentRankColor = rankColors[data.tier] || '#ffffff';
   
   // Buscar el color del próximo rango mayor (diferente al actual)

@@ -3,8 +3,8 @@ import { config } from '../config';
 import { ValorantApiResponse } from '../types/valorant';
 
 
-function handleApiError(status: number, data: unknown): never {
-    throw { status, data, message: 'API Error' };
+function handleApiError(status: number, data: unknown) {
+    return { status, data, message: 'API Error' } as any;
 }
 
 const inFlightRequests = new Map<string, Promise<unknown>>();
@@ -48,17 +48,17 @@ export async function fetchWithCache<T>(
             return data;
         } catch (error: unknown) {
             const errObj = error as Record<string, unknown>;
-            if (errObj?.status) throw error;
+            if (errObj?.status) return errObj as any;
             
             // Evitar exponer grandes bloques de HTML o stack traces internos
             const rawErrorMsg = typeof errObj?.message === 'string' ? errObj.message : String(error);
             const safeErrorMsg = rawErrorMsg.length > 200 ? 'Service Unavailable or parsing error' : rawErrorMsg;
 
-            throw {
+            return {
                 status: 500,
                 message: 'Internal Server Error',
                 error: safeErrorMsg
-            };
+            } as any;
         } finally {
             // Eliminar de in-flight al terminar (éxito o error)
             inFlightRequests.delete(inflightKey);

@@ -50,6 +50,9 @@ export default function OverlayGenerator() {
 
   const [copied, setCopied] = useState(false);
 
+  const [simulatedOffset, setSimulatedOffset] = useState(0);
+  const [simulatedLastChange, setSimulatedLastChange] = useState<number | null>(null);
+
   const overlayUrl = useMemo(() => {
     if (!data?.account) return '';
     let url = `${window.location.origin}/overlay?name=${encodeURIComponent(data.account.name)}&tag=${encodeURIComponent(data.account.tag)}&region=${region}&bg=${bg}&size=${size}&layout=${layout}&showName=${showName ? '1' : '0'}&lastMatch=${showLastMatch ? '1' : '0'}&rankIcon=${showRankIcon ? '1' : '0'}&rankLabel=${showRankLabel ? '1' : '0'}&showRR=${showRR ? '1' : '0'}&showProgress=${showProgressBar ? '1' : '0'}&radius=${borderRadius}&iconPos=${iconPosition}&rankColor=${encodeURIComponent(rankColor)}&color=${encodeURIComponent(primaryColor)}&accent=${encodeURIComponent(accentColor)}&progress=${encodeURIComponent(progressColor)}&rrColor=${encodeURIComponent(rrColor)}&borderColor=${encodeURIComponent(borderColor)}&bgOpacity=${bgOpacity}&bgColor=${encodeURIComponent(bgColor)}&lang=${currentLang}`;
@@ -58,33 +61,35 @@ export default function OverlayGenerator() {
     }
     return url;
   }, [
-    data?.account?.name, data?.account?.tag, region, bg, size, layout, showName, showLastMatch, 
-    showRankIcon, showRankLabel, showRR, showProgressBar, borderRadius, iconPosition, rankColor, 
+    data?.account?.name, data?.account?.tag, region, bg, size, layout, showName, showLastMatch,
+    showRankIcon, showRankLabel, showRR, showProgressBar, borderRadius, iconPosition, rankColor,
     primaryColor, accentColor, progressColor, rrColor, borderColor, bgOpacity, bgColor, currentLang, userApiKey
   ]);
 
   const previewConfig = useMemo(() => ({
-    bg, size, layout, showName, showLastMatch, showRankIcon, showRankLabel, showRR, showProgressBar, 
-    rankColor, primaryColor, accentColor, progressColor, rrColor, borderColor, bgOpacity, 
+    bg, size, layout, showName, showLastMatch, showRankIcon, showRankLabel, showRR, showProgressBar,
+    rankColor, primaryColor, accentColor, progressColor, rrColor, borderColor, bgOpacity,
     borderRadius, iconPosition, bgColor
   }), [
-    bg, size, layout, showName, showLastMatch, showRankIcon, showRankLabel, showRR, showProgressBar, 
-    rankColor, primaryColor, accentColor, progressColor, rrColor, borderColor, bgOpacity, 
+    bg, size, layout, showName, showLastMatch, showRankIcon, showRankLabel, showRR, showProgressBar,
+    rankColor, primaryColor, accentColor, progressColor, rrColor, borderColor, bgOpacity,
     borderRadius, iconPosition, bgColor
   ]);
 
   const previewData = useMemo(() => {
     if (!data?.account) return null;
+    let baseRr = data.rank?.ranking_in_tier || 0;
+
     return {
       name: data.account.name,
       tag: data.account.tag,
       tier: data.rank?.current_tier || 0,
       tierName: translateRank(data.rank?.current_tier_patched || 'Unranked', currentLang),
-      rr: data.rank?.ranking_in_tier || 0,
+      rr: Math.max(0, baseRr + simulatedOffset),
       iconUrl: data.rank?.rank_image || 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/0/largeicon.png',
-      lastChange: data.rank?.mmr_change_to_last_game || 0
+      lastChange: simulatedLastChange !== null ? simulatedLastChange : (data.rank?.mmr_change_to_last_game || 0)
     };
-  }, [data, currentLang]);
+  }, [data, currentLang, simulatedOffset, simulatedLastChange]);
 
   if (!searched || !data?.account) return null;
 
@@ -285,8 +290,8 @@ export default function OverlayGenerator() {
                 onMouseLeave={e => { if (!copied) { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)'; (e.currentTarget as HTMLElement).style.boxShadow = ''; } }}
               >
                 <iconify-icon icon={copied ? "solar:check-circle-bold" : "solar:copy-bold"} width="15"></iconify-icon>
-                {copied 
-                  ? (t('overlayCopiedBtn') || '¡URL COPIADA!') 
+                {copied
+                  ? (t('overlayCopiedBtn') || '¡URL COPIADA!')
                   : `${t('overlayCopyBtn') || 'COPIAR URL PARA OBS'} (${layout === 'full' ? '280x120' : '380x100'})`
                 }
               </button>
@@ -298,9 +303,15 @@ export default function OverlayGenerator() {
             {/* PREVIEW SECTION */}
             <div className="flex-1 flex flex-col">
               <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between mb-2 gap-2">
-                <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">
-                  {t('overlayPreview')}
-                </span>
+                <div className="flex flex-col gap-1.5">
+                  <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">
+                    {t('overlayPreview') || 'Vista Previa del Widget'}
+                  </span>
+                  <div className="flex gap-2">
+                    <button onClick={() => { setSimulatedOffset(prev => prev + 25); setSimulatedLastChange(25); }} className="text-[9px] px-2 py-1 font-bold rounded uppercase tracking-wider bg-green-500/10 text-green-400 border border-green-500/20 hover:bg-green-500/20 hover:border-green-500/40 transition-colors">+ Simular Win</button>
+                    <button onClick={() => { setSimulatedOffset(prev => prev - 15); setSimulatedLastChange(-15); }} className="text-[9px] px-2 py-1 font-bold rounded uppercase tracking-wider bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 hover:border-red-500/40 transition-colors">- Simular Loss</button>
+                  </div>
+                </div>
 
                 {/* Preview BG Toggle */}
                 <div className="flex items-center gap-2">
