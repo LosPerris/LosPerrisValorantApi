@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { translateRank } from '../../../services/formatService';
 
 export interface OverlayConfig {
   bg: string;
@@ -113,17 +114,50 @@ export function useOverlayData(previewConfig?: OverlayConfig, previewData?: Over
     const fetchData = async () => {
       try {
         const apiKey = params.get('api_key');
-        let fetchUrl = `/api/overlay/${region}/${encodeURIComponent(name)}/${encodeURIComponent(tag)}?lang=${urlLang}`;
+        
+        let json;
         if (apiKey) {
-          fetchUrl += `&api_key=${encodeURIComponent(apiKey)}`;
-        }
-        const res = await fetch(fetchUrl);
-
-        if (res.status === 429) return;
-
-        const json = await res.json();
-        if (json.status !== 200) {
-          throw new Error(json.errors?.[0]?.message || json.message || 'Error al obtener datos');
+          // HYBRID MODE: Bypass Vercel entirely and hit Henrik API directly from OBS
+          // This saves Vercel server resources and handles the user's custom API key directly.
+          const henrikUrl = `https://api.henrikdev.xyz/valorant/v1/mmr/${region}/${encodeURIComponent(name)}/${encodeURIComponent(tag)}`;
+          const res = await fetch(henrikUrl, {
+            headers: {
+              'Authorization': apiKey,
+              'accept': 'application/json'
+            }
+          });
+          
+          if (res.status === 429) return;
+          const rawJson = await res.json();
+          
+          if (rawJson.status !== 200) {
+            throw new Error(rawJson.errors?.[0]?.message || rawJson.message || 'Error al obtener datos');
+          }
+          
+          // Map raw Henrik response to OverlayData format
+          json = {
+            status: 200,
+            data: {
+              name: rawJson.data.name || name,
+              tag: rawJson.data.tag || tag,
+              tier: rawJson.data.currenttier || 0,
+              tierName: translateRank(rawJson.data.currenttierpatched || 'Unranked', urlLang),
+              rr: rawJson.data.ranking_in_tier || 0,
+              iconUrl: rawJson.data.images?.large || 'https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/0/largeicon.png',
+              lastChange: rawJson.data.mmr_change_to_last_game || 0
+            }
+          };
+        } else {
+          // VERCEL MODE: No custom API key provided, use the server to proxy and cache the request
+          const fetchUrl = `/api/overlay/${region}/${encodeURIComponent(name)}/${encodeURIComponent(tag)}?lang=${urlLang}`;
+          const res = await fetch(fetchUrl);
+          
+          if (res.status === 429) return;
+          json = await res.json();
+          
+          if (json.status !== 200) {
+            throw new Error(json.errors?.[0]?.message || json.message || 'Error al obtener datos');
+          }
         }
 
         setData((prevData) => {
