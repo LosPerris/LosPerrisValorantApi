@@ -6,6 +6,10 @@ Stats de Valorant para streamers: rango, última partida, sesión del día, coma
 
 Usa datos de [HenrikDev](https://henrikdev.xyz/). No afiliada a Riot Games ni a Valorant.
 
+<div align="center">
+  <img src="./docs/images/home-search.webp" alt="Panel de búsqueda de LosPerris Valorant API" width="800" />
+</div>
+
 ---
 
 ## Cómo usarlo (panel)
@@ -17,6 +21,12 @@ Usa datos de [HenrikDev](https://henrikdev.xyz/). No afiliada a Riot Games ni a 
 5. En **Overlay OBS**, personaliza el widget, copia la URL y añádela como fuente de navegador en OBS
 
 También puedes poner tu propia API key de HenrikDev en el buscador si quieres usar tus límites en lugar de la cuota compartida.
+
+<div align="center">
+  <img src="./docs/images/panel-comandos.webp" alt="Resultado de búsqueda de T1 TenZ y pestaña Comandos" width="800" />
+  <br />
+  <em>Resultado de un jugador público (T1 TenZ#2001) y generador de comandos</em>
+</div>
 
 Guía rápida de comandos: [vlr.losperris.dev/docs](https://vlr.losperris.dev/docs)
 
@@ -77,6 +87,10 @@ GET /api/system/stats
 
 ## Bots de Twitch
 
+<div align="center">
+  <img src="./docs/images/panel-comandos.webp" alt="Generador de comandos para Nightbot, Fossabot y StreamElements" width="800" />
+</div>
+
 ### Nightbot / StreamElements
 
 ```
@@ -112,11 +126,25 @@ Variables útiles:
 
 ## Overlay OBS
 
+<div align="center">
+  <img src="./docs/images/panel-overlay.webp" alt="Pestaña Overlay OBS con vista previa del widget" width="800" />
+  <br />
+  <em>Personaliza el widget y copia la URL para OBS</em>
+</div>
+
 1. Busca tu cuenta en el panel → pestaña **Overlay OBS**
 2. Ajusta layout, fondo y qué mostrar
 3. Copia la URL
 4. En OBS: **Fuente → Navegador** → pega la URL  
    Tamaño orientativo: ~280×120 o ~380×100 según el layout
+
+<p align="center">
+  <img src="./docs/images/overlay-tarjeta.webp" alt="Overlay layout tarjeta con T1 TenZ Inmortal 1" width="280" />
+  &nbsp;&nbsp;
+  <img src="./docs/images/overlay-banner.webp" alt="Overlay layout banner con T1 TenZ Inmortal 1" width="380" />
+  <br />
+  <em>Layouts tarjeta y banner (capturas a tamaño nativo del widget)</em>
+</p>
 
 ---
 
