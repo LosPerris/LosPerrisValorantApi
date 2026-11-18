@@ -44,9 +44,7 @@ export default function LiveStats() {
     <section className="relative z-10 w-full">
       <div className="bg-[#0a0a0a] border border-white/10 rounded-xl p-2 sm:p-4 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/5">
         <div className="py-2 sm:py-0 sm:px-4 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-white/5 border border-white/5">
-            <iconify-icon icon="solar:bolt-linear" width="16" className="text-[#ff4655]"></iconify-icon>
-          </div>
+          <iconify-icon icon="solar:bolt-linear" width="18" className="text-[#ff4655] shrink-0"></iconify-icon>
           <div>
             <p className="text-base font-bold text-white tracking-tight leading-none">
               {stats.latency > 0 ? (
@@ -60,9 +58,7 @@ export default function LiveStats() {
         </div>
         
         <div className="py-2 sm:py-0 sm:px-4 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-white/5 border border-white/5">
-            <iconify-icon icon="solar:server-linear" width="16" className="text-[#ff4655]"></iconify-icon>
-          </div>
+          <iconify-icon icon="solar:server-linear" width="18" className="text-[#ff4655] shrink-0"></iconify-icon>
           <div>
             <p className="text-base font-bold text-white tracking-tight leading-none">
               {formatRequests(stats.requests)}
@@ -72,9 +68,7 @@ export default function LiveStats() {
         </div>
         
         <div className="py-2 sm:py-0 sm:px-4 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-white/5 border border-white/5">
-            <iconify-icon icon="solar:global-linear" width="16" className="text-[#ff4655]"></iconify-icon>
-          </div>
+          <iconify-icon icon="solar:global-linear" width="18" className="text-[#ff4655] shrink-0"></iconify-icon>
           <div>
             <p className="text-base font-bold text-white tracking-tight leading-none">{REGIONS_COUNT}</p>
             <p className="text-[10px] text-neutral-400 uppercase tracking-wide mt-0.5">{t('regions')}</p>

@@ -1,5 +1,8 @@
 import * as valorantService from '../services/valorantService';
 import type { ValorantAccount } from '../types/valorant';
+import { z } from 'zod';
+import { kv } from './cache';
+import type { APIRoute, APIContext } from 'astro';
 
 // ─── Constantes de Headers compartidas por todos los endpoints ──────────────
 const JSON_HEADERS = { 'Content-Type': 'application/json' };
@@ -17,8 +20,6 @@ export const TEXT_HEADERS = {
     'Content-Type': 'text/plain; charset=utf-8',
     'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600'
 };
-
-import { z } from 'zod';
 
 const RouteParamsSchema = z.object({
     region: z.enum(['eu', 'na', 'ap', 'kr', 'latam', 'br'], {
@@ -52,8 +53,6 @@ const QueryParamsSchema = z.object({
     // La api_key no se valida exhaustivamente pero se limita en longitud para evitar payloads absurdos
     api_key: z.string().max(128, 'api_key too long').nullable().optional(),
 });
-
-import { kv } from './cache';
 
 // Rate limit pensado para bots (IPs compartidas Nightbot/SE): 60 req/min por IP.
 // TTL fijo: EXPIRE solo si falta (evita claves eternas y bans que se alargan).
@@ -223,8 +222,6 @@ export async function resolvePUUID(
 }
 
 // ─── Wrapper para Endpoints ─────────────────────────────────────────────────
-import type { APIRoute, APIContext } from 'astro';
-
 export type ValorantEndpointHandler = (params: {
     region: string;
     name: string;
@@ -320,4 +317,3 @@ export function createValorantEndpoint(handler: ValorantEndpointHandler): APIRou
         }
     };
 }
-

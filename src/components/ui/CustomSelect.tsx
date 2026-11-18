@@ -72,9 +72,9 @@ export default function CustomSelect({ id, value, onChange, options, className }
         ref={buttonRef}
         onClick={handleToggle}
         className={cn(
-          'w-full text-left px-3 py-2 rounded-lg text-sm text-white outline-none transition cursor-pointer flex justify-between items-center',
+          'w-full h-10 text-left px-3 rounded-lg text-sm text-white outline-none transition cursor-pointer flex justify-between items-center',
           'bg-[#111] border',
-          isOpen ? 'border-[#ff4655] ring-1 ring-[#ff4655]' : 'border-white/10 hover:border-[#ff4655]/50',
+          isOpen ? 'border-[#ff4655] ring-1 ring-[#ff4655]/30' : 'border-white/10 hover:border-[#ff4655]/50',
           className
         )}
       >

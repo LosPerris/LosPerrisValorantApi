@@ -42,7 +42,6 @@ export default function OverlayGenerator() {
     'haven.webp'
   ];
 
-  const backgroundNames = ['Ascent', 'Icebox', 'Bind', 'Haven'];
   const checkerboard = "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAOklEQVQYV2N89erVfwY0ICYmxoBFMwowIikAq8bIQFwYw2QwHkUVTCHMjLAKiHYU2WA0j6IKphBmRlgFAG5QMBK52dOnAAAAAElFTkSuQmCC')";
 
   const [bgIndex, setBgIndex] = useState(0);
@@ -101,10 +100,8 @@ export default function OverlayGenerator() {
 
   return (
     <section className="relative z-20 animate-[fadeIn_0.5s_ease-out] w-full flex flex-col gap-2">
-      <div className="flex items-center gap-2 px-1 mb-2">
-        <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/5 border border-white/5 shrink-0">
-          <iconify-icon icon="solar:monitor-camera-bold-duotone" width="16" className="text-[#ff4655]"></iconify-icon>
-        </div>
+      <div className="flex items-center gap-2.5 px-1 mb-2">
+        <iconify-icon icon="solar:monitor-camera-bold-duotone" width="18" className="text-[#ff4655] shrink-0"></iconify-icon>
         <div>
           <h2 className="font-semibold text-base tracking-tight text-white leading-none">{t('overlayTitle')}</h2>
           <p className="text-[11px] text-neutral-400 mt-1">{t('overlayDesc')}</p>
@@ -120,7 +117,7 @@ export default function OverlayGenerator() {
               {/* TABS */}
               <div className="relative flex bg-[#111] border border-white/5 p-1 rounded-lg mb-3 isolate shrink-0">
                 <div
-                  className="absolute top-1 bottom-1 rounded-md border border-[#ff4655] bg-[#ff4655]/5 shadow-[0_0_10px_rgba(255,70,85,0.2)] transition-transform duration-300 ease-out -z-10"
+                  className="absolute top-1 bottom-1 rounded-md bg-white/10 transition-transform duration-300 ease-out -z-10"
                   style={{
                     left: '4px',
                     width: 'calc((100% - 8px) / 3)',
@@ -134,8 +131,8 @@ export default function OverlayGenerator() {
                 ].map((tab) => (
                   <button
                     key={tab.id}
-                    onClick={() => setActiveTab(tab.id as any)}
-                    className={`flex-1 py-1.5 text-[11px] font-bold uppercase tracking-wider rounded-md transition-colors duration-300 ${activeTab === tab.id ? 'text-[#ff4655]' : 'text-neutral-500 hover:text-white'}`}
+                    onClick={() => setActiveTab(tab.id as 'appearance' | 'colors' | 'content')}
+                    className={`flex-1 py-1.5 text-[11px] font-semibold uppercase tracking-wide rounded-md transition-colors duration-300 ${activeTab === tab.id ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
                   >
                     {tab.label}
                   </button>
@@ -317,7 +314,7 @@ export default function OverlayGenerator() {
                 <div className="flex items-center gap-2">
                   <div className="relative flex bg-[#111] border border-white/5 p-1 rounded-lg shrink-0 isolate w-48">
                     <div
-                      className="absolute top-1 bottom-1 rounded-md border border-[#ff4655] bg-[#ff4655]/5 shadow-[0_0_10px_rgba(255,70,85,0.2)] transition-transform duration-300 ease-out -z-10"
+                      className="absolute top-1 bottom-1 rounded-md bg-white/10 transition-transform duration-300 ease-out -z-10"
                       style={{
                         left: '4px',
                         width: 'calc(50% - 4px)',
@@ -327,14 +324,14 @@ export default function OverlayGenerator() {
 
                     <button
                       onClick={() => setShowMap(false)}
-                      className={`flex-1 py-1 rounded-md text-[9px] font-bold uppercase tracking-wider transition-colors duration-300 ${!showMap ? 'text-[#ff4655]' : 'text-neutral-500 hover:text-white'}`}
+                      className={`flex-1 py-1 rounded-md text-[9px] font-semibold uppercase tracking-wide transition-colors duration-300 ${!showMap ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
                     >
                       Transparente
                     </button>
 
                     <button
                       onClick={() => setShowMap(true)}
-                      className={`flex-1 py-1 rounded-md text-[9px] font-bold uppercase tracking-wider transition-colors duration-300 ${showMap ? 'text-[#ff4655]' : 'text-neutral-500 hover:text-white'}`}
+                      className={`flex-1 py-1 rounded-md text-[9px] font-semibold uppercase tracking-wide transition-colors duration-300 ${showMap ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
                     >
                       Mapa
                     </button>

@@ -25,8 +25,8 @@ export default function ApiKeyModal() {
       {/* Modal Container */}
       <div
         className={cn(
-          'relative w-full max-w-lg rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)]',
-          'bg-[#050505] text-white transition-[opacity,transform] duration-200 ease-out',
+          'relative w-full max-w-lg rounded-xl overflow-hidden border border-white/10',
+          'bg-[#0a0a0a] text-white transition-[opacity,transform] duration-200 ease-out',
           isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-[0.98]',
         )}
       >
@@ -35,20 +35,18 @@ export default function ApiKeyModal() {
           <div className="flex justify-between items-start gap-4 mb-6">
             <h2
               id="apikey-modal-title"
-              className="text-xl md:text-2xl font-bold tracking-tight text-white flex items-center gap-3 min-w-0 flex-1"
+              className="text-xl font-bold tracking-tight text-white flex items-center gap-2.5 min-w-0 flex-1"
             >
-              <span className="w-10 h-10 shrink-0 rounded-full bg-[#ff4655]/10 flex items-center justify-center text-[#ff4655]">
-                <iconify-icon icon="solar:key-bold-duotone" width="24" height="24" className="block" />
-              </span>
+              <iconify-icon icon="solar:key-linear" width="20" className="text-[#ff4655] shrink-0" />
               <span className="min-w-0">Tu propia API Key</span>
             </h2>
             <button
               type="button"
               onClick={() => isApiKeyModalOpen.set(false)}
               tabIndex={isOpen ? 0 : -1}
-              className="shrink-0 w-8 h-8 text-[#ff4655] hover:text-[#ff5c6a] transition-colors bg-[#ff4655]/10 rounded-full flex items-center justify-center"
+              className="shrink-0 text-neutral-500 hover:text-white transition-colors cursor-pointer"
             >
-              <iconify-icon icon="solar:close-circle-bold" width="26" height="26" className="block" />
+              <iconify-icon icon="solar:close-circle-linear" width="22" />
             </button>
           </div>
 
@@ -91,9 +89,9 @@ export default function ApiKeyModal() {
               target="_blank"
               rel="noopener noreferrer"
               tabIndex={isOpen ? 0 : -1}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#5865F2] hover:bg-[#4752C4] text-white font-semibold transition-colors w-full justify-center sm:w-auto"
+              className="inline-flex items-center gap-2 h-10 px-4 rounded-lg bg-[#5865F2] hover:bg-[#4752C4] text-white font-semibold text-sm transition-colors w-full justify-center sm:w-auto"
             >
-              <iconify-icon icon="ic:baseline-discord" width="24" height="24" />
+              <iconify-icon icon="ic:baseline-discord" width="18" />
               Unirse al Discord de HenrikDev
             </a>
           </div>

@@ -13,10 +13,8 @@ export default function PlayerResults() {
 
   return (
     <section id="resultados" className="relative animate-[fadeIn_0.5s_ease-out] w-full flex flex-col gap-3">
-      <div className="flex items-center gap-2 px-1 mb-2">
-        <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/5 border border-white/5 shrink-0">
-          <iconify-icon icon="solar:user-circle-linear" width="16" className="text-[#ff4655]"></iconify-icon>
-        </div>
+      <div className="flex items-center gap-2.5 px-1 mb-2">
+        <iconify-icon icon="solar:user-circle-linear" width="18" className="text-[#ff4655] shrink-0"></iconify-icon>
         <div>
           <h2 className="font-semibold text-base tracking-tight text-white leading-none">{t('accountSummaryTitle')}</h2>
           <p className="text-[11px] text-neutral-400 mt-1">{t('accountSummaryDesc')}</p>

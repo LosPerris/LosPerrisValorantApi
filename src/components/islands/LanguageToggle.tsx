@@ -6,21 +6,24 @@ export default function LanguageToggle() {
   const currentLang = useStore(lang);
 
   return (
-    <div className="fixed top-4 right-4 md:right-8 flex bg-[#0a0a0d] border border-[#2a2a30] p-1 rounded-lg z-50 shadow-lg">
-      <button 
-        onClick={() => lang.set('es')} 
+    <div className="fixed top-4 right-4 md:right-6 flex items-center gap-1 z-50 text-xs font-semibold">
+      <button
+        type="button"
+        onClick={() => lang.set('es')}
         className={cn(
-          "px-3 py-1.5 rounded-md font-bold text-xs transition-colors cursor-pointer",
-          currentLang === 'es' ? "bg-[#ff4655] text-[#050505]" : "text-neutral-400 hover:text-white"
+          'px-1.5 py-1 transition-colors cursor-pointer',
+          currentLang === 'es' ? 'text-[#ff4655]' : 'text-neutral-500 hover:text-white'
         )}
       >
         ES
       </button>
-      <button 
-        onClick={() => lang.set('en')} 
+      <span className="text-neutral-700">/</span>
+      <button
+        type="button"
+        onClick={() => lang.set('en')}
         className={cn(
-          "px-3 py-1.5 rounded-md font-bold text-xs transition-colors cursor-pointer",
-          currentLang === 'en' ? "bg-[#ff4655] text-[#050505]" : "text-neutral-400 hover:text-white"
+          'px-1.5 py-1 transition-colors cursor-pointer',
+          currentLang === 'en' ? 'text-[#ff4655]' : 'text-neutral-500 hover:text-white'
         )}
       >
         EN

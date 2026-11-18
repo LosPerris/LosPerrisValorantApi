@@ -1,5 +1,3 @@
-import React from 'react';
-
 export function PokemonStatEffect({ type }: { type: 'up' | 'down' }) {
   // Arrow configuration: left position, animation delay, and scale
   const arrows = [

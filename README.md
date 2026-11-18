@@ -1,92 +1,77 @@
 # LosPerris Valorant API
 
-API y panel web para stats de Valorant (rango, última partida, sesión del día, estadísticas) e integración con bots de Twitch (Nightbot, Fossabot, StreamElements).
+Stats de Valorant para streamers: rango, última partida, sesión del día, comandos para bots de Twitch y overlay para OBS.
 
-**Producción:** [https://vlr.losperris.dev](https://vlr.losperris.dev)
+**Sitio:** [https://vlr.losperris.dev](https://vlr.losperris.dev)
 
-Construida con **Astro + React**, desplegada en Vercel. Consume la API de [Henrik](https://henrikdev.xyz/). No afiliada a Riot Games ni a Valorant.
-
----
-
-## Rutas web
-
-| Ruta | Descripción |
-|------|-------------|
-| `/` | Landing / buscador y generador de comandos |
-| `/docs` | Documentación interactiva |
+Usa datos de [HenrikDev](https://henrikdev.xyz/). No afiliada a Riot Games ni a Valorant.
 
 ---
 
-## Endpoints API
+## Cómo usarlo (panel)
 
-Base URL: `https://vlr.losperris.dev`
+1. Entra a [vlr.losperris.dev](https://vlr.losperris.dev)
+2. Elige región, escribe tu Riot ID y tag, y busca
+3. En **Comandos**, elige plataforma (Nightbot / Fossabot / StreamElements), estilo y detalle
+4. Copia el comando y pégalo en tu bot
+5. En **Overlay OBS**, personaliza el widget, copia la URL y añádela como fuente de navegador en OBS
 
-Query opcionales en todos los endpoints de jugador:
+También puedes poner tu propia API key de HenrikDev en el buscador si quieres usar tus límites en lugar de la cuota compartida.
 
-| Param | Descripción | Valores |
-|-------|-------------|---------|
-| `format` | Formato de respuesta | `text` (bots) u omitir (JSON) |
-| `lang` | Idioma del texto | `es` (default), `en` |
-| `type` | Nivel de detalle del texto | `1` (menos) → `3` (más) |
+Guía rápida de comandos: [vlr.losperris.dev/docs](https://vlr.losperris.dev/docs)
 
-### Rango
+---
 
-```
-GET /api/rank/:region/:name/:tag
-```
+## API
+
+Base: `https://vlr.losperris.dev`
 
 Regiones: `na`, `eu`, `ap`, `kr`, `latam`, `br`.
 
-**Texto (`format=text`):**
-- `type=1` → solo rango
-- `type=2` → rango + puntos
-- `type=3` → rango + puntos + MMR
+### Query opcionales
 
-### Última partida
+| Param | Descripción | Valores |
+|-------|-------------|---------|
+| `format` | Respuesta para bots | `text` (omitir = JSON) |
+| `lang` | Idioma | `es` (default), `en` |
+| `type` | Detalle del texto | `1` → `3` |
+| `style` | Estilo del mensaje | `default`, `clean`, `custom` |
+| `template` | Plantilla si `style=custom` | p. ej. `Rango: {rank}` |
+| `api_key` | Tu key de HenrikDev | opcional |
+
+### Endpoints
 
 ```
+GET /api/rank/:region/:name/:tag
 GET /api/match/last/:region/:name/:tag
-```
-
-- `type=1` → mapa + agente + resultado
-- `type=2` → + KDA
-- `type=3` → + HS%
-
-### Sesión de hoy
-
-```
 GET /api/today/:region/:name/:tag
-```
-
-- `type=1` → victorias / derrotas
-- `type=2` → + partidas jugadas
-- `type=3` → + winrate
-
-### Estadísticas recientes
-
-```
 GET /api/stats/:region/:name/:tag
-```
-
-- `type=1` → compacto
-- `type=2` → básico
-- `type=3` → descriptivo
-
-### Resumen (JSON)
-
-```
 GET /api/summary/:region/:name/:tag
-```
-
-Cuenta + rango + última partida + historial en una sola respuesta.
-
-### Health / métricas
-
-```
+GET /api/overlay/:region/:name/:tag
 GET /api/system/stats
 ```
 
-Latencia y contador de peticiones (útil para monitores de uptime).
+**Rango (`type`):**
+- `1` → solo rango
+- `2` → rango + RR
+- `3` → rango + RR + MMR
+
+**Última partida (`type`):**
+- `1` → mapa + agente + resultado
+- `2` → + KDA
+- `3` → + HS%
+
+**Hoy (`type`):**
+- `1` → W / L
+- `2` → + partidas
+- `3` → + winrate
+
+**Stats (`type`):**
+- `1` → compacto
+- `2` → básico
+- `3` → descriptivo
+
+`/api/summary` devuelve JSON con cuenta, rango, última partida e historial.
 
 ---
 
@@ -98,84 +83,40 @@ Latencia y contador de peticiones (útil para monitores de uptime).
 $(urlfetch https://vlr.losperris.dev/api/rank/na/NombreJugador/TAG?format=text&lang=es&type=1)
 ```
 
-### Estilos de mensaje (`style`)
-
-| style | Ejemplo (rank) |
-|-------|----------------|
-| `default` (omitido) | `Actualmente estoy en Oro 3` |
-| `clean` | `Oro 3` |
-| `custom` + `template=` | Tú defines el texto, p. ej. `Rango: {rank}` |
-
-Variables por comando:
-- **rank:** `{rank}` `{rr}` `{mmr}` `{name}` `{tag}` `{level}`
-- **match:** `{map}` `{agent}` `{result}` `{rr}` `{kda}` `{hs}`
-- **today:** `{name}` `{wins}` `{losses}` `{draws}` `{rr}` `{matches}` `{winrate}`
-- **stats:** `{name}` `{winrate}` `{agent}` `{hs}` `{matches}`
-
-Ejemplo limpio:
-
-```
-?format=text&style=clean
-```
-
-Ejemplo editable:
-
-```
-?format=text&style=custom&template=Rango:%20{rank}%20({rr}%20RR)
-```
-
 ### Fossabot
 
 ```
 $(customapi https://vlr.losperris.dev/api/rank/na/NombreJugador/TAG?format=text&lang=es&type=1)
 ```
 
-También puedes generar el comando desde el panel en [vlr.losperris.dev](https://vlr.losperris.dev) tras buscar un jugador.
+### Estilos
+
+| style | Ejemplo |
+|-------|---------|
+| `default` | `Actualmente estoy en Oro 3` |
+| `clean` | `Oro 3` |
+| `custom` | Tú defines el texto con variables |
+
+Variables útiles:
+- rank: `{rank}` `{rr}` `{mmr}` `{name}` `{tag}`
+- match: `{map}` `{agent}` `{result}` `{rr}` `{kda}` `{hs}`
+- today: `{wins}` `{losses}` `{rr}` `{winrate}`
+- stats: `{winrate}` `{agent}` `{hs}` `{matches}`
+
+```
+?format=text&style=clean
+?format=text&style=custom&template=Rango:%20{rank}%20({rr}%20RR)
+```
 
 ---
 
-## Desarrollo local
+## Overlay OBS
 
-### Requisitos
-
-- Node.js 20+
-- `HENRIK_API_KEY` (y opcionalmente Vercel KV para caché/rate limit)
-
-### Instalación
-
-```bash
-git clone https://github.com/Ponss17/LosPerrisValorantApi.git
-cd LosPerrisValorantApi
-pnpm install
-```
-
-### Variables de entorno
-
-```bash
-cp .env.example .env
-```
-
-```env
-HENRIK_API_KEY=tu_api_key_aqui
-```
-
-### Scripts
-
-| Script | Descripción |
-|--------|-------------|
-| `pnpm dev` | Servidor de desarrollo Astro |
-| `pnpm build` | Build de producción |
-| `pnpm preview` | Preview del build |
-| `pnpm test` | Tests (si están configurados) |
-
----
-
-## Stack
-
-- **Astro** (SSR) + **React**
-- **Deploy:** Vercel (`vlr.losperris.dev`)
-- **Caché:** Vercel KV / Redis
-- **Datos:** Henrik Unofficial Valorant API
+1. Busca tu cuenta en el panel → pestaña **Overlay OBS**
+2. Ajusta layout, fondo y qué mostrar
+3. Copia la URL
+4. En OBS: **Fuente → Navegador** → pega la URL  
+   Tamaño orientativo: ~280×120 o ~380×100 según el layout
 
 ---
 

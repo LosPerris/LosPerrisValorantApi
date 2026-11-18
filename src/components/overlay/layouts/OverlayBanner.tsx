@@ -2,7 +2,7 @@ import type { OverlayConfig, OverlayData } from '../hooks/useOverlayData';
 import { getBgClasses, getSizeClasses, getCommonStyles } from '../utils';
 import { useNumberCounter } from '../hooks/useNumberCounter';
 import { useResultSequence } from '../hooks/useResultText';
-import { PokemonStatEffect } from './PokemonStatEffect';
+import { OverlayResultCover } from './OverlayResultCover';
 
 export function OverlayBanner({ config, data, animationType, lang = 'es' }: { config: OverlayConfig; data: OverlayData; animationType: 'up' | 'down' | 'tier-up' | 'tier-down' | null; lang?: string }) {
   const bgClasses = getBgClasses(config);
@@ -32,38 +32,13 @@ export function OverlayBanner({ config, data, animationType, lang = 'es' }: { co
   return (
     <div className={`w-full min-w-[380px] flex items-center gap-4 ${bgClasses} ${sizeClasses}`} style={styles.bgInlineStyle}>
       
-      {/* Front Cover (Integrated Result Panel) */}
-      <div 
-        className={`absolute inset-0 z-50 flex items-center justify-center transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] pointer-events-none rounded-[inherit] overflow-hidden
-        ${animationType ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-        style={{
-          background: config.bg === 'none' ? 'transparent' : (animationType === 'up' || animationType === 'tier-up') 
-            ? 'linear-gradient(135deg, rgba(22,163,74,0.95), rgba(20,83,45,0.98))' 
-            : (animationType === 'down' || animationType === 'tier-down') 
-              ? 'linear-gradient(135deg, rgba(220,38,38,0.95), rgba(127,29,29,0.98))'
-              : 'transparent',
-          backdropFilter: config.bg === 'none' ? 'none' : 'blur(12px)',
-          boxShadow: config.bg === 'none' ? 'none' : 'inset 0 0 30px rgba(0,0,0,0.8)'
-        }}
-      >
-        {config.bg !== 'none' && <div className={`absolute inset-0 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] mix-blend-overlay`}></div>}
-        
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          {phase !== 'idle' && <PokemonStatEffect type={(animationType === 'up' || animationType === 'tier-up') ? 'up' : 'down'} />}
-          {phase === 'fixed' && (
-            <span className={`font-black text-2xl uppercase tracking-[0.4em] drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] text-white animate-zoom-in`}
-              style={config.bg === 'none' ? { textShadow: (animationType === 'up' || animationType === 'tier-up') ? '0 0 20px rgba(34,197,94,0.8), 0 4px 10px rgba(0,0,0,1)' : '0 0 20px rgba(239,68,68,0.8), 0 4px 10px rgba(0,0,0,1)', color: (animationType === 'up' || animationType === 'tier-up') ? '#4ade80' : '#f87171' } : {}}>
-              {fixedText}
-            </span>
-          )}
-          {phase === 'random' && (
-            <span className={`font-black text-2xl uppercase tracking-[0.4em] drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] text-white animate-pop-in`}
-              style={config.bg === 'none' ? { textShadow: (animationType === 'up' || animationType === 'tier-up') ? '0 0 20px rgba(34,197,94,0.8), 0 4px 10px rgba(0,0,0,1)' : '0 0 20px rgba(239,68,68,0.8), 0 4px 10px rgba(0,0,0,1)', color: (animationType === 'up' || animationType === 'tier-up') ? '#4ade80' : '#f87171' } : {}}>
-              {randomText}
-            </span>
-          )}
-        </div>
-      </div>
+      <OverlayResultCover
+        config={config}
+        animationType={animationType}
+        phase={phase}
+        fixedText={fixedText}
+        randomText={randomText}
+      />
 
       <div className={`w-full flex items-center gap-4 transition-opacity duration-700 ease-in-out ${animationType ? 'opacity-0' : 'opacity-100 delay-300'}`}>
         {config.iconPosition !== 'right' && iconEl}

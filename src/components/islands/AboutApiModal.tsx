@@ -34,8 +34,8 @@ export default function AboutApiModal() {
       {/* Modal Container — siempre montado para precargar iconos y evitar reflow al abrir */}
       <div
         className={cn(
-          'relative w-full max-w-lg rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)]',
-          'bg-[#050505] text-white transition-[opacity,transform] duration-200 ease-out',
+          'relative w-full max-w-lg rounded-xl overflow-hidden border border-white/10',
+          'bg-[#0a0a0a] text-white transition-[opacity,transform] duration-200 ease-out',
           isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-[0.98]',
         )}
       >
@@ -46,21 +46,19 @@ export default function AboutApiModal() {
           <div className="flex justify-between items-start gap-4 mb-6">
             <h2
               id="about-modal-title"
-              className="text-xl md:text-2xl font-bold tracking-tight text-white flex items-center gap-3 min-w-0 flex-1"
+              className="text-xl font-bold tracking-tight text-white flex items-center gap-2.5 min-w-0 flex-1"
             >
-              <span className="w-10 h-10 shrink-0 rounded-full bg-[#ff4655]/10 flex items-center justify-center text-[#ff4655]">
-                <iconify-icon icon="solar:info-circle-bold" width="24" height="24" className="block" />
-              </span>
+              <iconify-icon icon="solar:info-circle-linear" width="20" className="text-[#ff4655] shrink-0" />
               <span className="min-w-0">{t('aboutModalTitle')}</span>
             </h2>
             <button
               type="button"
               onClick={() => isAboutModalOpen.set(false)}
               tabIndex={isOpen ? 0 : -1}
-              className="shrink-0 w-8 h-8 text-[#ff4655] hover:text-[#ff5c6a] transition-colors bg-[#ff4655]/10 rounded-full flex items-center justify-center"
+              className="shrink-0 text-neutral-500 hover:text-white transition-colors cursor-pointer"
               aria-label={t('closeModal')}
             >
-              <iconify-icon icon="solar:close-circle-bold" width="26" height="26" className="block" />
+              <iconify-icon icon="solar:close-circle-linear" width="22" />
             </button>
           </div>
 
@@ -98,13 +96,11 @@ export default function AboutApiModal() {
               rel="noopener noreferrer"
               tabIndex={isOpen ? 0 : -1}
               className={cn(
-                'inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all',
-                'bg-[#ff4655] text-[#0a0a0a] hover:bg-[#ff5c6a] hover:-translate-y-0.5 shadow-[0_8px_20px_-6px_rgba(255,70,85,0.4)]',
+                'inline-flex items-center gap-2 h-10 px-4 rounded-lg font-semibold text-sm transition-colors',
+                'bg-[#ff4655] text-[#0a0a0a] hover:bg-[#ff5c6a]',
               )}
             >
-              <span className="inline-flex w-[22px] h-[22px] shrink-0 items-center justify-center">
-                <iconify-icon icon="mdi:github" width="22" height="22" className="block" />
-              </span>
+              <iconify-icon icon="mdi:github" width="18" />
               {t('aboutModalLinkText')}
             </a>
           </div>
